@@ -1,0 +1,8 @@
+<apex:page controller="URFormUpdateController" >
+<apex:form >
+<apex:outputPanel >
+<apex:pageMessages />
+<apex:commandButton action="{!URFormUpdate}" value="Update"/>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

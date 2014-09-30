@@ -1,0 +1,103 @@
+<apex:page showChat="false" showHeader="true" sidebar="true" docType="html-5.0" standardStylesheets="true">
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/JQueryComet/Cometd.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/jquery_1.5.2.min.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/JQueryComet/json2.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/JQueryComet/jquery.cometd.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/Style/jquery-animate-css-rotate-scale.js')}"/> 
+<apex:includeScript value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/Style/jquery-css-transform.js')}"/> 
+<apex:stylesheet value="{!URLFOR($Resource.StreamingAPI, 'StreaminAPI/Style/style.css')}"/> 
+
+<head>
+<style type="text/css">
+body #AppBodyHeader {
+display: none;
+}
+
+</style>
+ <script type="text/javascript">
+        var $jq = jQuery.noConflict();
+
+            $jq('.item').click(
+                function(){
+                    var $this = $jq(this);
+                    expand($this);
+                }
+            );
+            function expand($elem){
+                var angle = 0;
+                var t = setInterval(function () {
+                    if(angle == 1440){
+                        clearInterval(t);
+                        return;
+                    }
+                    angle += 40;
+                    $jq('.link',$elem).stop().animate({rotate: '+=-40deg'}, 0);
+                },10);
+                $elem.stop().animate({width:'500px'}, 1000)
+                .find('.item_content').fadeIn(400).focus();
+            }
+
+           function createEle(data, myType)
+           {
+                var $itemDiv = $jq(document.createElement('div'));
+                $itemDiv.addClass('item');
+
+                var $anch =  $jq(document.createElement('a'));
+                $anch.addClass('link');
+                $anch.addClass('icon_alert');
+
+                var $contentDiv = $jq(document.createElement('div'));
+                $contentDiv.addClass('item_content');
+
+                var $h2 = $jq(document.createElement('h2'));
+                if(myType == 'PersonAccount')
+                    $h2.html('New Person Account');
+                if(myType == 'Admit')
+                    $h2.html('New Admit');
+                if(myType == 'Discharge')
+                    $h2.html('New Discharge');
+                    
+                $contentDiv.append($h2);
+
+                if(myType == 'PersonAccount')
+                    $contentDiv.append('<br />Name : '+data.Name+' <br />  Id : '+data.Id+' <br /><a href="/' + data.Id + '"> Navigate to Account </a>');
+                if(myType == 'Admit')
+                    $contentDiv.append('<br />Case : '+data.CaseNumber+' <br />  Id : '+data.Id+' <br /><a href="/' + data.Id + '"> Navigate to Case </a>');
+                if(myType == 'Discharge')
+                    $contentDiv.append('<br />Name : '+data.CaseNumber+' <br />  Id : '+data.Id+' <br /><a href="/' + data.Id + '"> Navigate to Case </a>');
+
+
+                $itemDiv.append($anch);
+                $itemDiv.append($contentDiv);
+                $jq(".menu").append($itemDiv);
+                expand($itemDiv);
+           }
+
+           $jq(function() {
+                 // Connect to the CometD endpoint
+                $.cometd.init({
+                   url: window.location.protocol+'//'+window.location.hostname+'/cometd/29.0/',
+                   requestHeaders: { Authorization: 'OAuth {!$Api.Session_ID}'}
+               });
+
+              $.cometd.subscribe('/topic/PersonAccounts', function(message) {
+                    createEle(message.data.sobject, 'PersonAccount');
+                });
+                
+              $.cometd.subscribe('/topic/Admits', function(message) {
+                    createEle(message.data.sobject, 'Admit');
+                });
+                
+              $.cometd.subscribe('/topic/Discharges', function(message) {
+                    createEle(message.data.sobject, 'Discharge');
+                });                
+            });
+
+        </script>
+</head>
+<body>
+ <div class="menu">
+<!-- Place holder for notifications -->
+</div>   
+</body>
+</apex:page>

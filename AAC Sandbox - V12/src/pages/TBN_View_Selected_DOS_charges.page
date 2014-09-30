@@ -1,0 +1,29 @@
+<apex:page controller="TBN_Select_DOS_Charges" showHeader="false">
+    
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save"  action="{!ExportPdf}" />
+                <input type = "button" value="Cancel" onclick="" class="btn" />         
+            </apex:pageBlockButtons>
+            <apex:outputPanel rendered="{!$CurrentPage.parameters.Source == 'Select'}">
+	            <apex:pageBlockTable value="{!lstWrapper}" var="c" id="table1">
+	                <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">
+	                    <apex:column headerValue="{!f.label}">
+	                        <apex:outputField value="{!c.objDatesOfService[f]}" />
+	                    </apex:column>
+	                </apex:repeat>
+	            </apex:pageBlockTable>
+	        </apex:outputPanel>
+	        <apex:outputPanel rendered="{!$CurrentPage.parameters.Source != 'Select'}">
+	            <apex:pageBlockTable value="{!DocWrapper}" var="c" id="table2">
+	                <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">
+	                    <apex:column headerValue="{!f.label}">
+	                        <apex:outputField value="{!c.objDatesOfService[f]}" />
+	                    </apex:column>
+	                </apex:repeat>
+	            </apex:pageBlockTable>
+	        </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,16 @@
+<apex:page standardController="Case" extensions="AssessmentWorkflowController" showChat="false" showheader="false" sidebar="false">
+<apex:form >
+<style>
+.valid 
+{}
+.invalid
+{color:red;font-weight:bold;}
+</style>
+<apex:commandButton value="{!ButtonText}"   styleClass="{!ButtonClass}" action="{!ButtonAction}" Rendered="{!ButtonEnabled}" oncomplete="javascript:if('{!ButtonText}' != 'Assessment Submitted'){var choice = confirm('Submitted to supervisor queue.  Return to your queue?');if(choice){parent.location.href='/500/o';}else{parent.location.href='/{!Case.Id}';}}" />
+<br/>
+<apex:outputPanel id="pnlSupervisorView" rendered="{!ShowSupervisorPanel}">
+  <apex:commandButton value="{!SupervisorButtonText}" action="{!SupervisorButtonAction}" Rendered="{!ShowApprovalButton}" oncomplete="javascript: alert('Approval process complete.'); parent.location.href='/{!Case.Id}';"/> 
+  <apex:outputLabel value="Assessment has been approved by supervisor." rendered="{!ShowAssessmentApprovedPanel}"/>
+</apex:outputPanel>  
+</apex:form>
+</apex:page>

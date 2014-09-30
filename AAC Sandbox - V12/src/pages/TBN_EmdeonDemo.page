@@ -1,0 +1,43 @@
+<apex:page controller="TBN_EmdeonDemo">
+<style>
+	.Spaces10 
+	{ 
+	    word-spacing: 25px; 
+	}
+</style>
+
+ISA*<span class="Spaces10">00* *00* *ZZ*</span><span class="Spaces10">953994980 *ZZ*</span><span class="Spaces10">133052274<br/>
+<span class="todayDate"/></span>*<span class="todayTime"/>*^*00501*<apex:outputText value="{!strBatchId}"/>*0*T*:~
+GS*HC*953994980*133052274
+<span class="todayDate"/>*<span class="todayTime"/><apex:outputText value="{!strBatchId}"/>*X*005010X223A2~
+ST*837*000002000*005010X223A2~
+BHT*0019*00*000002000<span class="todayDate"/>*<span class="todayTime"/>*CH~
+NM1*41*2*<apex:outputText value="{!objFacility.Name}"/>*****46*<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+PER*IC*American Addiction Center*TE*1233456~
+NM1*40*2*EMDEON*****46<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+HL*1**20*1~
+NM1*85*2<apex:outputText value="{!objFacility.Name}"/>*****XX*<apex:outputText value="{!objFacility.Id}"/>~
+N3*<apex:outputText value="{!objFacility.Billing_Street_Address_1__c}"/><apex:outputText value="{!objFacility.Billing_Street_Address_2__c}"/>~
+N4*<apex:outputText value="{!objFacility.City__c}"/>*<apex:outputText value="{!objFacility.State__c}"/>*<apex:outputText value="{!objFacility.Zip__c}"/>~
+REF*G5~
+REF*EI*<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+HL*2*1*22*0~
+SBR*<apex:outputText value="{!strPatientInsuranceType}"/>*18*<apex:outputText rendered="{!if(lstDatesOfService.size > 0,true,false)}"  value="{!lstDatesOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceGroupNumber__c}"/>******Cl~
+NM1*IL*1*<apex:outputText value="{!objAccount.LastName}"/>*<apex:outputText value="{!objAccount.FirstName}"/>***<apex:outputText value="{!objAccount.Salutation}"/>*MI*<apex:outputText rendered="{!if(lstDatesOfService.size > 0,true,false)}" value="{!lstDatesOfService[0].Patient_Insurance__r.Insurance_Code__c}"/>~
+N3*<apex:outputText value="{!objAccount.BillingStreet}"/>~
+N4*<apex:outputText value="{!objAccount.BillingCity}"/><apex:outputText value="{!objAccount.BillingState}"/><apex:outputText value="{!objAccount.BillingPostalCode}"/>~
+DMG*D8*<span class="todayDate"/>*<apex:outputText value="{!objAccount.Gender__pc}"/>~
+NM1*PR*2*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!lstPatientIns[0].Insurance_Company__r.Name}"/>*****PI*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!lstPatientIns[0].Insurance_Company__r.Id}"/>~
+N3*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!lstPatientIns[0].Insurance_Company__r.Address__c}"/>~
+N4*****<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!lstPatientIns[0].Insurance_Company__r.Billing_Code__c}"/>~
+
+
+
+
+<script>
+var d = new Date();
+var month = d.getMonth() + 1;
+document.getElementByClassName("todayDate").innerHTML = "" + d.getFullYear() + month + d.getDate();
+document.getElementByClassName("todayTime").innerHTML = ""+ d.getHours()+ d.getMinutes();
+</script>
+</apex:page>

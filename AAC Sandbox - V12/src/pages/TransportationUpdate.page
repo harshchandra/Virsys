@@ -1,0 +1,9 @@
+<apex:page controller="TransportationUpdateController">
+<apex:form >
+<apex:outputPanel >
+<apex:pageMessages />
+<apex:commandButton action="{!TransportationUpdate}" value="Update"/>
+<apex:commandButton action="{!DeleteDuplicates}" value="Delete Duplicates"/>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

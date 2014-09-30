@@ -1,0 +1,55 @@
+<apex:page sidebar="false" standardStylesheets="false" showHeader="true" standardController="Utilization_Review__c" extensions="LevelOfCareCalendarController" docType="html-5.0">
+<script type="text/javascript" src="{!URLFOR($Resource.FullCalendar, 'jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.FullCalendar, 'fullcalendar.min.js')}"></script>
+<link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.FullCalendar, 'fullcalendar.css')}"/>
+<style>
+   .wrapper
+   {
+   text-align : center;
+   }
+</style>
+<script>    
+    
+    function getEvents()
+    {
+        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.LevelOfCareCalendarController.ProcessDatesOfService}','{!Utilization_Review__c.Id}',handleResult);
+    }
+    function handleResult(result, event)
+    {
+        if(event.status)
+        {
+           for(var i = 0; i < result.length; i++)
+           {
+               var newEvent = new Object();
+               newEvent.title = result[i].Title;                
+               newEvent.start = result[i].StartDate;
+               newEvent.end = result[i].EndDate;
+               newEvent.allDay = true;
+               //alert(result[i].Title + '-' + result[i].StartDate + ' through ' + result[i].EndDate);
+               $('#mycalendar').fullCalendar('renderEvent', newEvent, true);
+           }
+        }
+    }
+    $(document).ready(function() {
+    
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        
+        $('#mycalendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: false,
+        });
+        
+        getEvents();
+    });   
+</script>
+<div id="mycalendar">
+</div>
+<script type="text/javascript" src="{!URLFOR($Resource.Bootstrap, 'Bootstrap3/js/bootstrap.min.js')}"></script>
+</apex:page>

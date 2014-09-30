@@ -1,0 +1,32 @@
+<apex:page controller="CallProcessorController" action="{!CallDetails}" docType="html-5.0" sidebar="true" showHeader="true">
+<apex:form >
+<apex:pageBlock title="Phone System Values">
+    <apex:pageBlockTable value="{!ParamMap}" var="key">
+        <apex:column headerValue="Key Values">
+             {!key} <!-- display the key Values of map -->
+       </apex:column>
+       <apex:column headerValue="Values">
+            {!ParamMap[key]} <!-- display the values of corresponding keys-->
+       </apex:column>
+  </apex:pageBlockTable>
+</apex:pageBlock>
+<apex:pageBlock title="Parent Account">
+	<apex:pageblockTable value="{!ParentAccount}" var="acc">
+		<apex:column value="{!acc.Id}"/>
+		<apex:column value="{!acc.Name}"/>
+	</apex:pageblockTable>
+</apex:pageBlock>
+<apex:pageBlock title="Accounts with Callers Phone Number">
+ <apex:pageblockTable value="{!AccountList}" var="acc">
+       <apex:column value="{!acc.Id}"/>
+       <apex:column value="{!acc.Name}"/>
+    </apex:pageblockTable>
+ </apex:pageBlock>
+ <apex:pageBlock title="Leads with Callers Phone Number">
+    <apex:pageblockTable value="{!LeadList}" var="lea">
+      <apex:column value="{!lea.Id}"/>
+      <apex:column value="{!lea.Name}"/>
+    </apex:pageblockTable>
+ </apex:pageBlock>
+   </apex:form>
+</apex:page>

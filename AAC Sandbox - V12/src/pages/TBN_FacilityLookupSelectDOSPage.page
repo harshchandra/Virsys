@@ -1,0 +1,62 @@
+<apex:page standardController="Top_Batch_Payment__c" tabStyle="Select_Dates_Of_Service__tab">
+	
+	<apex:form >
+		<apex:pageBlock id="thePageBlock" >
+	        <apex:pageBlockSection title="Select Facility to view DOS" columns="1">
+	        	<span>
+	            	<apex:inputField id="Facility__c" value="{!Top_Batch_Payment__c.Facility__c}" onchange="lookupValue(this.value);"/>
+	            </span><br/>
+	            <span style="padding-left: 13.5%;">
+	            	<b style="color:#4a4a56; font-size: 100%;">Status</b> &nbsp;&nbsp;&nbsp;&nbsp;
+	            	<input type="radio" name="status" id="radio1" value="Submit" checked="true">Submit</input>
+					<input type="radio" name="status" id="radio2" value="ReSubmit">ReSubmit</input>
+	            </span>
+	            <!-- <br/> -->
+	            <span style="padding-left: 6%;">
+	            	<b style="color:#4a4a56; font-size: 100%;">Level Of Care</b> &nbsp;&nbsp;&nbsp;&nbsp;
+	            	<input type="radio" name="LevelOfCare" id="radio3" value="Non-EAP" checked="true">Non-EAP</input>
+					<input type="radio" name="LevelOfCare" id="radio4" value="EAP">EAP Only</input>
+	            </span>
+	           <!--  <br /> -->
+	            <span style="padding-left: 6%;">
+	            	<b style="color:#4a4a56; font-size: 100%;">Send</b> &nbsp;&nbsp;&nbsp;&nbsp;
+	            	<input type="radio" name="Send" id="radio5" value="Send Electronically" checked="true">Send Electronically</input>
+					<input type="radio" name="Send" id="radio6" value="Print Only">Print Only</input><br />
+	            </span>
+	            <br/><br/>
+	            <input type="button" name="Proceed" class="btn" value="Proceed" style="margin-left:50%;" onclick="redirectPage();"/>
+	        </apex:pageBlockSection>
+	    </apex:pageBlock>
+	</apex:form>
+	
+	<script>
+		var facilityName;
+		function lookupValue(value)
+		{
+			facilityName = value;
+		}
+		
+		function redirectPage()
+		{
+			var queryCondition = '';
+			var LevelOfCare = ''; 
+			var SentFormat = '';
+			if(document.getElementById('radio1').checked == true || document.getElementById('radio1').checked == 'true')
+				queryCondition = 'Submit';
+			else if(document.getElementById('radio2').checked == true || document.getElementById('radio2').checked == 'true')
+				queryCondition = 'ReSubmit';
+			if(document.getElementById('radio3').checked == true || document.getElementById('radio3').checked == 'true')
+				LevelOfCare = 'Non-EAP';
+			else if(document.getElementById('radio4').checked == true || document.getElementById('radio4').checked == 'true')
+				LevelOfCare = 'EAP';
+			if(document.getElementById('radio5').checked == true || document.getElementById('radio5').checked == 'true')
+				SentFormat = 'Send Electronically';
+			else if(document.getElementById('radio6').checked == true || document.getElementById('radio6').checked == 'true')
+				SentFormat = 'Print Only';
+			var tabId = window.location.search.split("=")[1];
+			window.location="/apex/TBN_Select_DOS_Charges?facility="+facilityName+"&sfdc.tabName="+tabId+"&Status="+queryCondition+"&LevelOfCare="+LevelOfCare+"&Format="+SentFormat;
+		}
+		
+	</script>
+	
+</apex:page>

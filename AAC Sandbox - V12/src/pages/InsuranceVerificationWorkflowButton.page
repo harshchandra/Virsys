@@ -1,0 +1,11 @@
+<apex:page standardController="Case" extensions="InsuranceVerificationWorkflowController" showChat="false" showheader="false" sidebar="false">
+  <apex:form >
+    <apex:commandButton value="{!ButtonText}" 
+      action="{!SubmitInsurance}"
+      rendered="{!ShowSubmit}"
+      oncomplete="javascript: alert('Insurance submitted.'); parent.location.href='/{!Case.Id}' " />
+    <apex:commandButton value="{!ButtonText}"
+      rendered="{!ShowView}"
+      oncomplete="javascript: parent.location.href='{!PrimaryFormUrl}';" />
+  </apex:form>
+</apex:page>

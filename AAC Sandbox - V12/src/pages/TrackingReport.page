@@ -1,0 +1,91 @@
+<apex:page controller="TrackingReportController" >
+<apex:form >
+
+<apex:pageBlock title="Tracking Report {!UserState}" id="mainPage" >
+<apex:pageBlockSection title="Title" collapsible="true" rendered="false"/>
+<apex:repeat value="{!caseStatusIdMap}" var="statusID">
+    <apex:repeat value="{!caseStatusIdMap[statusID]}" var="statusName">
+    <apex:pageBlockSection title="{!statusName}" collapsible="true" columns="1" id="statusHeader">
+        <apex:pageBlockTable value="{!caseStatusMap[statusName]}" rules="groups" var="c">
+            <apex:column headerValue="Case">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CaseNumber}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Client">
+                <apex:outputLink value="/{!c.ContactId}" target="_parent">{!c.ContactName}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Created Date">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CreatedDateString}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Owner">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.OwnerName}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Parent Account">
+            <apex:outputLink value="/{!c.ParentAccountId}" target="_parent" title="">{!c.ParentAccountName}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Parent Account Type">
+                <apex:outputLink value="/{!c.ParentAccountId}" target="_parent">{!IF(ISBLANK(c.ParentAccountName),'',c.ParentAccountType)}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Insurance Status">
+                <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.InsuranceStatus}</apex:outputLink>
+            </apex:column>                        
+            <apex:column headerValue="Insurance Company">
+                <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.FirstPolicyCompany}</apex:outputLink>
+            </apex:column>            
+            <apex:column headerValue="Insurance Type">
+                <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.FirstPolicyInsuranceType}</apex:outputLink>
+            </apex:column>
+			<apex:column headerValue="Benefit Type">
+                <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.BenefitType}</apex:outputLink>
+            </apex:column>            
+            <apex:column headerValue="Transportation Status">
+                <apex:outputLink value="/{!c.TransportationId}" target="_parent">{!c.TransportationStatus}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Date/Time Client Arrives">
+                <apex:outputLink value="/{!c.TransportationId}" target="_parent">{!c.DateTimeClientArrives}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Detox Facility">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.DetoxFacility}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Treatment Facility">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.TreatmentFacility}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Admit Date">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.FacilityAdmissionDate}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Discharge Date">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.FacilityDischargeDate}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Paperwork Sent">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!IF(c.PaperworkSent == false,'','Yes')}</apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Commission Pay / Split">
+                <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.PayCommissionTo} {!IF(ISNULL(c.SplitCommissionWith),'',' / ' & c.SplitCommissionWith)}</apex:outputLink>
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    </apex:repeat>
+</apex:repeat>
+</apex:pageBlock>
+
+<script type="text/javascript" src="{!URLFOR($Resource.jQuery171, '/jQuery/js/jquery-1.7.1.min.js')}">
+<script>
+jQuery.noConflict();
+</script>
+<script type="text/javascript">
+$(document).ready(function ()
+ {
+       collapse();
+ });
+            
+function collapse()
+{
+    elements = $('.hideListButton');     
+    elements.each(function()
+    {
+        twistSection(this);
+    });
+}
+</script>
+
+</apex:form>
+</apex:page>

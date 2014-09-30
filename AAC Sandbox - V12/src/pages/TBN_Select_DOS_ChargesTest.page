@@ -1,0 +1,212 @@
+<apex:page controller="TBN_Select_DOS_ChargesTest" >
+
+	<style>
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+    </style> 
+    
+    <apex:form id="FormId">
+         <!-- handle selected item -->
+        <apex:actionFunction name="aSelectItem" action="{!doSelectItem}" rerender="Dummy">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:outputPanel id="Dummy"/>
+        <!-- handle deselected item -->
+        <apex:actionFunction name="aDeselectItem" action="{!doDeselectItem}" rerender="FormId">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+<!--          <apex:actionFunction name="allselect" action="{!refresh}" rerender="table"> -->
+<!--          </apex:actionFunction> -->
+		<apex:actionstatus id="processingImg" startText="Loading...">
+           <apex:facet name="start">
+           		<div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+		        <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+		            <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+		                <table align="center" valign="middle" style="width: 100%; height: 100%">
+		                    <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+		                        <td valign="middle" style="padding-top: 15px;" >
+		                            <img src="/img/loading.gif"/>
+		                            <span class="waitingDescription">
+		                                <b>Loading...</b>
+		                            </span>
+		                        </td>
+		                    </tr>
+		                </table>
+		            </div>
+		        </div>
+		        </div>
+		        <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+		        <script>
+		            document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+		        </script>
+           </apex:facet>
+           <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        <apex:pageBlock id="pb">
+            <apex:outputPanel id="errorMessageId" rendered="{!isError}">
+                <apex:pageMessages />
+            </apex:outputPanel> 
+            
+            <apex:pageBlockButtons >
+                        <apex:commandButton value="Save" action="{!updateStatusOfDOS}" status="actStatusId" />
+                        <apex:commandButton value="Save & Next" action="{!renderToViewSelectedDOScharges}" />
+                        <apex:commandButton value="Cancel" onClick="window.location.href='/apex/TBN_Select_DOS_Charges'"/>
+            </apex:pageBlockButtons>
+            
+            <apex:outputPanel id="dosTable">
+					<apex:pageBlockTable value="{!lstwrapperToShowOnPage}" var="c" id="table">
+	                    <apex:column headervalue="Select All">
+	                        <apex:facet name="header">
+	                            <apex:inputCheckbox selected="false"  onclick="checkall(this,'inid')" />
+	                        </apex:facet>                        
+	                        <apex:inputCheckbox value="{!c.isSelect}" id="inid" onclick="check(this,'{!c.objDatesOfService.Id}')"/>
+	                    </apex:column>
+	                    <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">
+	                        <apex:column headerValue="{!f.label}">
+	                            <apex:outputField value="{!c.objDatesOfService[f]}" />
+	                        </apex:column>
+	                    </apex:repeat>
+	            	</apex:pageBlockTable>
+	            	<!--           Start - Pagination -->
+					<apex:outputPanel style="{!IF(lstwrapperToShowOnPage.size > 0, 'display: block;', 'display:none;')}" id="paginatiorPanel">
+						<div  >
+		                   <div style="width:100%; text-align:center;" >
+		                       <apex:outputPanel id="paginationPanel">
+		                           <table width="100%" id = "tableNew">
+		                               <tr>
+		                                    <td width="39%" />
+		                                    <td width="4%">
+		                                       <apex:outputPanel rendered="{!(page==1)}">
+		                                            <a class="first disabled" data-action="first" style="text-decoration: none;"><font size="5">&laquo;</font> </a>&nbsp;
+		                                           <a class="previous disabled" data-action="previous" style="text-decoration: none;"><font size="5">&lsaquo;</font> </a>&nbsp;
+		                                       </apex:outputPanel>
+		                                       <apex:outputPanel rendered="{!!(page==1)}">
+		                                           <apex:commandLink action="{!firstPage}" style="text-decoration:none;" rerender="dosTable" status="processingImg"> 
+		                                              <font size="5"> &laquo; </font>&nbsp;
+		                                           </apex:commandLink>
+		                                           <apex:commandLink action="{!previousPage}" style="text-decoration:none;" rerender="dosTable" status="processingImg"> 
+		                                             <font size="5">  &lsaquo; </font>&nbsp;
+		                                           </apex:commandLink>
+		                                       </apex:outputPanel>
+		                                   </td>
+		                                   <td width="6%" align="center" nowrap="nowrap">
+		                                       <apex:outputPanel rendered="{!IF(lastPage == 1,true,false)}">
+		                                        <span style="vertical-align: baseline; " >
+		                                        <input type="text" value="{!page}" style="width:30px;height:15px;border:0.1em solid gray;margin-top:4.3px;" disabled="disabled"/>
+		                                        </span>
+		                                       </apex:outputPanel>
+		                                       <apex:inputText rendered="{!IF(lastPage > 1,true,false)}" value="{!page}" onkeypress="return onlyNum(event);" id="key4" size="1" style="width:30px;height:14px;border:0.1em solid gray;margin-top:4.3px;"/> 
+		                                            &nbsp;<font size="2.3" style="vertical-align: initial;">of {!lastPage}</font>&nbsp;&nbsp;
+		                                       <apex:actionFunction name="goToPage" action="{!goToPage}" rerender="dosTable" status="processingImg" />
+		                                   </td>
+		                                   <td width="4%">
+		                                       <apex:outputPanel rendered="{!(page == lastPage)}">
+		                                           <a class="next disabled" data-action="next" style="text-decoration: none;"><font size="5" >&rsaquo;</font></a>&nbsp;
+		                                           <a class="last disabled" data-action="last" style="text-decoration: none;"><font size="5" >&raquo;</font> </a>&nbsp;
+		                                       </apex:outputPanel>
+		                                       <apex:outputPanel rendered="{!!(page == lastPage)}"> 
+		                                           <apex:commandLink action="{!nextPage}" style="text-decoration:none;" rerender="dosTable" status="processingImg"> 
+		                                               <font size="5"> &rsaquo; </font>&nbsp;
+		                                           </apex:commandLink>
+		                                           <apex:commandLink action="{!lastPage}" style="text-decoration:none;" rerender="dosTable" status="processingImg"> 
+		                                                 <font size="5">   &raquo;  </font>&nbsp;
+		                                           </apex:commandLink> 
+		                                       </apex:outputPanel>
+		                                   </td>
+		                                   <td width="47%" />
+		                               </tr>
+		                           </table>
+		                       </apex:outputPanel>
+		                   </div>
+		                   <div style="clear:both"></div>
+		               </div>
+		            </apex:outputPanel>
+					<!-- End - Pagination -->
+					<script>
+						//function to check number is enter or not
+				        function onlyNum(evt) {
+				        
+				            evt = (evt) ? evt : window.event;
+				            var charCode = (evt.which) ? evt.which : evt.keyCode; 
+				            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+				            
+				                var status = 'This field accepts numbers only!';
+				                return false;
+				            }
+				            else {
+				            
+				                if(charCode == 13) {
+				                    goToPage();
+				                    return false;
+				                }
+				            }
+				            return true;
+				        }
+					</script>
+	        </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+    <script type="text/javascript">
+    function check(cb,cbid)
+    {   
+   
+        if(cb.checked==true)
+        {
+                aSelectItem(cbid);
+        }
+        else
+        {
+                aDeselectItem(cbid);
+        }
+       
+        return false;
+      
+    }  
+    
+    
+    
+    function checkall(cb,cbid)
+    {
+		
+        var inputElem = document.getElementsByTagName("input");
+        for(var i=0; i<inputElem.length; i++)
+        {            
+             if(inputElem[i].id.indexOf(cbid)!=-1)
+             {                                       
+                inputElem[i].checked = cb.checked;
+            }
+        }
+        
+        
+       //allselect();
+      return false;  
+   }
+        
+</script>
+    
+    
+
+</apex:page>

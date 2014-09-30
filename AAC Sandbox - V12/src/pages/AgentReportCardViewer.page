@@ -1,0 +1,29 @@
+<apex:page controller="AgentReportCardController" showHeader="false" sidebar="false" tabstyle="Account" renderas="pdf">
+<head>
+<style>
+@page
+{
+	size:landscape;
+}
+</style> 
+</head> 
+<apex:pageBlock title="Agent Report Card {!StartDateDisplay} through {!EndDateDisplay}" >
+<apex:pageBlockSection title="Report Card" columns="1" >
+<apex:outputPanel >
+<apex:pageBlockTable id="reportcard" align="center" cellpadding="3" cellspacing="3" value="{!ReportCardList}" var="rc" headerClass="col" columnClasses="col"  style="text-align:center; font-size:10pt; border: 1px solid black;">
+<apex:column value="{!rc.AgentName}" headervalue="Agent" style="text-align:center;" />
+<apex:column value="{!rc.Calls}" headervalue="Calls"  style="text-align:center"/>
+<apex:column value="{!rc.TotalTalkTimeMinutes}" headervalue="Talk Time (Minutes)"  style="text-align:center"/>
+<apex:column value="{!rc.AverageTalkTime}" headervalue="Avg. Talk Time (Minutes)"  style="text-align:center"/>
+<apex:column value="{!rc.Accounts}" headervalue="Accounts"  style="text-align:center"/>
+<apex:column value="{!rc.Cases}" headervalue="Cases"  style="text-align:center"/>
+<apex:column value="{!rc.InsuranceForms}" headervalue="Insurance Forms"  style="text-align:center"/>
+<apex:column value="{!rc.Assessments}" headervalue="Assessments"  style="text-align:center"/>
+<apex:column value="{!rc.Admissions}" headervalue="Admissions"  style="text-align:center"/>
+<apex:column value="{!rc.TotalCashCollected}" headervalue="Total Cash Collected"  style="text-align:center"/>
+<apex:column value="{!rc.ConversionRatio}" headervalue="Conversion Ratio (%)"  style="text-align:center"/>
+</apex:pageBlockTable> 
+</apex:outputPanel>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:page>

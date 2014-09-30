@@ -1,0 +1,355 @@
+<apex:page controller="VOBController" action="{!PreSave}">
+ <apex:form >
+  <apex:pageBlock title="Edit Insurance Verification Form">
+
+  <STYLE type="text/css">
+  
+    .tpat0 { width: 804px;  border: 0px; padding: 10px; margin-top: 10px;  background-color : #DDDDDD; text-align: left; } 
+    .tpat0 p {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt; padding-bottom: 10px;}
+    .tpat0 p input {width: 40px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+  
+    .tpat1 { width: 800px;  border: 2px solid #000000; padding: 10px; background-color : #DDDDDD; text-align: left; } 
+    .tpat1 p {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tpat1 p input {width: 130px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tpat1 p span.s1 {display: inline-block; width : 100pt;}
+    .tpat1 p span.s2 {display: inline-block; width : 60pt;}
+    .tpat1 p span.s3 {display: inline-block; width : 60pt;}
+
+    .tpat2 { width: 804px;  border: 0px; padding: 10px; margin-top: 10px;  background-color : #DDDDDD; text-align: left; } 
+    .tpat2 p {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt; padding-bottom: 10px;}
+    .tpat2 p input {width: 40px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tpat2 p select {width: 80px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+
+    .tpat3 { width: 804px;  border: 0px; padding: 10px; margin-top: 10px;  background-color : #DDDDDD; text-align: left; } 
+    .tpat3 p {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt; padding-bottom: 10px;}
+    .tpat3 p input {width: 80px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tpat3 p select {width: 80px; margin-left: 10px;margin-right: 10px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tpat3 p span.s1 {display: inline-block; width : 90pt;}
+    .tpat3 p textarea {border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+
+    .tpat4 { width: 800px;  border: 1px solid #000000; padding: 10px; margin-top: 10px; } 
+    .tpat4 p {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+
+    .tab1 { width: 822px;  border: 1px solid #000000; padding: 10px; margin-top: 10px;  background-color : #DDDDDD; } 
+    .tab1 tr td {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tab1 tr td input {width: 50px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+
+    .tab2 { width: 822px;  border: 1px solid #000000; padding: 10px; margin-top: 10px;  background-color : #DDDDDD; } 
+    .tab2 tr td {font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    .tab2 tr td input {width: 50px; border: 0; font-family : Verdana, Geneva, Arial, Helvetica, sans-serif; font-size : 8pt;}
+    
+div#messgbox {
+    display: none;
+    height: 100%;
+    left: 5%;
+    margin-top: 10px;
+    padding: 10px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 90%;
+}
+div#messgbox div#box {
+    background-color: #FFFFE7;
+    border: 2px solid #000000;
+    top: 100px;
+    left: 35%;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    position: absolute;
+    text-align: center;
+    width: 30%;
+}
+div#messgbox div#box a {
+    text-decoration : none;
+    font-weight : normal;
+    font-family : Arial, Helvetica, sans-serif;
+    font-size : 14pt;
+}
+div#messgbox div#box a:hover{
+    text-decoration : underline;
+}
+  </STYLE>
+  
+<CENTER>
+
+
+
+<input type="hidden" id="messgbox_result" name="messgbox_result"  value="" />
+<div id="messgbox">
+<div id="box">
+<a href="#" onclick="javascript:hideMessageBox('update');">Update information</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="#" onclick="javascript:hideMessageBox('review');">Review</a>
+</div>
+</div>
+
+<script>
+
+    var msg = '<apex:outputText value="{!jsMessage}" />';
+    var msgUrl = '<apex:outputText value="{!jsMessageUrl}" />';
+    
+    if (msg!='') alert(msg);
+    if (msgUrl !='') window.location.href = msgUrl;
+    
+    function hideMessageBox(val) {
+        var msg = document.getElementById("messgbox");
+        var v = document.getElementById("messgbox_result");
+        msg.style.display = 'none';
+        v.value = val;
+    }
+    
+    function showMessageBox() {
+        var msg = document.getElementById("messgbox");
+        var v = document.getElementById("messgbox_result");
+        var s = '<apex:outputText value="{!messageBoxStatus}" />';
+        v.value = s;
+        if (s!='update' && s!='review' && s!='created')
+        {
+            msg.style.display = 'block';
+        }
+    }
+    
+    window.setTimeout(showMessageBox,500);
+
+</script>
+
+<DIV CLASS="tpat0">
+<apex:outputText value="{!message}" />
+<apex:inputField value="{!vob.Name}" style="visibility: hidden;" />
+<apex:inputField value="{!vob.caseid__c}" style="visibility: hidden;" />
+</DIV>
+
+
+<DIV CLASS="tpat1">
+<P> <SPAN CLASS="s1">Client Name:</SPAN> <apex:inputField value="{!vob.pt_patient_name__c}"/> <SPAN CLASS="s2">S.S.#:</SPAN><apex:inputField value="{!vob.pt_s_s__c}"/> <SPAN CLASS="s3">DOB:</SPAN><apex:inputField value="{!vob.pt_dob__c}" style="width: 80px;"/>     </P>
+<P> <SPAN CLASS="s1">Phone:</SPAN> <apex:inputField value="{!vob.pt_phone__c}"/></P>
+<P> <SPAN CLASS="s1">Client Address:</SPAN>  <apex:inputField value="{!vob.pt_patient_address__c}" style="width: 600px;" /></P>
+<P> <SPAN CLASS="s1">Insured&rsquo;s Name:</SPAN><apex:inputField value="{!vob.pt_insured_name__c}"/>   <SPAN CLASS="s2">Rel to PT: </SPAN> <apex:inputField value="{!vob.pt_rel_to_pt__c}"/>  </P>
+<P> <SPAN CLASS="s1">Insured&rsquo;s Phone:</SPAN><apex:inputField value="{!vob.pt_inured_phone__c}"/>   <SPAN CLASS="s2">INS SS#:</SPAN> <apex:inputField value="{!vob.pt_ins_ss__c}"/>   <SPAN CLASS="s3">INS DOB:</SPAN><apex:inputField value="{!vob.pt_ins_dob__c}"  style="width: 80px;"/></P>
+<P> <SPAN CLASS="s1">Employer of Insured:</SPAN><apex:inputField value="{!vob.pt_employer_of_insured__c}"/>  <SPAN CLASS="s2">Phone#:</SPAN> <apex:inputField value="{!vob.pt_employer_of_insured_phone__c}"/></P>
+<P> <SPAN CLASS="s1">Insurance CO:</SPAN> <apex:inputField value="{!vob.pt_insurance_co__c}"/> <SPAN CLASS="s2">Ins Phone#:</SPAN> <apex:inputField value="{!vob.pt_ins_phone__c}"/></P>
+<P> <SPAN CLASS="s1">ID # :</SPAN><apex:inputField value="{!vob.pt_id__c}"/>    <SPAN CLASS="s2">GRP #:</SPAN><apex:inputField value="{!vob.pt_grp__c}"/>   <SPAN CLASS="s3">Ins Phone#:</SPAN><apex:inputField value="{!vob.pt_ins_phone2__c}"/></P>
+<P> <SPAN CLASS="s1">TYPE OF PLAN:</SPAN><apex:inputField value="{!vob.pt_type_of_plan__c}"/>         <SPAN CLASS="s2">DOC:</SPAN><apex:inputField value="{!vob.pt_doc__c}"/>       <SPAN CLASS="s3">rEF#:</SPAN>  <apex:inputField value="{!vob.pt_ref__c}"/>      </P>
+</DIV>
+
+<DIV CLASS="tpat2">
+<P>Completed by: <apex:inputField value="{!vob.cp_completed_by__c}" style="width: 130px;"/> Verified W/ 1<SUP>ST</SUP>: <apex:inputField value="{!vob.cp_verified_w1__c}" style="width: 130px;"/> 2<SUP>ND</SUP>:<apex:inputField value="{!vob.cp_verified_w2__c}" style="width: 130px;"/></P>
+<P>Date: <apex:inputField value="{!vob.cp_date__c}"/> Time: <apex:inputField value="{!vob.cp_time__c}"/> <B>GOOD FOR:</B> Detox <apex:inputField value="{!vob.cp_good_for_detox__c}"/>  IP<apex:inputField value="{!vob.cp_good_for_ip__c}"/>   RES<apex:inputField value="{!vob.cp_good_for_res__c}"/>   PHP<apex:inputField value="{!vob.cp_good_for_php__c}"/>   IOP<apex:inputField value="{!vob.cp_good_for_iop__c}"/>    OP<apex:inputField value="{!vob.cp_good_for_op__c}"/> </P>
+<P>Effective:<apex:inputField value="{!vob.cp_effective__c}"/> Active: <B><apex:inputField value="{!vob.cp_active__c}"/> </B> COBRA: <apex:inputField value="{!vob.cp_corba__c}"/>  Pre-Existing: <apex:inputField value="{!vob.cp_pre_existing__c}"/>    Pre Ex Terms: <apex:inputField value="{!vob.cp_pre_ex_terms__c}"/> </P>
+<P><B>ALCOHOL/SUBSTANCE ABUSE BENEFITS: </B><B> DED: <apex:inputField value="{!vob.cp_abuse_benefits_ded__c}"/> MET: <apex:inputField value="{!vob.cp_abuse_benefits_met__c}"/>               OOP: <apex:inputField value="{!vob.cp_abuse_benefits_oop__c}"/> MET: <apex:inputField value="{!vob.cp_abuse_benefits_oopmet__c}"/></B></P>
+<P>PRECERT: DETOX:<apex:inputField value="{!vob.cp_precert_detox__c}"/> IP: <apex:inputField value="{!vob.cp_precert_ip__c}"/>  RES:<apex:inputField value="{!vob.cp_precert_res__c}"/> PHP:<apex:inputField value="{!vob.cp_precert_php__c}"/> IOP:<apex:inputField value="{!vob.cp_precert_iop__c}"/> OP:<apex:inputField value="{!vob.cp_precert_op__c}"/> PENALTY:<apex:inputField value="{!vob.cp_precert_penalty__c}"/></P>
+</DIV>
+  
+<TABLE CLASS="tab1">
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="14"></COL>
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="62"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="40"></COL>
+    <COL WIDTH="63"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="52"></COL>
+    <TR>
+        <TD>DETOX</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_detox_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>IPDED</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_ipded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>RES DED</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_resded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>PHP DED</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_phpded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>IOP DED</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_iopded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>OUT PT</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t1_outpt_v6__c}"/></TD>
+    </TR>
+
+
+  
+</TABLE>
+  
+<DIV CLASS="tpat3">
+  <P><B>ALCOHOL &amp; SUBSTANCE COMBINED:  </B><apex:inputField value="{!vob.sb_substance_combined__c}"/><B>        MH/SA COMBINED:  </B><apex:inputField value="{!vob.sb_mh_sa_combined__c}"/></P>
+  <P><B>MENTAL HEALTH BENEFITS: </B><B>DED: <apex:inputField value="{!vob.cp_mental_benefits_ded__c}"/> MET:<apex:inputField value="{!vob.cp_mental_benefits_met__c}"/>OOP: <apex:inputField value="{!vob.cp_mental_benefits_oop__c}"/> MET: <apex:inputField value="{!vob.cp_mental_benefits_oopmet__c}"/></B></P>
+  <P>PRECERT: IP: <apex:inputField value="{!vob.sb_precert_ip__c}"/>  PHP:<apex:inputField value="{!vob.sb_precert_php__c}"/> IOP:<apex:inputField value="{!vob.sb_precert_iop__c}"/> OP:<apex:inputField value="{!vob.sb_precert_op__c}"/> PENALTY:<apex:inputField value="{!vob.sb_precert_penalty__c}"/></P>
+</DIV>
+  
+<TABLE CLASS="tab2">
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="14"></COL>
+    <COL WIDTH="52"></COL>
+    <COL WIDTH="62"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="40"></COL>
+    <COL WIDTH="63"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="30"></COL>
+    <COL WIDTH="52"></COL>
+    <TR>
+        <TD>IP DED</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_ipded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>PHP DED</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_phpded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>IQP DED</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_iqpded_v6__c}"/></TD>
+    </TR>
+
+    <TR>
+        <TD>OP DED</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v1__c}"/></TD>
+        <TD>%</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v2__c}"/></TD>
+        <TD>DAYS/YR.</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v3__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v4__c}"/></TD>
+        <TD>LFTM MAX</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v5__c}"/></TD>
+        <TD>USED</TD>
+    <TD><apex:inputField value="{!vob.t2_opded_v6__c}"/></TD>
+    </TR>
+
+</TABLE>
+  
+<DIV CLASS="tpat3">
+<P> <SPAN CLASS="s1">Precert Company:</SPAN><apex:inputField value="{!vob.pc_precert_company__c}" style="width: 291px;"/>  Phone:<apex:inputField value="{!vob.pc_phone__c}" style="width: 250px;"/></P>
+<P> <SPAN CLASS="s1">Bill to Name:</SPAN> <apex:inputField value="{!vob.pc_bill_to_name__c}" style="width: 605px;"/></P>
+<P> <SPAN CLASS="s1">Claims Address:</SPAN> <apex:inputField value="{!vob.pc_claims_address__c}" style="width: 205px;"/> City: <apex:inputField value="{!vob.pc_claims_address_city__c}"/> State: <apex:inputField value="{!vob.pc_claims_address_state__c}"/> ZIP:<apex:inputField value="{!vob.pc_claims_address_zip__c}"/></P>
+<P> <SPAN CLASS="s1">License Req.</SPAN> <apex:inputField value="{!vob.pc_license_req__c}"/>     Free Standing Facility: <apex:inputField value="{!vob.pc_free_standing_facility__c}"/>   Can Pt Go Out of State:<apex:inputField value="{!vob.pc_can_pt_go_out_of_state__c}"/> </P>
+<P> <SPAN CLASS="s1">Pharmacy Benefit:</SPAN> <apex:inputField value="{!vob.pc_pharmacy_benefit__c}"/>        RX:  <apex:inputField value="{!vob.pc_pharmacy_benefit_rx__c}"/>   RX Phone#<apex:inputField value="{!vob.pc_pharmacy_benefit_rx_phone__c}"/></P>
+</DIV>
+
+
+<DIV CLASS="tpat3">
+  <P> Summary of Benefits:<BR/><apex:inputField value="{!vob.summary_of_benefits__c}" style="width: 100%;"/></P>
+  <P> Complete:<apex:inputField value="{!vob.complete__c}" style="width: 30px;"/></P>
+</DIV>
+
+
+</CENTER>
+  
+  <apex:pageBlockButtons >
+    <apex:commandButton value="Save" action="{!save}"/>
+    <apex:commandButton value="Cancel" action="{!cancel}"/>
+    <apex:commandButton value="Go to Case" action="{!gotocase}"/>
+  </apex:pageBlockButtons> 
+  
+  </apex:pageBlock>   
+ </apex:form>
+</apex:page>

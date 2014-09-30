@@ -1,0 +1,25 @@
+<apex:page >
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-1.10.2.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-ui-1.10.4.custom.min.js')}"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+    var startYear=1930; 
+    var endYear=2034; 
+    var optionsString=''; 
+    if(startYear<endYear) 
+    { 
+        for(i=startYear;i<endYear+1;i++) 
+        { 
+            optionsString += "<option value=\""+i+"\">"+i+"</option>"; 
+        } 
+        $('#calYearPicker').html(optionsString); 
+    }
+    for (j = 0; j < window.top.frames.length; j++) 
+    {
+        //traverse the frames in Service Cloud Console and change calYearPicker
+        $('#calYearPicker', window.top.frames[j].document).html(optionsString);
+    }
+});
+</script>
+</apex:page>

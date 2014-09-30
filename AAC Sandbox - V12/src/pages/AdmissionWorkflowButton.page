@@ -1,0 +1,54 @@
+<apex:page standardController="Case" extensions="AdmissionWorkflowController" showChat="false" showheader="false" sidebar="false">
+<apex:form >
+<style>
+.valid 
+{}
+.validationTextBold
+{
+font-weight:bold;
+font-size: 12px;
+}
+.validationText
+{
+font-size:12px;
+}
+.invalid
+{color:red;font-weight:bold;}
+.customPopup{
+   background-color: white;
+   border-style: solid;
+   border-width: 2px;
+   left: 50%;
+   padding:10px;
+   position: absolute;
+   z-index: 9999;
+   /* These are the 3 css properties you will need to tweak so the pop 
+   up displays in the center of the screen. First set the width. Then set 
+   margin-left to negative half of what the width is. You can also add 
+   the height property for a fixed size pop up.*/
+   width: 500px;
+   margin-left: -250px;
+   top:100px;
+        }
+</style>
+<apex:commandButton value="{!ButtonText}"   styleClass="{!ButtonClass}" action="{!ButtonAction}" Rendered="{!ButtonEnabled}" oncomplete="javascript:if('{!ButtonText}' != 'Complete Admission'){var choice = confirm('Submitted to supervisor queue.  Return to your queue?');if(choice){parent.location.href='/500/o';}else{parent.location.href='/{!Case.Id}';}}" />
+<apex:outputPanel id="pnlSupervisorView" rendered="{!ShowSupervisorPanel}">
+<br/>
+<apex:outputLabel value="The following <b>guideline overrides</b> are required to approve this admission.  By approving this admission you are validating that you accept the responsibility of approving the admission regardless of the following <b>guidelines not being met</b>:<br/><br/>" escape="false" styleClass="validationText" rendered="{!ShowAdmissionOverridePanel}" id="lblValidationHeader"/>
+<apex:outputText value="{!InsuranceValidationError}" styleClass="validationTextBold" escape="false" rendered="{!ShowAdmissionOverridePanel}" id="lblValidationInsurance" />
+<apex:outputText value="{!AssessmentValidationError}" styleClass="validationTextBold" escape="false" rendered="{!ShowAdmissionOverridePanel}" id="lblValidationAssessment" />
+<br/>
+<apex:inputCheckbox id="chkPayment" value="{!Case.Payment_Arrangements_Approved__c}" label="Are Payment Arrangements Approved?" rendered="{!ShowApprovalOptions}">
+      <apex:actionSupport action="{!UpdatePaymentSetting}" event="onchange" reRender="chkPayment,pnlSupervisorView,lblPayment"/>  
+</apex:inputCheckbox>
+<apex:outputLabel value="Are Payment Arrangements Approved?" rendered="{!ShowApprovalOptions}" id="lblPayment"/>
+  <br/>
+  <apex:inputCheckbox id="chkTransportation" value="{!Case.Transportation_Approved__c}" label="Is Transportation Approved?" rendered="{!ShowApprovalOptions}">  
+      <apex:actionSupport action="{!UpdateTransportationSetting}" event="onchange" reRender="chkTransportation,pnlSupervisorView,lblTransportation"/>    
+  </apex:inputCheckbox>
+  <apex:outputLabel value="Is Transportation Approved?" rendered="{!ShowApprovalOptions}" id="lblTransportation"/>
+  <apex:commandButton value="{!SupervisorButtonText}" action="{!SupervisorButtonAction}" Rendered="{!ShowApprovalButton}" oncomplete="javascript: alert('Approval process complete.'); parent.location.href='/{!Case.Id}';"/> 
+<apex:outputLabel value="Admission approved by supervisor." rendered="{!ShowAdmissionApprovedPanel}"/>
+</apex:outputPanel>  
+</apex:form>
+</apex:page>

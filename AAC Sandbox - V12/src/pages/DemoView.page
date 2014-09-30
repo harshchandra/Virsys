@@ -1,0 +1,191 @@
+<apex:page controller="MyTest" >
+
+    <style>
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+    </style> 
+    
+    <apex:form id="FormId">
+         <!-- handle selected item -->
+        <apex:actionFunction name="aSelectItem" action="{!doSelectItem}" status="processingImg" rerender="Dummy">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:outputPanel id="Dummy"/>
+        <!-- handle deselected item -->
+        <apex:actionFunction name="aDeselectItem" action="{!doDeselectItem}" timeout="1000" rerender="Dummy">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+        
+         <apex:actionstatus id="processingImg" startText="Loading...">
+           <apex:facet name="start">
+                <div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+                    <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+                        <table align="center" valign="middle" style="width: 100%; height: 100%">
+                            <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+                                <td valign="middle" style="padding-top: 15px;" >
+                                    <img src="/img/loading.gif"/>
+                                    <span class="waitingDescription">
+                                        <b>Loading...</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+                <script>
+                    document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+                </script>
+           </apex:facet>
+           <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        <apex:pageBlock id="pb">
+            <apex:outputPanel id="errorMessageId" rendered="{!isError}">
+                <apex:pageMessages />
+            </apex:outputPanel> 
+            
+            <apex:pageBlockButtons >
+<!--                         <apex:commandButton value="Save" action="{!updateStatusOfDOS}" status="processingImg" rerender="OPPAnelID" />  -->
+                        <apex:commandButton value="Save and Confirm" action="{!renderToViewSelectedDOScharges}" rerender="popup"/>
+<!--                         <input type = "button" value="cancel" onclick="document.location.reload(true);" class="btn"/> -->
+                        <!-- <apex:commandButton value="Cancel" onClick="window.location.href='/apex/TBN_Select_DOS_Charges'"/> -->
+<!--                         <apex:commandButton value="Show Pop up" action="{!showPopup}" rerender="popup"/> -->
+            </apex:pageBlockButtons>
+            <apex:outputPanel id="OPPAnelID">
+                <apex:pageBlockTable value="{!DocWrapper}" var="c" id="table">
+                    <apex:column headervalue="Select All">
+                        <apex:facet name="header">
+                            <apex:inputCheckbox selected="false"  onclick="checkall(this,'inid')" />
+                        </apex:facet>                       
+                        <apex:inputCheckbox value="{!c.isSelect}" id="inid" onclick="check(this,'{!c.objDatesOfService.Id}')"/>
+                    </apex:column>
+                    <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">
+                        <apex:column headerValue="{!f.label}">
+                            <apex:outputField value="{!c.objDatesOfService[f]}" />
+                        </apex:column>
+                    </apex:repeat>
+            
+            </apex:pageBlockTable>
+            </apex:outputPanel>
+            
+            <!-- count of selected items -->
+            <!-- <apex:outputLabel value="[{!SelectedCount} records selected]" /> -->
+ 
+            <br/>
+ 
+            <!-- next, previous and page info -->
+            <apex:commandLink action="{!doPrevious}" rendered="{!hasPrevious}" value="Previous" rerender="pb" status="processingImg"/>
+            <apex:outputLabel rendered="{!NOT(hasPrevious)}" value="Previous" />
+ 
+             <apex:outputLabel value=" (page {!pageNumber} of {!totalPages}) " /> 
+ 
+            <apex:commandLink action="{!doNext}" rendered="{!hasNext}" value="Next"  rerender="pb" status="processingImg"/> 
+            <apex:outputLabel rendered="{!NOT(hasNext)}" value="Next" />
+         </apex:pageBlock>
+          
+        <apex:pageBlock >
+        <apex:outputPanel id="popup" >
+            <apex:outputPanel styleClass="customPopup"  rendered="{!displayPopUp}"> 
+             <apex:commandButton value="Cancel" action="{!closePopup}" rendered="{!displayPopUp}" rerender="popup"/>
+              <apex:commandButton value="Save" action="{!updateStatusOfDOS}" status="processingImg" rerender="popup" /> 
+                    <apex:pageBlockTable value="{!lstPopUpView}" var="c" id="table1">
+                        <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">
+                            <apex:column headerValue="{!f.label}">
+                                <apex:outputField value="{!c.objDatesOfService[f]}" />
+                            </apex:column>
+                        </apex:repeat>
+                    </apex:pageBlockTable>
+                  </apex:outputPanel>
+          </apex:outputPanel>
+       </apex:pageBlock>
+     
+    </apex:form>
+    <script type="text/javascript">
+    
+  
+    function check(cb,cbid)
+    {   
+   
+        if(cb.checked==true)
+        {   
+                aSelectItem(cbid);
+              
+        }
+        else
+        {
+                aDeselectItem(cbid);
+        }
+       
+        return false;
+      
+    }  
+    
+    
+    
+    function checkall(cb,cbid)
+    {
+        //alert('--');
+        
+        var inputElem = document.getElementsByTagName("input");
+        var arr = "{!DocWrapper}";
+        //alert("{!DocWrapper}".length);                     
+        for(var i=0; i<inputElem.length; i++)
+        {            
+             if(inputElem[i].id.indexOf(cbid)!=-1)
+             {                                       
+                inputElem[i].checked = cb.checked;
+            }
+        }
+        
+        
+       //allselect();
+      return false;  
+   }
+   
+</script>
+
+    <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+    </style>
+
+</apex:page>

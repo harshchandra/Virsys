@@ -1,0 +1,111 @@
+<apex:page controller="TBN_PostPaymentController" tabStyle="Post_Payment__tab">
+	
+	<style>
+	
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+         
+    </style>
+    
+	<apex:form >
+		<apex:pagemessages id="error" />
+		<apex:actionstatus id="processingImg" startText="Loading...">
+			<apex:facet name="start">
+				<div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+					<div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+						<div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+							<table align="center" valign="middle" style="width: 100%; height: 100%">
+								<tr align="center" valign="middle" style="width: 100%; height: 30%;">
+									<td valign="middle" style="padding-top: 15px;" >
+		                                 <img src="/img/loading.gif"/>
+		                                 <span class="waitingDescription">
+		                                     <b>Loading...</b>
+		                                 </span>
+	                             	</td>
+	                         	</tr>
+	                     	</table>
+	                 	</div>
+	             	</div>
+				</div>
+				<div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+				<script>
+				document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+				</script>
+			</apex:facet>
+	    	<apex:facet name="stop"></apex:facet>
+		</apex:actionstatus>
+		
+		<apex:outputPanel id="up">
+			<apex:pageBlock id="pb" title="All Batch Payment">
+				<input style="margin-left: 48%;" type="button" class="btn" value="New" onclick="window.open('/apex/TBN_CreateNewPayemBatchPage', '_self')"/>
+				<apex:outputPanel rendered="{!if(lstTopBatchPayment.size == 0, true, false)}">
+					<br/><span style="font-style: italic;">No record to display</span>
+				</apex:outputPanel>
+				<apex:pageBlockSection title="{!lstTopBatchPayment[0].CreatedBy.Name}" columns="1"  rendered="{!if(lstTopBatchPayment.size > 0, true, false)}">
+        			<apex:pageBlockTable value="{!lstTopBatchPayment}" var="payment" id="table1">
+						<apex:column >
+		               			<a href="/apex/TBN_EditPaymentBatch?Id={!payment.Id}" style="color: #015ba7; text-decoration: none;" target="_blank">View</a>
+<!-- 		               			<apex:commandLink action="{!editTopBatchPayment}" value="Edit" id="editLink" target="_blank" style="color: #015ba7; text-decoration: none;"> -->
+<!-- 		               				<apex:param value="{!payment.Id}" name="Id" assignTo="{!editTopBatchPaymentId}" ></apex:param> -->
+<!-- 		               			</apex:commandLink> -->
+		               	</apex:column>
+						<apex:column value="{!payment.Name}">
+							<apex:facet name="header">
+		           				<apex:commandLink action="{!sort}" value="Name{!IF(sortExpression=='Name',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+		             				<apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param>
+		           				</apex:commandLink>
+		        			</apex:facet>
+						</apex:column>
+						<apex:column value="{!payment.Facility__c}">
+							<apex:facet name="header">
+		           				<apex:commandLink action="{!sort}" value="Facility{!IF(sortExpression=='Facility__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+		             				<apex:param value="Facility__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+		           				</apex:commandLink>
+		        			</apex:facet>
+						</apex:column>
+						<apex:column headerValue="Status">
+								<apex:outputField value="{!payment.Status__c}" />
+						</apex:column>
+						<apex:column headerValue="# of Check">
+							<apex:outputField value="{!payment.of_Check__c}" />
+						</apex:column>
+		        		<apex:column headerValue="Batch Amount">
+							<apex:outputField value="{!payment.Batch_Amount__c}" />
+						</apex:column>
+						<apex:column headerValue="Processed Amount">
+							<apex:outputField value="{!payment.RollUp_Amount__c}" />
+						</apex:column>
+						<apex:column headerValue="Processed Check">
+							<apex:outputField value="{!payment.RollUp_Check__c}" />
+						</apex:column>
+					</apex:pageBlockTable>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+		</apex:outputPanel>
+	</apex:form>
+</apex:page>

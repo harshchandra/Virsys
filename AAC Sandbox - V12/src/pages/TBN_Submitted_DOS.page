@@ -1,0 +1,174 @@
+<apex:page controller="TBN_Submitted_DOS" tabStyle="Submitted_Claims__tab">
+
+    <style>
+    
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+         
+    </style>
+    
+    <apex:form >
+        <apex:pagemessages id="error" />
+        <apex:actionstatus id="processingImg" startText="Loading...">
+           <apex:facet name="start">
+                <div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+                    <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+                        <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+                            <table align="center" valign="middle" style="width: 100%; height: 100%">
+                                <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+                                    <td valign="middle" style="padding-top: 15px;" >
+                                        <img src="/img/loading.gif"/>
+                                        <span class="waitingDescription">
+                                            <b>Loading...</b>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+                <script>
+                    document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+                </script>
+            </apex:facet>
+            <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        
+        <apex:outputPanel id="up" rendered="{!if(lstClaim.size > 0, true, false)}">
+            <apex:pageBlock id="pb">
+                <apex:pageBlockButtons >
+                        <input style="margin-left: 25%;" type="button" class="btn" value="Re-Print" onclick=" return showUB04Pdf(this,'inid');"/>
+                </apex:pageBlockButtons>
+                    <apex:pageBlockSection title="{!lstClaim[0].Patient__c}" columns="1">
+                        <apex:outputPanel id="OPPAnelID">
+                    <apex:pageBlockTable value="{!lstClaim}" var="c" id="table1">
+                        <!-- <apex:column headerValue="Facility">
+                            <apex:outputText value="{!c.Facility__c}" />
+                        </apex:column> -->
+                        <apex:column >
+                                <apex:inputCheckbox value="{!isChecked}" id="inid" onclick="check(this,'{!c.Id}')" />
+                        </apex:column>
+                        <apex:column value="{!c.Facility__c}">
+                            <apex:facet name="header">
+                                <apex:commandLink action="{!sort}" value="Facility{!IF(sortExpression=='Facility__c',IF(sortDirection='ASC','?','?'),'?')}" rerender="pb" status="processingImg">
+                                <apex:param value="Facility__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                        </apex:column>
+                        <apex:column value="{!c.Level_of_Care__c}">
+                            <apex:facet name="header">
+                                <apex:commandLink action="{!sort}" value="Level of Care{!IF(sortExpression=='Level_of_Care__c',IF(sortDirection='ASC','?','?'),'?')}" rerender="pb" status="processingImg">
+                                <apex:param value="Level_of_Care__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                        </apex:column>
+                        <apex:column headerValue="Patient">
+                                <apex:outputField value="{!c.Patient__c}" />
+                        </apex:column>
+                        <apex:column headerValue="Claim Name">
+                            <apex:outputField value="{!c.Name}" />
+                        </apex:column>
+                        <apex:column headerValue="Parent Claim">
+                            <apex:outputField value="{!c.ParentClaim__c}" />
+                        </apex:column>
+                        <apex:column value="{!c.CreatedDate}">
+                            <apex:facet name="header">
+                                <apex:commandLink action="{!sort}" value="Created Date{!IF(sortExpression=='CreatedDate',IF(sortDirection='ASC','?','?'),'?')}" rerender="pb" status="processingImg">
+                                <apex:param value="CreatedDate" name="column" assignTo="{!sortExpression}" ></apex:param>
+                                </apex:commandLink>
+                            </apex:facet>
+                        </apex:column>
+                        <apex:column headerValue="Status">
+                            <apex:outputField value="{!c.Status__c}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:outputPanel>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        </apex:outputPanel>
+            <apex:outputPanel rendered="{!if(lstClaim.size == 0, true, false)}">
+            <apex:pageBlock id="facilityBlock1" title="Submitted DOS">
+                <span style="font-style: italic;">No record to display</span>
+            </apex:pageBlock>   
+        </apex:outputPanel>
+    </apex:form>
+  
+  <script>
+    
+    var strId;
+    function showUB04Pdf(cb,cbid)
+    {
+        var inputElem = document.getElementsByTagName("input");           
+        var chkflag=0;
+        for(var i=0; i<inputElem.length; i++)
+        {            
+             if(inputElem[i].id.indexOf(cbid)!=-1)
+             {                  
+                if(inputElem[i].checked == true)
+                {                   
+                    chkflag++;                                      
+                }                       
+            }
+        }
+        if(chkflag > 1)
+        {
+            alert("Please select only one Claim to reprint.");          
+        }   
+        else if(chkflag == 0)
+        {
+            alert("Please select one Claim to reprint.");       
+        }
+        else
+        {
+            window.open('/apex/TBN_UB04Form?claim='+strId, '_blank');           
+        }
+    }
+    
+    var arr=new Array();
+    function check(cb,cbid)
+   { 
+       if(cb.checked==true)
+       {   
+        arr.push(cbid);
+       }
+       else
+       {
+        var i = arr.indexOf(cbid);
+        if(i != -1)
+         {
+            arr.splice(i, 1);
+         }
+               
+       }
+       strId=arr[0];
+   }  
+    
+  </script>
+  
+</apex:page>

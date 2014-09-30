@@ -1,0 +1,73 @@
+<apex:page controller="PhoneSystemLoginController2">
+
+  <apex:form > 
+  <apex:pageBlock title="Phone System Report 2" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Search" action="{!filterPhoneSystemLogin}" reRender="FTbl,error,chart1,chart2"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2">
+                <apex:inputText label="Date From" id="DateFrom" value="{!DateFrom}" onfocus="DatePicker.pickDate(true, '{!$Component.DateFrom}', false);"/>
+                <apex:inputText label="Date To" id="DateTo" value="{!DateTo}" onfocus="DatePicker.pickDate(true, '{!$Component.DateTo}', false);"/>
+            </apex:pageBlockSection>
+  </apex:pageBlock>
+        
+  <apex:pageBlock >
+  
+      <apex:pageBlockTable styleClass="appTbl" id="FTbl" value="{!FilteredList}" var="item">
+
+          <apex:column headerValue="User" value="{!item.psl.User__c}"/>
+         
+          <apex:column headerValue="Count" value="{!item.total}">
+          <apex:facet name="footer">Total: {!CountTotal}<br/>Avg: {!CountAvg}<br/>Min: {!CountMin}<br/>Max: {!CountMax}</apex:facet>
+          </apex:column>
+          
+          <apex:column headerValue="Length" value="{!item.diff}">
+          <apex:facet name="footer">Total: {!TimeTotal}<br/>Avg: {!TimeAvg}<br/>Min: {!TimeMin}<br/>Max: {!TimeMax}</apex:facet>
+          </apex:column>
+          
+          <apex:column headerValue="Calls - all" value="{!item.callsAll}  /  {!item.callsAllLengthStr}">
+          <apex:facet name="footer">Total: {!SumCallsAll}  /  {!AllTimeTotal}
+          <br/>Avg: {!AvgCallsAll}  /  {!AllTimeAvg}
+          <br/>Min: {!MinCallsAll}  /  {!AllTimeMin}
+          <br/>Max: {!MaxCallsAll}  /  {!AllTimeMax}</apex:facet>
+          </apex:column>
+                    
+          <apex:column headerValue="Calls - known" value="{!item.callsKnown}  /  {!item.callsKnownLengthStr}">
+          <apex:facet name="footer">Total: {!SumCallsKnown}  /  {!KnownTimeTotal}
+          <br/>Avg: {!AvgCallsKnown}  /  {!KnownTimeAvg}
+          <br/>Min: {!MinCallsKnown}  /  {!KnownTimeMin}
+          <br/>Max: {!MaxCallsKnown}  /  {!KnownTimeMax}</apex:facet>
+          </apex:column>
+          
+          <apex:column headerValue="Calls - new" value="{!item.callsNew}  /  {!item.callsNewLengthStr}">
+          <apex:facet name="footer">Total: {!SumCallsNew}  /  {!NewTimeTotal}
+          <br/>Avg: {!AvgCallsNew}  /  {!NewTimeAvg}
+          <br/>Min: {!MinCallsNew}  /  {!NewTimeMin}
+          <br/>Max: {!MaxCallsNew}  /  {!NewTimeMax}</apex:facet>
+          </apex:column>
+        
+      </apex:pageBlockTable>
+      
+      <apex:pageMessages id="error"></apex:pageMessages>
+  </apex:pageBlock>
+  
+    <apex:pageBlock >
+      
+      <apex:chart height="350" width="600" data="{!FilteredList}" id="chart1">
+        <apex:pieSeries dataField="total" labelField="userName"/>
+        <apex:legend position="right"/>
+        </apex:chart>
+        
+        <apex:chart height="350" width="700" data="{!FilteredList}" id="chart2">
+
+            <apex:axis type="Numeric" position="left" fields="hours" title="Length [m]"/>
+            <apex:axis type="Category" position="bottom" fields="userName" title="User"/>
+                
+            <apex:barSeries orientation="vertical" axis="left" xField="userName" yField="hours"/>
+        
+        </apex:chart>
+      
+    </apex:pageBlock>
+    
+    </apex:form>
+</apex:page>

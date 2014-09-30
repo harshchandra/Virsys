@@ -1,0 +1,12 @@
+<apex:page standardController="Case">
+<apex:pageBlock title="Client Profile">
+<apex:pageMessages />
+<apex:pageBlockSection >
+<apex:outputField id="cName" value="{!Case.Contact.Name}"/>
+<apex:outputfield id="cPhone" value="{!Case.Contact.Phone}"/>
+<apex:outputfield id="cEmail" value="{!Case.Contact.Email}"/>
+<apex:outputfield id="cAddress" value="{!Case.Contact_Address__c}"/>
+<apex:outputfield id="cMinor" value="{!Case.Contact.Is_Client_a_Minor__c}"/>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:page>

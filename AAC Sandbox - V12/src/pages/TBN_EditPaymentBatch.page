@@ -1,0 +1,189 @@
+<apex:page sidebar="false" controller="TBN_EditPaymentBatch_Controller" tabStyle="Post_Payment__tab" action="{!deletePatienetPaymentInfo}">
+	<apex:form >
+		<style>
+			.clasp {
+				text-align:center;
+			}
+			.lunchbox {
+				display:none;
+			}
+		</style>
+		<script>
+			function openDetail(idd) 
+			{
+				if(document.getElementById(idd).style.display == 'block')
+				{
+					document.getElementById(idd).style.display = 'none';
+				}
+				else if(document.getElementById(idd).style.display == 'none')
+				{
+					document.getElementById(idd).style.display = 'block';
+				}	
+			}
+			
+			/*Function to open edit page of corresponding Batch Payment Record.*/
+			function editBatch()
+			{
+				var url = "/{!objBatchPay.Id}/e?retURL=/apex/TBN_EditPaymentBatch?Id={!objBatchPay.Id}";
+				window.open(url);
+			}
+			
+			/*Function to open edit page of corresponding Batch Payment Record.*/
+			function saveAndCloseStatus()
+			{
+				if('{!objBatchPay.Batch_Amount__c}' != '{!objBatchPay.RollUp_Amount__c}')
+					alert("Batch amount is not equal to Total processed amount. This Batch can not be closed.");
+				else
+					saveAndClose();
+			}
+			
+			/*Function to redirect to "TBN_PatientDOSDetailsPage" to show the DOS records where person can adjust amount on DOS*/
+			function editPatientPaymentInfo(accountName, checkAmount, insuranceName, patientPaymentInfoId, checkRollUpAmount)
+			{
+				var balanceCheckAmount = checkAmount - checkRollUpAmount;
+				var url = "/apex/TBN_PatientDOSDetailsPage?amount="+checkAmount+"&balanceAmount="+balanceCheckAmount+"&insurance="+insuranceName+"&patient="+accountName+"&PatientId="+patientPaymentInfoId;
+				window.open(url);
+			}
+			
+		</script>
+		
+		<apex:pageMessages id="msg"/>
+		<apex:actionFunction name="saveAndClose" action="{!saveAndClose}" rerender="batchPanel"/> 
+		<apex:sectionHeader title="Top Batch Payment" subtitle="{!objBatchPay.Name}"/>
+		<apex:outputPanel id="batchPanel">
+			<table cellspacing="0" width="100%">
+				<tr width="100%">
+					<td style="width: 20%; font-weight: bold; text-align: right; height: 35px;">Name</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 25%; text-align: left;">{!objBatchPay.Name}</td>
+					<td style="width: 15%; font-weight: bold; text-align: right;">Facility</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 30%; text-align: left;">{!objBatchPay.Facility__r.Name}</td>
+				</tr>
+				<tr>
+					<td style="width: 20%; font-weight: bold; text-align: right; height: 35px;">Batch Amount</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 25%; text-align: left;">{!objBatchPay.Batch_Amount__c}</td>
+					<td style="width: 15%; font-weight: bold; text-align: right;">Total Processed Check</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 30%; text-align: left;">{!objBatchPay.RollUp_Check__c}</td>
+				</tr>
+				<tr>
+					<td style="width: 20%; font-weight: bold; text-align: right; height: 35px;">Total Processed Amount</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 25%; text-align: left;">{!objBatchPay.RollUp_Amount__c}</td>
+					<td style="width: 15%; font-weight: bold; text-align: right;">Status</td>
+					<td style="width: 5%">&nbsp;</td>
+					<td style="width: 30%; text-align: left;">
+						<span style="color: red"><b>{!objBatchPay.Status__c}</b></span>
+					</td>
+				</tr>
+<!-- 				<tr> -->
+<!-- 					<td style="width: 20%; font-weight: bold; text-align: right; height: 35px;">Status</td> -->
+<!-- 					<td style="width: 5%">&nbsp;</td> -->
+<!-- 					<td style="width: 25%; text-align: left;"> -->
+<!-- 						<span style="color: red"><b>{!objBatchPay.Status__c}</b></span> -->
+<!-- 					</td> -->
+<!-- 				</tr>	 -->
+			</table>
+		</apex:outputPanel>
+		<br /><br />
+			<div style="text-align: center;">
+				<input type="button" class="btn" value="Edit" onclick="editBatch()"/>
+				<apex:commandButton value="Continue" action="{!doContinue}" rerender="msg"/>
+				<input type="button" class="btn" value="Save and Close" onclick="saveAndCloseStatus();"/>
+			</div>
+			<br />	 
+			<apex:repeat value="{!lstBatchDetail}" var="val">
+				<apex:pageBlock Title="{!val.objCheckInfo.Name} Check Info">
+					<apex:pageBlockSection id="SectionId" >
+						<table cellspacing="0" width="100%">
+							<tr width="100%">
+								<td style="width: 30%; font-weight: bold; text-align: right; height: 20px;">Check #</td>
+								<td style="width: 5%">&nbsp;</td>
+								<td style="width: 20%">{!val.objCheckInfo.Name}</td>
+								<td style="width: 30%; font-weight: bold; text-align: right;">Check Amount</td>
+								<td style="width: 5%">&nbsp;</td>
+								<td style="width: 20%">{!val.objCheckInfo.Amount__c}</td>
+							</tr>
+							
+							
+							<tr width="100%">
+								<td style="width: 30%; font-weight: bold; text-align: right;"># Of Patients</td>
+								<td style="width: 5%">&nbsp;</td>
+								<td style="width: 20%">{!val.objCheckInfo.RollUp_Patient__c}</td>
+								<td style="width: 30%; font-weight: bold; text-align: right; height: 20px;">Total Processed Amount</td>
+								<td style="width: 5%">&nbsp;</td>
+								<td style="width: 20%">{!val.objCheckInfo.RollUp_Amount__c}</td>
+							</tr>
+							
+							
+							<!-- <tr>
+								<td style="width: 30%; font-weight: bold; text-align: right; height: 20px;">Status</td>
+								<td style="width: 5%">&nbsp;</td>
+								<td style="width: 20%">
+									<span style="color: red" id="Test{!val.objCheckInfo.Id}"><b>{!val.objCheckInfo.Status__c}</b></span>
+								</td>
+							</tr> -->	
+						</table>
+					</apex:pageBlockSection>	
+					<apex:outputPanel rendered="{!if(AND(val.lstPatientInfo != null, val.lstPatientInfo.size >0), true, false)}">
+						<div id="clasp_1" class="clasp"><a style="color: #015ba7;" href="javascript:openDetail('{!val.objCheckInfo.Id}');">More Info..</a></div><br /><br />
+						<div id="{!val.objCheckInfo.Id}" style="display: none;">
+							<apex:repeat value="{!val.lstPatientInfo}" var="innr">
+								<table width="80%" >
+									<tr width="100%">
+										<td width="22%">&nbsp;</td>
+										<td style="width: 8%; font-weight: bold; text-align: right; height: 20px;">Name</td>
+										<td style="width: 5%">&nbsp;</td>
+										<td style="width: 20%">{!innr.Name}</td>
+										<td style="width: 30%; font-weight: bold; text-align: right; height: 20px;">Patient Name</td>
+										<td style="width: 5%">&nbsp;</td>
+										<td style="width: 20%">{!innr.Patient__r.Name}</td>
+									</tr>
+									<tr width="100%">
+										<td colspan="7">
+											<a value="Edit" id="editLink" style="color: #015ba7; cursor: pointer; margin-left: 15%; display:{!IF(AND(objBatchPay.Status__c == 'Open', val.objCheckInfo.Amount__c > val.objCheckInfo.RollUp_Amount__c, objBatchPay.Batch_Amount__c > objBatchPay.RollUp_Amount__c),'','none')}" onclick="editPatientPaymentInfo('{!innr.Patient__r.Name}', '{!val.objCheckInfo.Amount__c}', '{!innr.Insurance__r.Type__c}', '{!innr.Id}', '{!val.objCheckInfo.RollUp_Amount__c}');">Edit</a>
+										</td>
+									</tr>
+									<tr width="100%">
+									<td width="22%">&nbsp;</td>
+										<td style="width: 8%; font-weight: bold; text-align: right;">Amount</td>
+										<td style="width: 5%">&nbsp;</td>
+										<td style="width: 20%">{!innr.Amount__c}</td>
+										<td style="width: 30%; font-weight: bold; text-align: right; height: 20px;">Insurance Name</td>
+										<td style="width: 5%">&nbsp;</td>
+										<td style="width: 20%">{!innr.Insurance__r.Type__c}</td>
+									</tr>
+									<!-- <tr>
+										<td width="22%">&nbsp;</td>
+										<td style="width: 8%; font-weight: bold; text-align: right;">Status</td>
+										<td style="width: 5%">&nbsp;</td>
+										<td style="width: 20%">
+											<span style="color: red" id="Test{!innr.Id}"><b>{!innr.Status__c}</b></span>
+										</td>
+									</tr> -->
+									<tr>
+										<td>&nbsp;</td>
+										<td style="border-bottom: 1px solid black;" colspan="8">&nbsp;</td>
+									</tr>
+								</table>
+								<script>
+									/*if('{!innr.Status__c}' == 'Closed')
+										document.getElementById('Test{!innr.Id}').style.color='#00FF00';*/
+								</script>		
+							</apex:repeat>
+							<script>
+							/*if('{!val.objCheckInfo.Status__c}' == 'Closed')
+								document.getElementById('Test{!val.objCheckInfo.Id}').style.color='#00FF00';*/
+							</script>
+						</div>
+					</apex:outputPanel>	
+				</apex:pageBlock>
+			</apex:repeat>
+		
+<!-- 		<div id="clasp_1" class="clasp"><a href="javascript:lunchboxOpen('1');">Open Lunchbox 1...</a></div> -->
+<!-- 					<div id="lunch_1" class="lunchbox">This is lunchbox 1<br />Peanut Butter &amp; Jelly<br />Potato Chips<br />Apple</div> -->
+		
+	</apex:form>
+</apex:page>

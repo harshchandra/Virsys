@@ -1,0 +1,66 @@
+<apex:page controller="AgentReportCardController" showheader="true" sidebar="true" tabstyle="Account">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
+<script>
+    j$ = jQuery.noConflict();
+    
+    function showLoadingDiv() {
+        var newHeight = j$("[id$=report-card-section] .pbSubsection").css("height");//Just shade the body, not the header
+        j$("[id$=loading-curtain-div]").css("background-color", "black").css("opacity", 0.35).css("height", newHeight).css("width", "99%").css("display", "block");
+    }
+    function hideLoadingDiv() {
+        j$("[id$=loading-curtain-div]").css("background-color", "black").css("opacity", "1").css("height", "0px").css("width", "99%").css("display","none");
+    }
+    
+</script>
+<style>
+    #loading-curtain-div {
+        height:0px;
+        width:100%;
+        position:absolute;
+        z-index:5;
+        //-webkit-transition: all 0.30s ease-out;
+        //-moz-transition: all 0.30s ease-out;
+    }
+</style>
+<style>
+.col{
+text-align:center;
+}
+</style>
+<apex:form id="page-form">
+<apex:pageBlock title="Agent Report Card">
+<apex:actionStatus id="search-status" onstart="showLoadingDiv();" onstop="hideLoadingDiv();"/>
+<apex:pageBlockButtons location="top">
+<apex:commandButton action="{!GetAgentReportCard}" value="Search" status="search-status" reRender="page-form" />
+<apex:commandButton action="{!GeneratePDF}" value="Generate PDF" rendered="{!RenderPDFButton}"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection title="Search Settings" columns="1">
+<apex:selectList value="{!selectedUsers}" label="Agent(s)" multiselect="true" size="10">
+<apex:selectOptions value="{!UserList}" />
+</apex:selectList>
+<apex:inputField value="{!TempCase.Facility_Admission_Date__c}" label="Search Start Date"/>
+<apex:inputField value="{!TempCase.Facility_Date_of_discharge__c}" label="Search End Date"/>
+</apex:pageBlockSection>
+
+<apex:actionRegion >
+<apex:pageBlockSection title="Report Card" columns="1" id="report-card-section">
+<div id="loading-curtain-div" style="display:none;"><img src="/img/loading.gif" border="0" style="text-align:center; height:20px; width:20px;"/></div>
+<apex:pageMessages />
+<apex:pageBlockTable id="reportcard" align="center" cellpadding="3" cellspacing="3" value="{!ReportCardList}" var="rc" headerClass="col" columnClasses="col">
+<apex:column value="{!rc.AgentName}" headervalue="Agent" />
+<apex:column value="{!rc.Calls}" headervalue="Calls"/>
+<apex:column value="{!rc.TotalTalkTimeMinutes}" headervalue="Talk Time(mi)"/>
+<apex:column value="{!rc.AverageTalkTime}" headervalue="Avg. Talk Time(mi)"/>
+<apex:column value="{!rc.Accounts}" headervalue="Accounts"/>
+<apex:column value="{!rc.Cases}" headervalue="Cases"/>
+<apex:column value="{!rc.InsuranceForms}" headervalue="Insurance Forms"/>
+<apex:column value="{!rc.Assessments}" headervalue="Assessments"/>
+<apex:column value="{!rc.Admissions}" headervalue="Admissions"/>
+<apex:column value="{!rc.TotalCashCollected}" headervalue="Cash Collected"/>
+<apex:column value="{!rc.ConversionRatio}" headervalue="Conversion Ratio (%)"/>
+</apex:pageBlockTable> 
+</apex:pageBlockSection>
+</apex:actionRegion>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

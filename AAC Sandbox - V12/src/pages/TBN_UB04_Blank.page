@@ -1,0 +1,1274 @@
+<apex:page showHeader="false" controller="TBN_UB04FormController">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>UB-04 Form</title>
+            <style>
+                html, body{margin:10px 0px; padding:0px; font:normal 11px Arial; color:#dd0000; height:auto;}
+                .floatL{float:left;}
+                .floatR{float:right;}
+                .wText{color:#fff;}
+                .textLeft{text-align:left;}
+                .textRight{text-align:right;}
+                .textCenter{text-align:center;}
+                .mBox{margin:0 1px; width:1002px; font-size: 8px;}
+                .mWrapper{width:1122px; margin:0px auto; padding:0px;}
+                td{height:18px; padding:0px; border-bottom:1px solid #fff;}
+                .mWrapper td{height:20px; padding:0px 1px; border-bottom:1px solid #c4c4c4; border-right:1px solid #c4c4c4; line-height:18px;}
+                .mWrapper td:last-child{border-right:0px;}
+                .mWrapper1{width:1000px; border:0px solid #c4c4c4; margin:0px auto; padding:0px;}
+                .mWrapper1 td{height:18px; padding:0px 5px; border-bottom:1px solid #c4c4c4; border-right:1px solid #c4c4c4; line-height:18px;}
+                .whiteBg{background:#fff !important;}
+                .greyBg{background:#ffecec !important;}
+                .row1{height:50px; border:0px;}
+                .col{height:18px; border-right:1px solid #c4c4c4; padding:0px 5px; line-height:18px;}
+                .col_small{/*width:10px;*/ margin:0px 5px 0px -5px; text-align:center; line-height:18px; font:normal 10px Arial; color:#999;}
+                .hideRightLine{border-right:0px !important;}
+                .spaceFix{line-height:10px;}
+                .blackBox{background:#333; color:#fff; padding-right:0.6%;} 
+                .gold{background:gold;}
+                .lime{background:lime;}
+                .purple{background:purple;}
+                .paddingFix{padding:0px;}
+                .bLine{border-bottom:1px solid #c4c4c4 !important;}
+                .h50{height:50px;}
+                .rightLine{border-right:1px solid #c4c4c4 !important;}
+                .noBorder{border:0px;}
+                .showBorder{border:1px solid red;}
+                .noFix{margin:-25px 0px 0px -5px; padding:0px;}
+                .noFix1{margin:-12px 0px 0px -2px; padding:0px;}
+                .oneLine{white-space:nowrap;}
+                .splitMiddle{width:75%; margin:0px auto;}
+                .splitMiddle1{width:90%; margin:0px 0px 0px 25px; border:0px solid #333;}
+                .splitMiddle2{width:103%; margin:0px auto; border:0px solid green;}
+                .splitMiddle2 div{width:22px; padding:0px 2px 0px 3px; border:0px solid blue; border-left:0px; text-align:center; margin-left:-1px;}
+                .font12{font: normal 12px Arial;}
+                .mFix{margin-left:20px;}
+                .m14left{margin-left:14px;}
+                .m24left{margin-left:24px;}
+                .m12left{margin-left:12px;}
+                .m5left{margin-left:5px;}
+                .mNeg10{margin-left:-10px;}
+                .titleText{font:bold 16px Arial; font-style:italic;}
+                .mWrapper tr:nth-child(odd) {background:#ffecec; border-bottom:0px;}
+                .mWrapper tr:nth-child(even) {background:#fff;}
+                .mTable td{border-bottom:0px;}
+                .backNumber{position:relative; z-index:2; width:100%; height:18px; text-align:center; background:none; padding:0px; margin:0px 0px 0px 0px; font:bold 22px Arial; filter: alpha(opacity=20); opacity: 0.2; color:#fa5959;}
+                .frontContent{margin-top:-15px; position:relative; z-index:10; width:100%; height:18px; text-align:center; background:none;}
+                .mBorder{border:1px solid #c4c4c4;}
+                .leftLegend{width:20px; position:absolute; z-index:30; text-align:right; margin:0px 0px 0px -32px; height:18px;}
+                .rightLegend{width:20px; position:absolute; z-index:31; text-align:left; margin:0px 0px 0px 26px; height:18px;}
+                .rightLegend1{width:20px; position:absolute; z-index:32; text-align:left; margin:0px 0px 0px 90px; height:18px;}
+                .rightLegend2{width:20px; position:absolute; z-index:33; text-align:left; margin:0px 0px 0px 125px; height:18px;}
+                .rightLegend3{width:20px; position:absolute; z-index:34; text-align:left; margin:0px 0px 0px 205px; height:18px;}
+                .rightLegend4{width:20px; position:absolute; z-index:34; text-align:left; margin:0px 0px 0px 335px; height:18px;}
+                
+                .topBorder{border-top: 1px solid #c4c4c4;} */
+            </style>
+        </head>
+        <apex:outputPanel id="mainPanel" rendered="{!if(lstDateOfService.size == 0, false, true)}">
+            <body>
+                <div style="margin: 0 5px; width: 1220px; font-family: Courier; font-size: 17pt;">
+    <!--             <div style="margin: 0 5px; width: 1220px; font-size: 12px;"> -->
+                    <div style="border: 1px solid #c4c4c4;">
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--1-->            <td style="font-family: courier new; height: 22px; max-width: 371px; min-width:371px;">&nbsp;&nbsp;{!objFacility.Name}</td><td style="font-family: courier new; height: 22px; max-width: 371px; min-width:371px;">&nbsp;{!objFacility.Name}</td><td style="font-family: courier new; height: 22px; max-width: 45px; min-width:45px;"></td><td style="font-family: courier new; height: 22px; max-width: 346px; min-width:346px;">17</td><td style="font-family: courier new; height: 22px; max-width: 85px; min-width:85px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                            
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--2-->            <td style="font-family: courier new; height: 22px; max-width: 371px; min-width:371px;">&nbsp;&nbsp;{!objFacility.Street_Address_1__c} {!objFacility.Street_Address_2__c}</td><td style="font-family: courier new; height: 22px; max-width: 371px; min-width:371px;">&nbsp;{!objFacility.Billing_Street_Address_1__c} {!objFacility.Billing_Street_Address_2__c}</td><td style="font-family: courier new; height: 22px; max-width: 45px; min-width:45px;"></td><td style="font-family: courier new; height: 22px; max-width: 346px; min-width:346px;"></td><td style="font-family: courier new; height: 22px; max-width: 85px; min-width:85px;">&nbsp;113</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--3-->            <td style="font-family: courier new; height: 22px; max-width: 360px; min-width:371px;">&nbsp;&nbsp;{!objFacility.City__c} {!objFacility.State__c} {!objFacility.Country__c} {!objFacility.Zip__c}</td><td style="font-family: courier new; height: 22px; max-width: 371px; min-width:371px;">&nbsp;{!objFacility.Billing_City__c} {!objFacility.Billing_State__c} {!objFacility.Billing_Country__c} {!objFacility.Billing_Zip__c}</td><td style="font-family: courier new; height: 22px; max-width: 144px; min-width:144px;">&nbsp;&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 190px; min-width:190px;">&nbsp; </td><td style="font-family: courier new; height: 22px; max-width: 117px; min-width:117px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--4-->            <td style="font-family: courier new; height: 22px; max-width: 360px; min-width:371px;">&nbsp;&nbsp;{!objFacility.Main_Phone_Number__c}</td>
+            					<td style="font-family: courier new; height: 22px; max-width: 340px; min-width:340px;">&nbsp;{!objFacility.Billing_Main_Phone_Number__c}</td>
+            					<td style="font-family: courier new; height: 22px; max-width: 130px; min-width:130px;">{!objFacility.Facility_Tax_ID__c}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 94px; min-width:94px;">
+                                    <span id="from" ></span>
+                                </td>
+                                <td style="font-family: courier new; height: 22px; max-width: 85px; min-width:85px;">
+                                    <span id="through" ></span>
+                                </td>
+                                    <script>
+                                        var date = new Date('{!lstDateOfService[lstDateOfService.size-1].Start_Date__c}');
+                                        var year = date.getFullYear();
+                                        year = year.toString().substr(2,2);
+                                        var month = date.getMonth()+1;
+                                        if(month<10)
+                                            month = 0+''+month;
+                                        var day = date.getDate();
+                                        if(day<10)
+                                            day = 0+''+day;
+                                        var dateToDisplay = month+''+day+''+year;
+                                        if(dateToDisplay == 'NaNNaNNaN')
+                                            document.getElementById("through").innerHTML = '';
+                                        else
+                                            document.getElementById("through").innerHTML = dateToDisplay;
+                                    </script>
+                                <td style="font-family: courier new; height: 22px; max-width: 117px; min-width:117px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 29px;">
+                            <tr>
+            <!--5-->            <td style="font-family: courier new; height: 22px; max-width: 123px; min-width:123px;">&nbsp;&nbsp;&nbsp;&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 198px; min-width:198px;">17</td><td style="font-family: courier new; height: 22px; max-width: 109px; min-width:109px;"></td><td style="font-family: courier new; height: 22px; max-width: 421px; min-width:421px;">{!objAccount.BillingStreet}</td>
+                            </tr>
+                        </table>
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--6-->            <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!objAccount.LastName}, {!objAccount.Salutation} {!objAccount.FirstName}</td><td style="font-family: courier new; height: 22px; max-width: 363px; min-width:363px;">&nbsp;{!objAccount.BillingCity}</td><td style="font-family: courier new; height: 22px; max-width: 40px; min-width:40px;">{!objAccount.BillingState}</td><td style="font-family: courier new; height: 22px; max-width: 156px; min-width:156px;">&nbsp;{!objAccount.BillingPostalCode}</td>
+                            </tr>
+                        </table>
+                        
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--7-->            <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 26px;">
+                            <tr>
+            <!--8-->            <td style="font-family: courier new; height: 22px; max-width: 47px; min-width:47px;" >&nbsp;&nbsp;<span id="dob"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 363px; min-width:363px;">
+                                    &nbsp;{!objAccount.Gender__pc}
+                                    &nbsp;<span id="admissionDate"></span>
+                                    08&nbsp;&nbsp;3&nbsp;1&nbsp;
+<!--                                    <span id="dhr" style="font-size: 10px;"></span>&nbsp; -->
+                                    <span id="dhr" ></span>&nbsp;
+                                    <span id="stat"></span>
+                                </td>
+                                <script>
+                                    var date = new Date('{!objAccount.PersonBirthdate}');        
+                                    var year = date.getFullYear();
+                                    var month = date.getMonth()+1;
+                                    if(month<10)
+                                        month = 0+''+month;
+                                    var day = date.getDate();
+                                    if(day<10)
+                                        day = 0+''+day;
+                                    var dateToDisplay = month+''+day+''+year;
+                                    if(dateToDisplay == 'NaNNaNNaN')
+                                        document.getElementById("dob").innerHTML = '';
+                                    else
+                                        document.getElementById("dob").innerHTML = dateToDisplay;
+                                </script>
+                                <script>
+                                    var date = new Date('{!lstDateOfService[0].Start_Date__c}');
+                                    var year = date.getFullYear();
+                                    year = year.toString().substr(2,2);
+                                    var month = date.getMonth()+1;
+                                    if(month<10)
+                                        month = 0+''+month;
+                                    var day = date.getDate();
+                                    if(day<10)
+                                        day = 0+''+day;
+                                    var dateToDisplay = month+''+day+''+year;
+                                    if(dateToDisplay == 'NaNNaNNaN')
+                                    {
+                                        document.getElementById("admissionDate").innerHTML = '';
+                                        document.getElementById("from").innerHTML = '';
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("admissionDate").innerHTML = dateToDisplay;
+                                        document.getElementById("from").innerHTML = dateToDisplay;
+                                    }
+                                </script>
+                                <script>
+                                    var date = new Date('{!lstDateOfService[lstDateOfService.size-1].Utilization_Review_Form__r.Discharge_Date__c}');
+                                    if(date == '' || date == NaN)
+                                    {
+                                        document.getElementById("dhr").innerHTML = '';
+                                        document.getElementById("stat").innerHTML = '1';
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("dhr").innerHTML = '1200';
+                                        document.getElementById("stat").innerHTML = '30';
+                                    }
+                                </script>
+                            </tr>
+                        </table>
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--9-->            <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--10-->           <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--11-->           <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 30px;">
+                            <tr>
+            <!--12-->           <td style="font-family: courier new; height: 22px; max-width: 126px; min-width:126px;">&nbsp;&nbsp;{!objPatientInsurance.Insurance_Company__r.Name}</td><td style="font-family: courier new; height: 22px; max-width: 112px; min-width:112px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--13-->           <td style="font-family: courier new; height: 22px; max-width: 126px; min-width:126px;">&nbsp;&nbsp;{!strInsAdd1}</td><td style="font-family: courier new; height: 22px; max-width: 112px; min-width:112px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--14-->           <td style="font-family: courier new; height: 22px; max-width: 126px; min-width:126px;">&nbsp;&nbsp;{!strInsAdd2}</td><td style="font-family: courier new; height: 22px; max-width: 112px; min-width:112px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--15-->           <td style="font-family: courier new; height: 22px; max-width: 126px; min-width:126px;">&nbsp;&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 112px; min-width:112px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--16-->           <td style="font-family: courier new; height: 22px; max-width: 126px; min-width:126px;">&nbsp;&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 112px; min-width:112px;">&nbsp;</td>
+                            </tr>
+                        </table>
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+            <!--17-->           <td style="font-family: courier new; height: 22px; max-width: 333px; min-width:333px;"></td>
+                            </tr>
+                        </table>
+<!--                         <apex:repeat value="{!lstDateOfService}" var="dos" > -->
+<!--                         <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;"> -->
+<!--                             <tr> -->
+<!--             18           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!dos.New_Revenue_Code__c}</td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;">&nbsp;{!dos.Notes__c}</td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!dos.New_CPT_HCSPCS_Code__c}</td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="{!dos.id}"></span></td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!dos.Amount__c}&nbsp;</td> -->
+<!--                                 <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td> -->
+<!--                             </tr> -->
+<!--                         </table> -->
+<!--                         </apex:repeat> -->
+                        
+                        
+                        
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 0, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[0].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[0].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[0].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId0"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[0].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[0].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId0").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId0").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 0, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                            
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 1, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[1].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[1].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[1].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId1"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[1].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[1].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId1").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId1").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 1, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                            
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 2, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[2].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[2].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[2].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId2"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[2].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	 <script>
+		                            	alert('{!lstDateOfService[2]}');
+		                                var date = new Date('{!lstDateOfService[2].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId2").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId2").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 2, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 3, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[3].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[3].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[3].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId3"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[3].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[3].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId3").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId3").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 3, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 4, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[4].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[4].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[4].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId4"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[4].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[4].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId4").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId4").innerHTML = dateToDisplay;
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 4, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 5, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[5].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[5].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[5].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId5"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[5].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                               		<script>
+		                                var date = new Date('{!lstDateOfService[5].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId5").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId5").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 5, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 6, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[6].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[6].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[6].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId6"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[6].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[6].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId6").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId6").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 6, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 7, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[7].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[7].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[7].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId7"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[7].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[7].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId7").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId7").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 7, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 8, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[8].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[8].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[8].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId8"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[8].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[8].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId8").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId8").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 8, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 9, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[9].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[9].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[9].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId9"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[9].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[9].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId9").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId9").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 9, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 10, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[10].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[10].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[10].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId10"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[10].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[10].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId10").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId10").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 10, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                            
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 11, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[11].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[11].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[11].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId11"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[11].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[11].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId11").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId11").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 11, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 12, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[12].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[12].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[12].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId12"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[12].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[12].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId12").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId12").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 12, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 13, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[13].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[13].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[13].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId13"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[13].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[13].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId13").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId13").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 13, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 14, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[14].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[14].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[14].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId14"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[14].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[14].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId14").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId14").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 14, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 15, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[15].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[15].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[15].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId15"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[15].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[15].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId15").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId15").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 15, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 16, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[16].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[16].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[16].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId16"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[16].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[16].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId16").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId16").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 16, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 23px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 17, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[17].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[17].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[17].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId17"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[17].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[17].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId17").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId17").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 17, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        
+						<table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 18, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[18].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[18].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[18].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId18"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[18].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[18].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId18").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId18").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 18, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 19, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[19].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[19].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[19].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId19"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[19].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[19].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId19").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId19").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 19, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 20, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[20].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[20].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[20].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId20"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[20].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[20].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId20").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId20").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 20, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;">
+                            <tr>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 21, true, false)}" layout="none">
+                <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;{!lstDateOfService[21].New_Revenue_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;white-space: nowrap;overflow: hidden;">&nbsp;{!lstDateOfService[21].Notes__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;">{!lstDateOfService[21].New_CPT_HCSPCS_Code__c}</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="numId21"></span></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;1</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!lstDateOfService[21].Amount__c}&nbsp;</td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                	<script>
+		                                var date = new Date('{!lstDateOfService[21].Start_Date__c}');
+		                                var year = date.getFullYear();
+		                                year = year.toString().substr(2,2);
+		                                var month = date.getMonth()+1;
+		                                if(month<10)
+		                                    month = 0+''+month;
+		                                var day = date.getDate();
+		                                if(day<10)
+		                                    day = 0+''+day;
+		                                var dateToDisplay = month+''+day+''+year;
+		                                if(dateToDisplay == 'NaNNaNNaN')
+		                                    document.getElementById("numId21").innerHTML = '';
+		                                else
+		                                    document.getElementById("numId21").innerHTML = dateToDisplay;
+		                                
+		                            </script>
+                                </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(lstDateOfService.size > 21, false, true)}" layout="none">
+                                    <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;</td><td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;"></td><td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                    <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;"></td><td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td><td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;"></td><td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                </apex:outputPanel> 
+                            </tr>
+                        </table>                        
+                        
+                        
+                        
+                        
+                        
+                        
+<!--                         <apex:repeat value="{!lstNumberOfBlankRows}" var="row" > -->
+<!--                             <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;"> -->
+<!--                                 <tr> -->
+<!--                 18           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;</td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;">&nbsp;</td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;</td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;">&nbsp;</td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">&nbsp;</td> -->
+<!--                                     <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td> -->
+                                    
+<!--                                 </tr>  -->
+<!--                             </table> -->
+<!--                         </apex:repeat> -->
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px; margin-bottom:-5px;">
+                            <tr>
+            <!--18-->           <td style="font-family: courier new; height: 22px; max-width: 24px; min-width:24px;">&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 111px; min-width:111px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 62px; min-width:62px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 33px; min-width:33px;">&nbsp;<span id="printedDate"></span>
+                                    <script>
+                                    var date = new Date();
+                                    var year = date.getFullYear();
+                                    year = year.toString().substr(2,2);
+                                    var month = date.getMonth()+1;
+                                    if(month<10)
+                                        month = 0+''+month;
+                                    var day = date.getDate();
+                                    if(day<10)
+                                        day = 0+''+day;
+                                    var dateToDisplay = month+''+day+''+year;
+                                    if(dateToDisplay == 'NaNNaNNaN')
+                                        document.getElementById("printedDate").innerHTML = '';
+                                    else
+                                        document.getElementById("printedDate").innerHTML = dateToDisplay;
+                                  </script>
+                                </td>
+                                <td style="font-family: courier new; height: 22px; max-width: 38px; min-width:38px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 42px; min-width:42px;">{!TotalAmount}&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 49px; min-width:49px;"></td>
+                                
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 22px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 29px; min-width:29px;">&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 6px; min-width:6px;">&nbsp;NPI?</td>                      
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 330px; min-width:330px;">&nbsp;&nbsp;{!objPatientInsurance.Insurance_Company__r.Name}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 203px; min-width:203px;">&nbsp;{!objPatientInsurance.Insurance_Company__r.Health_Plan_Id__c}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 84px; min-width:84px;">Y&nbsp;&nbsp;&nbsp;Y</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 138px; min-width:138px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 149px; min-width:149px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 239px; min-width:239px;">&nbsp;&nbsp;&nbsp;&nbsp;</td>                        
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 330px; min-width:330px;">&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 203px; min-width:203px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 84px; min-width:84px;"><span id="secondary1"></span>&nbsp;&nbsp;&nbsp;<span id="secondary2"></span></td>
+                                <script>
+                                    var isSecondaryInsurance = '{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.IsSecondaryInsurance__c}';
+                                    if(isSecondaryInsurance == 'True')
+                                    {
+                                        document.getElementById("secondary1").innerHTML = 'Y';
+                                        document.getElementById("secondary2").innerHTML = 'Y';
+                                    }
+                                    else
+                                    {
+                                        document.getElementById("secondary1").innerHTML = '';
+                                        document.getElementById("secondary2").innerHTML = '';
+                                    }
+                                  </script>
+                                <td style="font-family: courier new; height: 22px; max-width: 138px; min-width:138px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 149px; min-width:149px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 239px; min-width:239px;">&nbsp;&nbsp;&nbsp;&nbsp;</td>                        
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 330px; min-width:330px;">&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 203px; min-width:203px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 84px; min-width:84px;">&nbsp;&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 138px; min-width:138px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 149px; min-width:149px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 239px; min-width:239px;">&nbsp;&nbsp;&nbsp;&nbsp;</td>                        
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 29px; min-width:29px;">&nbsp;&nbsp;</td>
+                            </tr>
+                        </table>
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 266px; min-width:266px;">&nbsp;&nbsp;{!objAccount.LastName}, {!objAccount.Salutation} {!objAccount.FirstName}</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 39px; min-width:39px;"><span id="relation"></span></td>
+                                <script>
+                                    var relation = '{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuredRelationshipToClient__c}';
+                                    if(relation == 'Self')
+                                        document.getElementById("relation").innerHTML = '18';
+                                    else if(relation == 'Child')
+                                        document.getElementById("relation").innerHTML = '19';
+                                    else
+                                        document.getElementById("relation").innerHTML = '';
+                                </script>
+                                <td style="font-family: courier new; height: 22px; max-width: 193px; min-width:193px;">{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceID__c}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 146px; min-width:146px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 162px; min-width:162px;">{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceGroupNumber__c}</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 266px; min-width:266px;">&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 39px; min-width:39px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 193px; min-width:193px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 146px; min-width:146px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 162px; min-width:162px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 266px; min-width:266px;">&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 39px; min-width:39px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 193px; min-width:193px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 146px; min-width:146px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 162px; min-width:162px;"></td>
+                            </tr>
+                        </table>
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 29px; min-width:29px;">&nbsp;&nbsp;</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 460px; min-width:460px;">&nbsp;&nbsp;{!AuthorizationNumber}</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 373px; min-width:373px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 322px; min-width:322px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 460px; min-width:460px;">&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 373px; min-width:373px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 322px; min-width:322px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 460px; min-width:460px;">&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 373px; min-width:373px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 322px; min-width:322px;"></td>
+                            </tr>
+                        </table>
+                        
+                         <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 131px; min-width:131px;">&nbsp;&nbsp;&nbsp;<span id="d1"></span></td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d2"></span></td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d3"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 97px; min-width:97px;"><span id="d4"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 108px; min-width:108px;"><span id="d5"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d6"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 91px; min-width:91px;">&nbsp;<span id="d7"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d8"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d9"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d10"></span></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 131px; min-width:131px;">&nbsp;&nbsp;&nbsp;<span id="d11"></span></td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d12"></span></td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d13"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 97px; min-width:97px;"><span id="d14"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 108px; min-width:108px;"><span id="d15"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"><span id="d16"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 91px; min-width:91px;">&nbsp;<span id="d17"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d18"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d19"></span></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;<span id="d20"></span></td>
+                            </tr>
+                        </table>
+                        <script>
+                            var allDiagnosis = '{!lstDateOfService[0].Utilization_Review_Form__r.Diagnosis__c}';
+                            var arrDiagnosis = allDiagnosis.split(",");
+                            for(i=1; i<=arrDiagnosis.length; i++)
+                            {
+                                var newDiagnosisCode = arrDiagnosis[i-1].replace(".", "");
+                                document.getElementById('d'+i).innerHTML =  newDiagnosisCode;
+                            }
+                        </script>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 143px; min-width:143px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!lstDateOfService[0].Utilization_Review_Form__r.Primary_Diagnosis_Code__r.Name}</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 142px; min-width:142px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 79px; min-width:79px;">0</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 87px; min-width:87px;">{!lstDateOfService[0].Utilization_Review_Form__r.Primary_Diagnosis_Code__r.Name}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 110px; min-width:110px;">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 91px; min-width:91px;"></td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;">&nbsp;</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 100px; min-width:100px;"></td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 232px; min-width:232px;">&nbsp;&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 103px; min-width:103px;white-space: nowrap;overflow: hidden;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{!objPhysiciansUnderFacility.Facility_Tax_ID__c}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 55px; min-width:55px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            </tr>
+                        </table>
+                        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 232px; min-width:232px;">&nbsp;&nbsp;&nbsp;</td> 
+                                <td style="font-family: courier new; height: 22px; max-width: 83px; min-width:83px;">&nbsp;&nbsp;{!strAttPhy2}</td>
+                                <td style="font-family: courier new; height: 22px; max-width: 55px; min-width:55px;">&nbsp;&nbsp;{!strAttPhy1}</td>
+                            </tr>
+                        </table>        
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 232px; min-width:232px;">&nbsp;&nbsp;&nbsp;</td> 
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;">
+                            <tr>
+                                <td style="font-family: courier new; height: 22px; max-width: 232px; min-width:232px;">&nbsp;&nbsp;&nbsp;</td> 
+                            </tr>
+                        </table>
+    <!--                    <table cellpadding="0" cellspacing="0" border="0" align="center" style="width: 1220px; margin: 0px auto; padding: 0px; line-height: 18px;"> -->
+    <!--                        <tr> -->
+    <!--                            <td style="font-family: courier new; height: 22px; max-width: 37px; min-width:37px;">&nbsp;Lorem ipsum dolor sit ame</td>  -->
+    <!--                            <td style="font-family: courier new; height: 22px; max-width: 83px; min-width:83px;">, consectetuer adipiscing elit. Aenean commodo ligula eget</td> -->
+    <!--                        </tr> -->
+    <!--                    </table> -->
+                    </div>
+                </div>
+            </body>  
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!if(lstDateOfService.size == 0, true, false)}">
+            <apex:pageBlock id="UBO4" title="UBO4 Form">
+                <span style="font-style: italic;">No Dates of Service record present for this Claim</span>
+            </apex:pageBlock>   
+        </apex:outputPanel>  
+    </html>
+</apex:page>

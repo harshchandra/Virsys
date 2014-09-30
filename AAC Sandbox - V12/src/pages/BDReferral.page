@@ -1,0 +1,438 @@
+<apex:page controller="ReferralFormController">
+<apex:form id="page">
+<apex:pageBlock title="BD Refferal Form">
+<apex:pageBlockButtons location="both">
+    <apex:commandButton action="{!SubmitReferral}" value="Submit"/>
+</apex:pageBlockButtons>
+<apex:pageMessages />
+<apex:pageBlockSection title="Client Details">
+    <apex:inputText label="First Name" value="{!FirstName}"/>
+    <apex:inputText label="Last Name" value="{!LastName}"/>
+    <apex:inputField value="{!PersonAccount.Phone}"/>
+    <apex:inputField value="{!PersonAccount.Date_of_birth__pc}"/>
+    <apex:inputField value="{!PersonAccount.SSN__pc}"/>
+    <apex:inputField value="{!PersonCase.Gender__c}"/>
+    <apex:inputField value="{!PersonAccount.Parent_Account__c}"/>
+    <apex:inputField value="{!PersonAccount.BillingStreet}"/>
+    <apex:inputField value="{!PersonAccount.BillingCity}"/>
+    <apex:inputField value="{!PersonAccount.BillingState}"/>
+    <apex:inputField value="{!PersonAccount.BillingPostalCode}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Insurance Verification Details">
+    <apex:inputField value="{!PersonVOB.InsuranceCompany__c}"/>
+    <apex:inputField value="{!PersonVOB.InsurancePhoneNumber__c}"/>
+    <apex:inputField value="{!PersonVOB.InsuredName__c}"/>
+    <apex:inputField value="{!PersonVOB.InsuranceID__c}"/>
+    <apex:inputField value="{!PersonVOB.InsuranceGroupNumber__c}"/>
+    <apex:inputField value="{!PersonAssessment.empl_employed__c}"/>
+    <apex:inputField value="{!PersonVOB.InsuredEmployer__c}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Information needed for OOP/Placement">
+    <apex:inputField value="{!PersonAssessment.sah_substance1__c}"/>
+    <apex:inputField value="{!PersonAssessment.sah_lastuse1__c}"/>
+    <apex:inputField value="{!PersonAssessment.sah_amountused1__c}"/>
+    <apex:inputField value="{!PersonAssessment.sah_frequency1__c}"/>
+    <apex:inputField value="{!PersonAssessment.fitrx_height__c}"/>
+    <apex:inputField value="{!PersonAssessment.fitrx_weight__c}"/>
+    
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Case Description/Notes" columns="1">
+    <apex:inputField value="{!PersonCase.Description}" style="width:100%"/>
+</apex:pageBlockSection>
+    <apex:pageBlockSection title="Diagnosed Psychiatric Problems" columns="1" rendered="{!ShowSections}">
+       <apex:outputPanel layout="block">
+       <table class="vob">
+       <tr>
+           <td class="label">Condition</td>
+           <td class="label">When?</td>
+           <td class="label">Recent Behavioral Symptoms<br/>(Unstable mood, self-injury, audio/visual hallucinations, etc.)</td>
+       </tr>
+       <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_anxiety__c}" />
+            <apex:outputText value="{!FieldLabels['paa_anxiety__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_anxiety_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_anxiety_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+       
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_bipolar_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_bipolar_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_bipolar_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_bipolar_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_depression__c}" />
+            <apex:outputText value="{!FieldLabels['paa_depression__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_depression_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_depression_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_eating_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_eating_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_eating_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_eating_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_obsessive_compulsive_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_obsessive_compulsive_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_obsessive_compulsive_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_obsessive_compulsive_disorder_sympto__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_panic_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_panic_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_panic_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_panic_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_paranoia__c}" />
+            <apex:outputText value="{!FieldLabels['paa_paranoia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_paranoia_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_paranoia_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_post_traumatic_stress_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_post_traumatic_stress_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_post_traumatic_stress_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_post_traumatic_stress_disorder_sympt__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_schizophrenia__c}" />
+            <apex:outputText value="{!FieldLabels['paa_schizophrenia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_schizophrenia_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_schizophrenia_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_personality_disorder__c}" />
+            <apex:outputText value="{!FieldLabels['paa_personality_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_personality_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:inputField value="{!PersonAssessment.paa_personality_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+       
+       <tr>
+           <td class="label" colspan="3">
+           <apex:outputText value="{!FieldLabels['paa_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+       </tr>
+       <tr>
+           <td class="label" colspan="3">
+           <apex:inputField value="{!PersonAssessment.paa_comments__c}" style="width:100%" />
+           </td>
+       </tr>
+
+       </table>
+       </apex:outputPanel>
+       </apex:pageBlockSection>
+    <apex:pageBlockSection title="Current Medical Problems" columns="1" rendered="{!ShowSections}">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          <tr>
+            <td class="label" colspan="3">
+            <apex:inputField value="{!PersonAssessment.cmp_pregnant__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_pregnant__c']}" style="font-size:12pt; font-weight:bold;" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            </tr>
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_cancer__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_cancer__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+            <apex:inputField value="{!PersonAssessment.cmp_cardiovascular_disease__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_cardiovascular_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_chronic_obstructive_pulmonary__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_chronic_obstructive_pulmonary__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_chronic_pain_issues__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_chronic_pain_issues__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_coughing_vomiting_blood__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_coughing_vomiting_blood__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_degenerative_disc_disease__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_degenerative_disc_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+ 
+           <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_dementia__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_dementia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_diabetes__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_diabetes__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_epilepsy_seizure__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_epilepsy_seizure__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>         
+ 
+            <tr>
+            <td class="label nowrap">
+            <apex:inputField value="{!PersonAssessment.cmp_history_of_cerebrovascular_accident__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_history_of_cerebrovascular_accident__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_history_of_dts_myocardial_infarction__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_history_of_dts_myocardial_infarction__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+            <td class="label">
+            </td>
+          </tr>     
+ 
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_history_of_intracranial_injury__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_history_of_intracranial_injury__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_hiv_aids__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_hiv_aids__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_hypertension__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_hypertension__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>     
+ 
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_kidney_disease__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_kidney_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_korsakoff_s_syndrome__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_korsakoff_s_syndrome__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_liver_disease_or_damage__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_liver_disease_or_damage__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>   
+
+ 
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_myocardial_infarction__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_myocardial_infarction__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_obesity__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_obesity__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_pancreatitis__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_pancreatitis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>           
+          
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_surgeries__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_surgeries__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_tuberculosis__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_tuberculosis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_ulcer_gastro_intestinal_problems__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_ulcer_gastro_intestinal_problems__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_blind__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_blind__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_deaf__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_deaf__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_mute__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_mute__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+          
+          
+          <tr>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_paralysis_walker_wheelchair__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_paralysis_walker_wheelchair__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_other__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_other__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:inputField value="{!PersonAssessment.cmp_special_needs__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_special_needs__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          
+           <tr>
+            <td class="label" valign="top">
+            <apex:inputField value="{!PersonAssessment.cmp_hepatitis__c}" />
+            <apex:outputText value="{!FieldLabels['cmp_hepatitis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText value="{!FieldLabels['cmp_other_t__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:inputField value="{!PersonAssessment.cmp_other_t__c}" />             
+            </td>
+            <td class="label">
+            <apex:outputText value="{!FieldLabels['cmp_special_needs_t__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>               
+            <apex:inputField value="{!PersonAssessment.cmp_special_needs_t__c}" />
+            </td>
+          </tr>          
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText value="{!FieldLabels['cmp_participation_in_activities_of_daily__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:inputField value="{!PersonAssessment.cmp_participation_in_activities_of_daily__c}" style="width:100%" />
+            </td>          
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText value="{!FieldLabels['cmp_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:inputField value="{!PersonAssessment.cmp_comments__c}" style="width:100%" />
+            </td>          
+          </tr>          
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

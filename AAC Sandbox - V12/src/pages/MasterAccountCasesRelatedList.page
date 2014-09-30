@@ -1,0 +1,14 @@
+<apex:page standardController="Account" extensions="MasterAccountRelatedCasesListExt">
+<apex:pageBlock title="Related Cases"  >
+<apex:pageBlockTable align="left" value="{!cases}" var="c">
+    <apex:column >
+        <apex:facet name="header">Case Number</apex:facet>
+        <apex:outputLink onclick="javascript: parent.location.href='/{!c.Id}'" value="">{!c.CaseNumber}</apex:outputLink>
+    </apex:column>
+    <apex:column value="{!c.Account.Name}"/>    
+    <apex:column value="{!c.CreatedDate}"/>    
+    <apex:column value="{!c.Status}"/>
+</apex:pageBlockTable> 
+</apex:pageBlock>
+
+</apex:page>

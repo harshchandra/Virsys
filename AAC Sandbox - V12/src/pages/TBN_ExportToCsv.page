@@ -1,0 +1,9 @@
+<apex:page controller="TBN_Select_DOS_Charges"  readOnly="true" contentType="text/csv#DOSSelectedData.csv">
+        <!-- <apex:variable var="lastFieldIndex" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView.size - 1}"/>
+        <apex:variable var="lastField" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView[lastFieldIndex]}"/>
+        <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">{!f.label} {!IF(f.label == $ObjectType.Dates_of_Service__c.FieldSets.FieldsView[lastFieldIndex].label, newLine, ',')}</apex:repeat>            
+        <apex:repeat value="{!lstPopUpView}" var="c">
+           <apex:repeat var="f" value="{!$ObjectType.Dates_of_Service__c.FieldSets.FieldsView}">{!c.objDatesOfService[f]} {!IF(c.objDatesOfService[f] == c.objDatesOfService[lastField], newLine, ',')}</apex:repeat>                     
+         </apex:repeat> -->
+       
+</apex:page>

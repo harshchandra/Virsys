@@ -1,0 +1,26 @@
+<apex:page standardController="Top_Batch_Payment__c" tabStyle="Submit_and_Print_Batch__tab">
+	
+	<apex:form >
+		<apex:pageBlock id="thePageBlock" >
+	        <apex:pageBlockSection title="Select Facility to submit and print batch" columns="1">
+	            <apex:inputField id="Facility__c" value="{!Top_Batch_Payment__c.Facility__c}" onchange="lookupValue(this.value);"/>
+	            <input type="button" name="Proceed" class="btn" value="Proceed" style="margin-left:50%;" onclick="redirectPage();"/>
+	        </apex:pageBlockSection>
+	    </apex:pageBlock>
+	</apex:form>
+	
+	<script>
+		var facilityName;
+		function lookupValue(value)
+		{
+			facilityName = value;
+		}
+		
+		function redirectPage()
+		{
+			window.location="/apex/TBN_SubmitAndPrintBatch?facility="+facilityName;
+		}
+		
+	</script>
+	
+</apex:page>

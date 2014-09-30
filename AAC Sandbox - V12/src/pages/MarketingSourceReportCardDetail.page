@@ -1,0 +1,56 @@
+<apex:page controller="MarketingReportCardController" showheader="false" sidebar="false" tabstyle="Account">
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
+<script>
+    j$ = jQuery.noConflict();
+    
+    function showLoadingDiv() {
+        var newHeight = j$("[id$=report-card-section] .pbSubsection").css("height");//Just shade the body, not the header
+        j$("[id$=loading-curtain-div]").css("background-color", "black").css("opacity", 0.35).css("height", newHeight).css("width", "99%").css("display", "block");
+    }
+    function hideLoadingDiv() {
+        j$("[id$=loading-curtain-div]").css("background-color", "black").css("opacity", "1").css("height", "0px").css("width", "99%").css("display","none");
+    }
+    
+</script>
+<style>
+    #loading-curtain-div {
+        height:0px;
+        width:100%;
+        position:absolute;
+        z-index:5;
+        //-webkit-transition: all 0.30s ease-out;
+        //-moz-transition: all 0.30s ease-out;
+    }
+</style>
+<style>
+.col{
+text-align:center;
+}
+</style>
+<apex:form id="page-form">
+<apex:pageBlock title="Marketing Source Report Card Detail">
+<apex:actionStatus id="search-status" onstart="showLoadingDiv();" onstop="hideLoadingDiv();"/>
+
+<apex:actionRegion >
+<apex:pageBlockSection title="Report Card" columns="1" id="report-card-section">
+<div id="loading-curtain-div" style="display:none;"><img src="/img/loading.gif" border="0" style="text-align:center; height:20px; width:20px;"/></div>
+<apex:pageMessages />
+<apex:pageBlockTable id="reportcard" align="center" cellpadding="3" cellspacing="3" value="{!ReportCardDetailList}" var="rc" headerClass="col" columnClasses="col">
+<apex:column value="{!rc.AccountName}" headerValue="Account"/>
+<apex:column value="{!rc.MarketingGroupName}" headervalue="Source" />
+<apex:column value="{!rc.Calls}" headervalue="Calls"/>
+<apex:column value="{!rc.TotalTalkTimeMinutes}" headervalue="Talk Time(mi)"/>
+<apex:column value="{!rc.AverageTalkTime}" headervalue="Avg. Talk Time(mi)"/>
+<apex:column value="{!rc.Accounts}" headervalue="Accounts"/>
+<apex:column value="{!rc.Cases}" headervalue="Cases"/>
+<apex:column value="{!rc.InsuranceForms}" headervalue="Insurance Forms"/>
+<apex:column value="{!rc.Assessments}" headervalue="Assessments"/>
+<apex:column value="{!rc.Admissions}" headervalue="Admissions"/>
+<apex:column value="{!rc.TotalCashCollected}" headervalue="Cash Collected"/>
+<apex:column value="{!rc.ConversionRatio}" headervalue="Conversion Ratio (%)"/>
+</apex:pageBlockTable>
+</apex:pageBlockSection>
+</apex:actionRegion>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

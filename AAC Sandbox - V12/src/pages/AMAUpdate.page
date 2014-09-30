@@ -1,0 +1,7 @@
+<apex:page controller="SetAMADeductions">
+<apex:form >
+<apex:pageBlock title="Update AMA Deductions">
+<apex:commandButton action="{!UpdatePayments}" value="Update"/> 
+</apex:pageBlock>
+</apex:form>
+</apex:page>

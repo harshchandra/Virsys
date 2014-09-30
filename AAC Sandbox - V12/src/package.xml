@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Emdeon</members>
+        <members>InsuranceVerificationFormController</members>
+        <members>TBN_DOSAmountRollUpHandler</members>
+        <members>TBN_InsuranceVerificationForm_Handler</members>
+        <members>TBN_UB04FormController</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>InsuranceVerificationForm</members>
+        <members>TBN_UB04_Blank</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>SetMultiPlanOnCaseFromInsurance</members>
+        <members>TBN_PatientInsurance</members>
+        <name>ApexTrigger</name>
+    </types>
+    <version>28.0</version>
+</Package>

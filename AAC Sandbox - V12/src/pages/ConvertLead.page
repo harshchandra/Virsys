@@ -1,0 +1,8 @@
+<apex:page standardController="Lead" extensions="LeadConversionController" action="{!ConvertLead}">
+<apex:form >
+<apex:outputpanel >
+<apex:pagemessages />
+<apex:commandButton action="{!ViewLead}" value="Go Back" />
+</apex:outputpanel>
+</apex:form>
+</apex:page>

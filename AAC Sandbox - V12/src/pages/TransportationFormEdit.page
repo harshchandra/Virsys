@@ -1,0 +1,133 @@
+<apex:page standardController="Transportation__c" extensions="TransportationFormExt" docType="html-5.0">
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-1.10.2.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-ui-1.10.4.custom.min.js')}"></script>
+<script src="/support/console/30.0/integration.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	sforce.console.setTabTitle('Transportation - {!Transportation__c.Name}');
+});              
+</script>
+<apex:Form >
+<style type="text/css">
+.half
+{
+width:500px;
+}
+.full
+{
+width:100%;
+}
+</style>
+<apex:pagemessages />
+<apex:pageBlock title="Validation Failure" rendered="{!PreAdmitValid == false}">
+<a href="{!URLFOR($Action.Account.View,ParentCase.Account.Id)}">View Account</a>
+<a href="{!URLFOR($Action.Case.View,ParentCase.Id)}">View Case</a>
+<a href="/{!PrimaryInsuranceForm.Id}">View Primary Insurance</a>
+<apex:pageBlockSection columns="1" title="Invalid Account Information" collapsible="false" rendered="{!AccountFieldsInvalid}">
+<apex:inputField value="{!ParentAccount.FirstName}" rendered="{!AccountNameValid == false}"/>
+<apex:inputField value="{!ParentAccount.LastName}" rendered="{!AccountNameValid == false}"/>
+<apex:inputField value="{!ParentAccount.Date_of_birth__pc}" rendered="{!AccountDOBValid == false}"/>
+<apex:inputField value="{!ParentAccount.Parent_Account__c}" rendered="{!AccountParentAccountValid == false}"/>
+<apex:inputField value="{!ParentAccount.Demographics__c}" rendered="{!AccountDemographicsValid == false}"/>
+<apex:inputField value="{!ParentAccount.How_Did_Caller_Get_Our_Number__c}" rendered="{!AccountHowDidYouGetOurNumberValid == false}"/>
+<apex:inputField value="{!ParentAccount.Phone}" rendered="{!AccountPhoneValid == false}"/>
+<apex:inputField value="{!ParentAccount.BillingStreet}" rendered="{!AccountAddressValid == false}"/>
+<apex:inputField value="{!ParentAccount.BillingCity}" rendered="{!AccountAddressValid == false}"/>
+<apex:inputField value="{!ParentAccount.BillingState}" rendered="{!AccountAddressValid == false}"/>
+<apex:inputField value="{!ParentAccount.BillingPostalCode}" rendered="{!AccountAddressValid == false}"/>
+<apex:commandButton title="Update Account" action="{!UpdateAccount}" value="Update Account"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection columns="1" title="Invalid Case Information" collapsible="false" rendered="{!CaseFieldsInvalid}">
+<apex:inputField value="{!ParentCase.Funding_Type__c}" rendered="{!CaseFundingTypeValid == false}"/>
+<apex:inputField value="{!ParentCase.Gender__c}" rendered="{!CaseGenderValid == false}"/>
+<apex:commandButton title="Update Case" action="{!UpdateCase}" value="Update Case" />
+</apex:pageBlockSection>
+<apex:pageBlockSection columns="1" title="Invalid Insurance Information" collapsible="false" rendered="{!InsuranceFieldsInvalid == true && HasInsuranceRecord == true}">
+<apex:inputField value="{!PrimaryInsuranceForm.InsuranceCompany__c}" rendered="{!InsInsuranceCompanyValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.Benefit_Type__c}" rendered="{!InsBenefitTypeValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsuredRelationshipToClient__c}" rendered="{!InsInsuredRelationshipToClientValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsuredName__c}" rendered="{!InsInsuredNameValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsuredEmployer__c}" rendered="{!InsInsuredEmployerValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsuredDateOfBirth__c}" rendered="{!InsInsuredDOBValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsurancePhoneNumber__c}" rendered="{!InsInsurancePhoneValid == false}"/>
+<apex:inputField value="{!PrimaryInsuranceForm.InsuranceID__c}" rendered="{!InsInsuranceIdValid == false}"/>
+<apex:commandButton title="Update Primary Insurance" action="{!UpdatePrimaryInsurance}" value="Update Primary Insurance" />
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:pageBlock title="Transportation" rendered="{!PreAdmitValid}">
+<apex:pageBlockButtons location="both">
+<apex:commandButton action="{!Save}" value="Save"/>
+<apex:commandButton action="{!Cancel}" value="Cancel"/>
+</apex:pageBlockButtons>
+<apex:pageBlockSection columns="1" title="Client Information">
+<apex:inputField value="{!Transportation__c.Name}"/>
+<apex:inputField value="{!Transportation__c.Case__c}"/>
+<apex:inputField value="{!Transportation__c.Client_s_Name__c}"/>
+<apex:inputField value="{!Transportation__c.ClientIs__c}"/>
+<apex:inputField value="{!Transportation__c.ClientsTravelPhoneNumber__c}"/>
+<apex:inputField value="{!Transportation__c.Paperworkhasbeensent__c}"/>
+<apex:inputField value="{!Transportation__c.TreatmentFacility__c}"/>
+<apex:inputField value="{!Transportation__c.DetoxFacility__c}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection columns="1" title="Completed Request for Ground Transportation">
+<apex:inputField value="{!Transportation__c.Transportation_Status__c}"/>
+<apex:inputField value="{!Transportation__c.Transportation_Manager__c}"/>
+<apex:inputField value="{!Transportation__c.Has_Assigned_Driver__c}"/>
+<apex:inputField value="{!Transportation__c.Who_s_Cell_Phone_Number_is__c}"/>
+<apex:inputField value="{!Transportation__c.To_pick_up_the_client_from_address__c}" styleClass="half" />
+<apex:inputField value="{!Transportation__c.At_Date_and_Time__c}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection columns="1" title="Booking Information">
+<apex:inputField value="{!Transportation__c.Date_Time_of_Clients_Arrival__c}"/>
+<apex:inputField value="{!Transportation__c.Facilityresponsibletotransport__c}"/>
+<apex:inputField value="{!Transportation__c.TravelBookedBy__c}"/>
+<apex:inputField value="{!Transportation__c.Destination__c}"/>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Travel Information" columns="1">
+<apex:inputField value="{!Transportation__c.Typeoftravel__c}"/>
+<apex:inputField value="{!Transportation__c.Confirmation_Number__c}" styleClass="half" />
+<apex:inputField value="{!Transportation__c.Pickup_Address__c}"  styleClass="half" />
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Flight Information" columns="1">
+<apex:inputField value="{!Transportation__c.Airline__c}"  styleClass="half" />
+<apex:pageBlockSection title="Departing" columns="1">
+<apex:inputField value="{!Transportation__c.Departing_Airline__c}"/>
+<apex:inputField value="{!Transportation__c.Departing_Flight_Number__c}"/>
+<apex:inputField value="{!Transportation__c.Departing_City__c}"  styleClass="half" />
+<apex:inputField value="{!Transportation__c.Departing_State__c}"/>
+<apex:inputField value="{!Transportation__c.Departure_Date__c}"/>
+<apex:inputField value="{!Transportation__c.Departure_Time__c}"  styleClass="half" />
+<apex:inputField value="{!Transportation__c.Am_PM__c}"/>
+<apex:inputField value="{!Transportation__c.Departing_Time_Zone__c}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Arriving" columns="1">
+<apex:inputField value="{!Transportation__c.Arriving_Airline__c}"/>
+<apex:inputField value="{!Transportation__c.Arriving_Flight_Number__c}"/>
+<apex:inputField value="{!Transportation__c.Arriving_City__c}"  styleClass="half" />
+<apex:inputField value="{!Transportation__c.Arriving_State__c}"/>
+<apex:inputField value="{!Transportation__c.Arriving_Date__c}"/>
+<apex:inputField value="{!Transportation__c.Arriving_Time__c}"  styleClass="half" />
+<apex:inputField value="{!Transportation__c.AM_PM_Arriving__c}"/>
+<apex:inputField value="{!Transportation__c.Arriving_Time_Zone__c}"/>
+</apex:pageBlockSection>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Layover Information" columns="1">
+<apex:inputField value="{!Transportation__c.Layover_Information__c}"/>
+<apex:pageBlockSection title="Layover 1" columns="1">
+<apex:inputField value="{!Transportation__c.Client_Layover_Airport_1__c}" styleClass="half" />
+<apex:inputField value="{!Transportation__c.Layover_Time_1__c}" styleClass="half" />
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Layover 2" columns="1">
+<apex:inputField value="{!Transportation__c.Client_Layover_Airport_2__c}" styleClass="half" />
+<apex:inputField value="{!Transportation__c.Layover_Time_2__c}" styleClass="half" />
+</apex:pageBlockSection>
+</apex:pageBlockSection>
+
+</apex:pageBlock>
+</apex:Form>
+</apex:page>

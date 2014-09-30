@@ -1,0 +1,268 @@
+<apex:page standardcontroller="Top_Batch_Payment__c" extensions="TBN_CreateNewPayemBatchController" tabStyle="Post_Payment__tab" sidebar="false">
+	<style>
+		.inputBox
+		{
+			color:#4a4a56; 
+			font-size: 91%; 
+			font-weight: bold;
+		}
+		
+		.textbox
+		{
+			margin-left: 0.5%;
+		}
+		
+		@-moz-document url-prefix() 
+		{
+		    .lookupfix 
+		    {
+		        margin-right: 11%;
+				//margin-top: -78%;	     
+			}
+			
+			.inputBox
+			{
+				margin-left: 7%;
+				color:#4a4a56; 
+				font-size: 91%; 
+				font-weight: bold;
+			}
+		}
+		
+		.macFix
+		{
+			display:inline-flex;
+			margin-left: 12%;
+			width: 40%
+		}
+	    
+	</style>
+	<apex:form >
+		<apex:pageMessages id="errorMsg"/>
+		
+		<!-- Action functions for first section (Top Batch Payment) creation-->
+		 <apex:actionFunction name="redirectToCheckInfoPage" action="{!redirectToCheckInfoPage}" rerender="errorMsg,totalSum" >        
+        	<apex:param name="facility" assignTo="{!strFacility}" value="" />
+        	<apex:param name="name" assignTo="{!strPaymentName}" value="" />
+        	<apex:param name="amount" value="" />
+        </apex:actionFunction>  
+        <apex:actionFunction name="redirectToPostPaymentPage" action="{!redirectToPostPaymentPage}" rerender="errorMsg,totalSum"/>   
+        
+        <!-- Action functions for second section (check info) creation -->
+        <apex:actionFunction name="redirectToTopBatchPaymentSection" action="{!redirectToTopBatchPaymentSection}" rerender="errorMsg,totalSum"/>
+        <apex:actionFunction name="redirectTopPatientPaymentInfoPage" action="{!redirectTopPatientPaymentInfoPage}" rerender="errorMsg,totalSum" >        
+        	<apex:param name="checkName" assignTo="{!strCheckName}" value="" />
+        	<apex:param name="checkAmount" value="" />
+        </apex:actionFunction> 
+         <apex:actionFunction name="redirectCheck" action="{!redirectCheck}" rerender="errorMsg,totalSum">
+         	<apex:param name="checkName" assignTo="{!strCheckName}" value="" />
+        	<apex:param name="checkAmount" value="" />
+        </apex:actionFunction>
+        
+        <!-- Action functions for third second section (Patient payment info) creation -->
+        <apex:actionFunction name="savePatientPaymentInfoSection" action="{!savePatientPaymentInfoPage}" rerender="errorMsg,totalSum"> 
+        </apex:actionFunction>
+        <apex:actionFunction name="savePaymentInfoOldCheck" action="{!savePaymentInfoOldCheck}" rerender="errorMsg,totalSum"> 
+        </apex:actionFunction>
+        <apex:actionFunction name="cancelToCheckInfo" action="{!cancelToCheckInfoPage}" rerender="errorMsg,totalSum"/> 
+        
+        <!-- START: Main section -->
+		<apex:pageBlock id="totalSum">
+			
+			<!-- START: TOP BATCH PAYMENT SECTION -->
+			<apex:pageBlockSection title="New Batch Payment" columns="1" rendered="{!if(blnBatchPaymentPage == true,true,false)}">
+				<apex:inputField id="facilityId"  value="{!Top_Batch_Payment__c.Facility__c}" onchange="lookupValue(this.value);" />
+				 <span class="inputBox" style="margin-left:9%;">Payment Batch Name</span>
+					<input id="nameId" type="text"  value="{!strPaymentName}" /><br/><br/>
+				 <span class="inputBox" style="margin-left:12.5%;">Total Deposit</span>
+					<input id="amountId" type="text"  value="{!decAmount}"/><br/><br/>
+				<input type="button" name="Next" class="btn" value="Next" style="margin-left:50%;" onclick="redirectToCheckInfo();"/> 
+				<input type="button" name="Cancel" class="btn" value="Cancel" style="margin-left:1%;" onclick="redirectToPostPaymentPage();"/>
+			</apex:pageBlockSection>
+			<!-- END: TOP BATCH PAYMENT SECTION --> 
+			
+			<!-- START: CHECK INFO SECTION -->			
+				<apex:pageBlockSection title="New Check Info" columns="2" rendered="{!if(blnCheckInfoPage == true,true,false)}">
+					<span style="font-size: 150%; font-weight: bolder;" >Related Payment Batch Information </span>  
+				<apex:outputText />
+					<apex:outputField value="{!objTopBatchPayment.Name}" label="Name" />
+					<apex:outputField value="{!objTopBatchPayment.Status__c}" label="Staus" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}" label="Total Deposit ">
+						<apex:param value="{!objTopBatchPayment.Batch_Amount__c}"/>
+					</apex:outputText>
+					<apex:outputField value="{!objTopBatchPayment.Facility__r.Name}" label="Facility" />
+					<apex:outputText value="{0, number, ###,###,###,##0.00}" label="Total Processed Amount">
+							<apex:param value="{!objTopBatchPayment.RollUp_Amount__c}"/>
+					</apex:outputText>
+					<apex:outputField value="{!objTopBatchPayment.RollUp_Check__c}" label="Total Processed Check" /><br/><br/>				 
+					<span class="inputBox" style="margin-left:75px;">Check Number</span> &nbsp;&nbsp;&nbsp;&nbsp;
+						<input id="checkId" type="text"  value="{!strCheckName}" /><br/><br/>
+					<span class="inputBox" style="margin-left:75px;">Check Amount</span> &nbsp;&nbsp;&nbsp;&nbsp;
+						<input id="checkAmountId" type="text"  value="{!decAmountCheckInfo}" /><br/><br/>			
+					<input type="button" name="Next" class="btn" value="Next" style="margin-left:50%;" onclick="redirectTopPatientPaymentInfo();"/>
+					<input type="button" name="Cancel" class="btn" value="Cancel" style="margin-left:1%;" onclick="redirectToTopBatchPaymentSection();"/>			 			
+				</apex:pageBlockSection>	
+			<!-- END: CHECK INFO SECTION -->
+			
+			<!-- START: PATIENT PAYMENT INFO SECTION -->			
+			<apex:pageBlockSection title="New Patient Info" columns="2" rendered="{!if(blnPatienInfo == true,true,false)}">
+				<span style="font-size: 150%; font-weight: bolder;" >Related Check Information </span>  
+				<apex:outputText />
+				<apex:outputField value="{!objCheckInformation.Name}" label="Check #" />
+				<apex:outputText value="{0, number, ###,###,###,##0.00}" label="Check Amount">
+						<apex:param value="{!objCheckInformation.Amount__c}"/>
+				</apex:outputText>
+				<apex:outputText value="{0, number, ###,###,###,##0.00}" label="Total Processed Amount">
+						<apex:param value="{!objCheckInformation.RollUp_Amount__c}"/>
+				</apex:outputText>
+				<apex:outputField value="{!objCheckInformation.RollUp_Patient__c}" label="# Of Patients" />
+				<apex:outputField value="{!objCheckInformation.Status__c}" label="Status" />				
+			</apex:pageBlockSection>
+			<br/><br/>
+			<apex:pageBlockSection columns="1" rendered="{!if(blnPatienInfo == true,true,false)}">
+				<apex:outputpanel styleClass="macFix inputBox">	
+					<span style="margin-right: 5%">Select Patient</span>
+					<apex:inputText label="Select Patient" id="recordNameCase" ></apex:inputText>
+					<a class="lookupfix" id="hrefUserSelect" href ="" style="cursor:pointer;float:left;padding: 0px;" onClick= " javascript:return openRelatedPopup('{!JSENCODE($Component.recordNameCase)}','{!JSENCODE($Component.recordIdCase)}','Case', 'Account.Name', document.getElementById(('{!$Component.recordNameCase}')))">
+						<img src="/s.gif" alt="Case Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="" />
+   					</a> 
+				</apex:outputpanel>
+				<apex:outputpanel styleClass="macFix inputBox">	
+					<span style="margin-right: 3%">Select Insurance</span>
+					<apex:inputText label="Select Insurance" id="recordNameInsurance" value="{!objPatientInsurance.Type__c}"></apex:inputText>
+					<a class="lookupfix" id="hrefUserSelect" href ="" style="cursor:pointer;float:left;padding: 0px;" onClick= " javascript:return openRelatedPopup('{!JSENCODE($Component.recordNameInsurance)}','{!JSENCODE($Component.recordIdInsurance)}','Patient_Insurance__c', 'Type__c', document.getElementById(('{!$Component.recordNameInsurance}')))">
+						<img src="/s.gif" alt="Patient Insurance Lookup (New Window)" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="" /> 
+					</a>
+				</apex:outputpanel>
+<!-- 				<span class="inputBox" style="margin-left: 8.5%;">Patient Total Amount</span> -->
+<!-- 				<input id="amountPatientId" type="number"  class="textbox" value="{!decPatientAmount}" /><br/><br/> -->
+				<apex:inputHidden value="{!CaseId}" id="recordIdCase"/>
+				<apex:inputHidden value="{!insuranceId}" id="recordIdInsurance"/>
+				<input type="button" name="Next" class="btn" value="Next" style="margin-left:50%;" onclick="savePatientPaymentInfo();"/> 
+				<input type="button" name="Cancel" class="btn" value="Cancel" style="margin-left:1%;" onclick="cancelToCheckInfo();"/>	
+			</apex:pageBlockSection>
+			<!-- END: PATIENT PAYMENT INFO SECTION -->
+		</apex:pageBlock>
+		<!-- END : Main Section -->
+	</apex:form>
+	
+	<script>
+		
+		var facilityName;
+		var numberCheck = /^(\d|,)*\.?\d*$/;
+		var totalAmount;	
+		var checkAmountValue;
+		function lookupValue(value)
+		{
+			facilityName = value;
+		}
+		
+		function redirectToCheckInfo()
+		{
+			
+			var paymentName = document.getElementById('nameId').value;
+			totalAmount = document.getElementById('amountId').value;
+			if(totalAmount.indexOf(',') != -1)
+			{
+				while(totalAmount.indexOf(',') != -1)
+				{
+				   totalAmount = totalAmount.replace(',','');
+				}
+				console.log('--final batch amount---',totalAmount);
+			}
+			if(totalAmount.match(numberCheck))
+					redirectToCheckInfoPage(facilityName,paymentName,totalAmount);
+			else
+				alert("please provide valid Deposit amount");
+		}
+		
+		function redirectTopPatientPaymentInfo()
+		{
+			var checkName = document.getElementById('checkId').value;
+			checkAmountValue = document.getElementById('checkAmountId').value;
+			if(checkAmountValue.indexOf(',') != -1)
+			{
+				while(checkAmountValue.indexOf(',') != -1)
+				{
+				   checkAmountValue = checkAmountValue.replace(',','');
+				}
+				console.log('--final check AMount---',checkAmountValue);
+			}
+			if(checkAmountValue.match(numberCheck))
+			{
+				console.log('--total amount---',totalAmount);
+				console.log('--checkAmountValue-',checkAmountValue);
+				console.log('---TBP amoun-----'+'{!decRemainingTopBatchPaymentAmount}');
+				if(parseFloat(totalAmount) >= parseFloat(checkAmountValue) || '{!decRemainingTopBatchPaymentAmount}' >= parseFloat(checkAmountValue) || '{!objTopBatchPayment.Batch_Amount__c}' >= parseFloat(checkAmountValue))
+				{
+					if({!blnFlag} == true)
+						redirectCheck(checkName,checkAmountValue);
+					else
+						redirectTopPatientPaymentInfoPage(checkName,checkAmountValue);
+				}
+				else
+					alert('Amount can not be greater than total deposited amount');
+			}
+			else
+			{
+				alert("Please provide valid Amount");
+			}
+		}
+		
+		function savePatientPaymentInfo()
+		{
+		
+			console.log('---flag----------','{!blnFlag}');
+			if({!blnFlag} == true)
+				savePaymentInfoOldCheck();
+			else
+				savePatientPaymentInfoSection();
+					
+		}
+		
+		/*Function to open Reference PopUp*/
+        var curPopupWindow;
+        
+        function openWind(URL)
+        {
+            curPopupWindow  = window.open(URL, "_blank","width=700, height=400,dependent=no,toolbar=no,status=no,directories=no,menubar=no,scrollbars=1,resizable=no", true);
+        }
+             
+        function openRelatedPopup(recordName_inuptId,recordId_inuptId,obj,field,strSearch)
+        {
+            //j$('#hrefUserSelect').css("display","block");
+            console.log('---search value--',strSearch.value);
+            var url = "TBN_CustomLookup?inputBox_name="+ recordName_inuptId +
+                                             "&inputBox_id=" + recordId_inuptId + 
+                                             "&ObjectName=" + obj + 
+                                             "&FieldName=" + field + 
+                                             "&MatchingString=" + strSearch.value; 
+            if(curPopupWindow == null)
+            {
+                openWind(url);  
+            }
+            else
+            {
+                curPopupWindow.close();
+                curPopupWindow = null;
+               
+                openWind(url);
+            }
+            return false;
+        }
+        
+        function setSelectedRelatedToDetails(recordName_inuptId, recordId_inuptId, selectedRecordId, selectedRecordName,field)
+        {
+        	selectedRecordId = selectedRecordId.substring(0,15);
+            document.getElementById(recordId_inuptId).value = selectedRecordId;
+            if(field == '')
+            	document.getElementById(recordName_inuptId).value = selectedRecordName;
+            else
+            	document.getElementById(recordName_inuptId).value = field;
+            curPopupWindow.close(); 
+            document.getElementById('{!$Component.defaultValue}').value = '';
+        }
+        
+	</script>
+	
+</apex:page>

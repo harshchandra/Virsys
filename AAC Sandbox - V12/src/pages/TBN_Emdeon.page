@@ -1,0 +1,51 @@
+<apex:page controller="TBN_EmdeonDemo" action="{!doCreateAttachment}">
+<style>
+    .Spaces10 
+    { 
+        word-spacing: 25px; 
+    }
+</style>
+
+ISA*<span class="Spaces10">00* *00* *ZZ*</span><span class="Spaces10">953994980 *ZZ*</span><span class="Spaces10">133052274<br/>
+<span class="todayDate"/></span>*<span class="todayTime"/>*^*00501*<apex:outputText value="{!strBatchId}"/>*0*T*:~
+GS*HC*953994980*133052274
+<span class="todayDate"/>*<span class="todayTime"/><apex:outputText value="{!strBatchId}"/>*X*005010X223A2~
+ST*837*000002000*005010X223A2~
+BHT*0019*00*000002000<span class="todayDate"/>*<span class="todayTime"/>*CH~
+NM1*41*2*<apex:outputText value="{!objFacility.Name}"/>*****46*<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+PER*IC*American Addiction Center*TE*1233456~
+NM1*40*2*EMDEON*****46<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+HL*1**20*1~
+NM1*85*2<apex:outputText value="{!objFacility.Name}"/>*****XX*<apex:outputText value="{!objFacility.Id}"/>~
+N3*<apex:outputText value="{!objFacility.Billing_Street_Address_1__c}"/><apex:outputText value="{!objFacility.Billing_Street_Address_2__c}"/>~
+N4*<apex:outputText value="{!objFacility.City__c}"/>*<apex:outputText value="{!objFacility.State__c}"/>*<apex:outputText value="{!objFacility.Zip__c}"/>~
+REF*G5~
+REF*EI*<apex:outputText value="{!objFacility.Facility_Tax_ID__c}"/>~
+<apex:variable var="count" value="{!2}"/> 
+<!-- <apex:repeat value="{!lstDatesOfService}" var="objDOS"> -->
+	
+	SBR*<apex:outputText value="{!strPatientInsuranceType}"/>*18*<!--  <apex:outputText value="{!lstDatesOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceGroupNumber__c}"/> -->******Cl~
+			<apex:repeat value="{!lstAccount}" var="patient">
+				HL*{!count}*1*22*0~
+				NM1*IL*1*<apex:outputText value="{!patient.LastName}"/>*<apex:outputText value="{!patient.FirstName}"/>***<apex:outputText value="{!patient.Salutation}"/>*MI*<!--  <apex:outputText value="{!lstDatesOfService[0].Patient_Insurance__r.Insurance_Code__c}"/>-->~
+				N3*<apex:outputText value="{!patient.BillingStreet}"/>~
+				N4*<apex:outputText value="{!patient.BillingCity}"/><apex:outputText value="{!patient.BillingState}"/><apex:outputText value="{!patient.BillingPostalCode}"/>~
+				DMG*D8*<span class="todayDate"/>*<apex:outputText value="{!patient.Gender__pc}"/>~
+				<apex:variable var="count" value="{!count+1}"/>
+			</apex:repeat>
+<!-- </apex:repeat> -->
+<apex:repeat value="{!lstPatientIns}" var="patientInsurance">
+	NM1*PR*2*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!patientInsurance.Insurance_Company__r.Name}"/>*****PI*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!patientInsurance.Insurance_Company__r.Id}"/>~
+	N3*<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!patientInsurance.Insurance_Company__r.Address__c}"/>~
+	N4*****<apex:outputText rendered="{!if(lstPatientIns.size > 0,true,false)}" value="{!patientInsurance.Insurance_Company__r.Billing_Code__c}"/>~
+</apex:repeat>
+CLM*
+
+
+<script>
+var d = new Date();
+var month = d.getMonth() + 1;
+document.getElementByClassName("todayDate").innerHTML = "" + d.getFullYear() + month + d.getDate();
+document.getElementByClassName("todayTime").innerHTML = ""+ d.getHours()+ d.getMinutes();
+</script>
+</apex:page>

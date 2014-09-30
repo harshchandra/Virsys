@@ -1,0 +1,1116 @@
+<apex:page showHeader="false" controller="TBN_UB04FormController">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>UB-04 Form</title>
+            <style>
+                html, body{margin:10px 0px; padding:0px; font:normal 11px Arial; color:#dd0000; height:auto;}
+                .floatL{float:left;}
+                .floatR{float:right;}
+                .wText{color:#fff;}
+                .textLeft{text-align:left;}
+                .textRight{text-align:right;}
+                .textCenter{text-align:center;}
+                .mBox{margin:0 auto; width:1002px; font-size: 8px;}
+                .mWrapper{width:1000px; margin:0px auto; padding:0px;}
+                td{height:18px; padding:0px; border-bottom:1px solid #fff;}
+                .mWrapper td{height:18px; padding:0px 5px; border-bottom:1px solid #c4c4c4; border-right:1px solid #c4c4c4; line-height:18px;}
+                .mWrapper td:last-child{border-right:0px;}
+                .mWrapper1{width:1000px; border:0px solid #c4c4c4; margin:0px auto; padding:0px;}
+                .mWrapper1 td{height:18px; padding:0px 5px; border-bottom:1px solid #c4c4c4; border-right:1px solid #c4c4c4; line-height:18px;}
+                .whiteBg{background:#fff !important;}
+                .greyBg{background:#ffecec !important;}
+                .row1{height:50px; border:0px;}
+                .col{height:18px; border-right:1px solid #c4c4c4; padding:0px 5px; line-height:18px;}
+                .col_small{/*width:10px;*/ margin:0px 5px 0px -5px; text-align:center; line-height:18px; font:normal 10px Arial; color:#999;}
+                .hideRightLine{border-right:0px !important;}
+                .spaceFix{line-height:10px;}
+                .blackBox{background:#333; color:#fff; padding-right:0.6%;}
+                .gold{background:gold;}
+                .lime{background:lime;}
+                .purple{background:purple;}
+                .paddingFix{padding:0px;}
+                .bLine{border-bottom:1px solid #c4c4c4 !important;}
+                .h50{height:50px;}
+                .rightLine{border-right:1px solid #c4c4c4 !important;}
+                .noBorder{border:0px;}
+                .showBorder{border:1px solid red;}
+                .noFix{margin:-25px 0px 0px -5px; padding:0px;}
+                .noFix1{margin:-12px 0px 0px -2px; padding:0px;}
+                .oneLine{white-space:nowrap;}
+                .splitMiddle{width:75%; margin:0px auto;}
+                .splitMiddle1{width:90%; margin:0px 0px 0px 25px; border:0px solid #333;}
+                .splitMiddle2{width:103%; margin:0px auto; border:0px solid green;}
+                .splitMiddle2 div{width:22px; padding:0px 2px 0px 3px; border:0px solid blue; border-left:0px; text-align:center; margin-left:-1px;}
+                .font12{font: normal 12px Arial;}
+                .mFix{margin-left:20px;}
+                .m14left{margin-left:14px;}
+                .m24left{margin-left:24px;}
+                .m12left{margin-left:12px;}
+                .m5left{margin-left:5px;}
+                .mNeg10{margin-left:-10px;}
+                .titleText{font:bold 16px Arial; font-style:italic;}
+                .mWrapper tr:nth-child(odd) {background:#ffecec; border-bottom:0px;}
+                .mWrapper tr:nth-child(even) {background:#fff;}
+                .mTable td{border-bottom:0px;}
+                .backNumber{position:relative; z-index:2; width:100%; height:18px; text-align:center; background:none; padding:0px; margin:0px 0px 0px 0px; font:bold 22px Arial; filter: alpha(opacity=20); opacity: 0.2; color:#fa5959;}
+                .frontContent{margin-top:-15px; position:relative; z-index:10; width:100%; height:18px; text-align:center; background:none;}
+                .mBorder{border:1px solid #c4c4c4;}
+                .leftLegend{width:20px; position:absolute; z-index:30; text-align:right; margin:0px 0px 0px -32px; height:18px;}
+                .rightLegend{width:20px; position:absolute; z-index:31; text-align:left; margin:0px 0px 0px 26px; height:18px;}
+                .rightLegend1{width:20px; position:absolute; z-index:32; text-align:left; margin:0px 0px 0px 90px; height:18px;}
+                .rightLegend2{width:20px; position:absolute; z-index:33; text-align:left; margin:0px 0px 0px 125px; height:18px;}
+                .rightLegend3{width:20px; position:absolute; z-index:34; text-align:left; margin:0px 0px 0px 205px; height:18px;}
+                .rightLegend4{width:20px; position:absolute; z-index:34; text-align:left; margin:0px 0px 0px 335px; height:18px;}
+                
+                .topBorder{border-top: 1px solid #c4c4c4;}
+            </style>
+        </head>
+        <apex:outputPanel id="mainPanel" rendered="{!if(lstDateOfService.size == 0, false, true)}">
+	        <body>
+	            <div class="mBox">
+	                <div class="mBorder">
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr id="row1">
+	                            <td colspan="10" width="276" class="whiteBg"><div class="col_small floatL">1{!objFacility.Name}</div> </td>
+	                            <td colspan="10" width="276" class="whiteBg"><div class="col_small floatL">2{!objFacility.Name}</div></td>
+	                            <td width="19" class="whiteBg"><span class="spaceFix">3a PAT.<br />CNTL #</span></td>
+	                            <td colspan="7" width="280" class="whiteBg">17</td>
+	                            <td colspan="2" width="41" class="blackBox textCenter hideRightLine"><div class="col_small floatL blackBox">4</div><span class="spaceFix">TYPE<br />OF BILL</span></td>
+	                        </tr>
+	                        <tr id="row2">
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.Street_Address_1__c} , {!objFacility.Street_Address_2__c}</div></td>
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.Billing_Street_Address_1__c} , {!objFacility.Billing_Street_Address_2__c}</div></td>
+	                            <td width="38" class="greyBg"><span class="spaceFix">b. MEC.<br />REC #</span></td>
+	                            <td colspan="7" width="210" class="greyBg"></td>
+	                            <td colspan="2" width="60" class="hideRightLine whiteBg"><div class="col_small floatL"></div>{!objClaim.Type_of_Bill__c}</td>
+	                        </tr>
+	                        <tr id="row3">
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.City__c}, {!objFacility.State__c}, {!objFacility.Country__c}, {!objFacility.Zip__c}</div></td>
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.Billing_City__c}, {!objFacility.Billing_State__c}, {!objFacility.Billing_Country__c}, {!objFacility.Billing_Zip__c}</div></td>
+	                            <td colspan="3" width="121" class="whiteBg"><span class="spaceFix oneLine">5 FED. TAX NO.</span></td>
+	                            <td colspan="3" width="155" class="textCenter greyBg">
+	                                <div class="col_small floatL">6</div>
+	                                <div class="spaceFix oneLine">STATEMENT COVERS PERIOD</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">FROM</div>
+	                                    <div class="floatR spaceFix">THROUGH</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="2" rowspan="2" align="top" width="26" class="whiteBg"><div class="col_small">7</div></td>
+	                        </tr>
+	                        <tr id="row4">
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.Main_Phone_Number__c}</div></td>
+	                            <td colspan="10" width="330" class="whiteBg"><div class="col_small floatL">{!objFacility.Billing_Main_Phone_Number__c}</div></td>
+	                            <td colspan="3" class="whiteBg">{!objFacility.Facility_Tax_ID__c}</td>
+	                            <td colspan="3" class="rightLine">&nbsp;<span id="from" style="margin-left: 11%"></span><span id="through" style="margin-left: 45%"></span></td>
+	                            <script>
+	                            	var date = new Date('{!lstDateOfService[lstDateOfService.size-1].Start_Date__c}');
+		                            var year = date.getFullYear();
+		                            year = year.toString().substr(2,2);
+		                            var month = date.getMonth()+1;
+		                            if(month<10)
+		                                month = 0+''+month;
+		                            var day = date.getDate();
+		                            if(day<10)
+		                                day = 0+''+day;
+		                            var dateToDisplay = month+''+day+''+year;
+		                            if(dateToDisplay == 'NaNNaNNaN')
+		                            	document.getElementById("through").innerHTML = '';
+		                            else
+		                            	document.getElementById("through").innerHTML = dateToDisplay;
+	                            </script>
+	                            <td colspan="3" class="rightLine">&nbsp;</td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr id="row5">
+	                            <td colspan="4" width="100"><span class="spaceFix oneLine">8 PATIENT NAME.</span></td>
+	                            <td width="20" class="col_small">a</td>
+	                            <td width="250" colspan="7" class="whiteBg">&nbsp;17</td>
+	                            <td colspan="4" width="100"><span class="spaceFix oneLine">9 PATIENT ADDRESS</span></td>
+	                            <td width="20" class="col_small">a</td>            
+	                            <td colspan="13" width="520" class="whiteBg">&nbsp;{!objAccount.BillingStreet}</td>
+	                        </tr>
+	                        <tr id="row6">
+	                            <td width="20" class="col_small greyBg">b</td> 
+	                            <td colspan="11" width="200">&nbsp;{!objAccount.LastName}, {!objAccount.Salutation} {!objAccount.FirstName}</td>
+	                            <td width="20" class="col_small greyBg">b</td> 
+	                            <td colspan="7" width="800">&nbsp;{!objAccount.BillingCity}</td>
+	                            <td width="20" class="col_small greyBg">c</td> 
+	                            <td colspan="2">&nbsp;{!objAccount.BillingState}</td>
+	                            <td width="20" class="col_small greyBg">d</td> 
+	                            <td colspan="3" width="30">&nbsp;{!objAccount.BillingPostalCode}</td>
+	                            <td width="20" class="col_small greyBg">e</td> 
+	                            <td colspan="2">&nbsp;</td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper1">
+	                        <tr>
+	                            <td colspan="4" rowspan="2" class="whiteBg">10 BIRTHDATE</td>
+	                            <td rowspan="2" class="whiteBg">11 SEX</td>
+	                            <td colspan="5" align="center" class="greyBg">ADMISSION</td>
+	                            <td rowspan="2" width="40" class="whiteBg">16 DHR</td>
+	                            <td rowspan="2" width="40" class="oneLine whiteBg">17 STAT</td>
+	                            <td colspan="11" align="center" class="greyBg">CONDITION CODES</td>
+	                            <td rowspan="2" width="50" class="greyBg">29 ACDT<br />STATE</td>
+	                            <td colspan="7" rowspan="2" valign="top" width="100" class="greyBg hideRightLine">30</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="2" align="center" class="greyBg">12 DATE</td>
+	                            <td width="35" align="center" class="greyBg">13 HR</td>
+	                          <td width="35" align="center" class="oneLine greyBg">14 TYPE</td>
+	                          <td width="35" align="center" class="oneLine greyBg">15 SRC</td>
+	                          <td align="center" class="greyBg">18</td>
+	                            <td align="center" class="greyBg">19</td>
+	                            <td align="center" class="greyBg">20</td>
+	                            <td align="center" class="greyBg">21</td>
+	                            <td align="center" class="greyBg">22</td>
+	                            <td align="center" class="greyBg">23</td>
+	                            <td align="center" class="greyBg">24</td>
+	                            <td align="center" class="greyBg">25</td>
+	                            <td align="center" class="greyBg">26</td>
+	                            <td align="center" class="greyBg">27</td>
+	                            <td align="center" class="greyBg rightLine">28</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="4" style="height:18px;" id="dob">&nbsp;</td>
+	                            <script>
+	                            	var date = new Date('{!objAccount.PersonBirthdate}');
+		                            var year = date.getFullYear();
+		                            var month = date.getMonth()+1;
+		                            if(month<10)
+		                                month = 0+''+month;
+		                            var day = date.getDate();
+		                            if(day<10)
+		                                day = 0+''+day;
+		                            var dateToDisplay = month+''+day+''+year;
+		                            if(dateToDisplay == 'NaNNaNNaN')
+		                            	document.getElementById("dob").innerHTML = '';
+		                            else
+		                            	document.getElementById("dob").innerHTML = dateToDisplay;
+	                            </script>
+	                            <td>&nbsp;{!objAccount.Gender__pc}</td>
+	                            <td colspan="2" id="admissionDate">&nbsp;</td>
+					            <script>
+	                            	var date = new Date('{!lstDateOfService[0].Start_Date__c}');
+		                            var year = date.getFullYear();
+		                            year = year.toString().substr(2,2);
+		                            var month = date.getMonth()+1;
+		                            if(month<10)
+		                                month = 0+''+month;
+		                            var day = date.getDate();
+		                            if(day<10)
+		                                day = 0+''+day;
+		                            var dateToDisplay = month+''+day+''+year;
+		                            if(dateToDisplay == 'NaNNaNNaN')
+		                            {
+		                            	document.getElementById("admissionDate").innerHTML = '';
+		                            	document.getElementById("from").innerHTML = '';
+		                            }
+		                            else
+		                            {
+		                            	document.getElementById("admissionDate").innerHTML = dateToDisplay;
+		                            	document.getElementById("from").innerHTML = dateToDisplay;
+		                            }
+	                            </script>
+	                            <td>&nbsp;08</td>
+	                            <td>&nbsp;003</td>
+	                            <td>&nbsp;1</td>
+	                            <td>&nbsp;<span id="dhr"></span></td>
+	                            <td>&nbsp;<span id="stat"></span></td>
+	                            <script>
+	                            	var date = new Date('{!lstDateOfService[lstDateOfService.size-1].Utilization_Review_Form__r.Discharge_Date__c}');
+	                            	if(date == '' || date == NaN)
+	                            	{
+	                            		document.getElementById("dhr").innerHTML = '';
+	                            		document.getElementById("stat").innerHTML = '1';
+	                            	}
+	                            	else
+	                            	{
+	                            		document.getElementById("dhr").innerHTML = '1200';
+	                            		document.getElementById("stat").innerHTML = '30';
+	                            	}
+	                            </script>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td>&nbsp;</td>
+	                            <td colspan="7" class="hideRightLine">&nbsp;</td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td colspan="4" width="100" class="textCenter">
+	                                <div class="col_small floatL">31</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="4" width="100" class="textCenter blackBox">
+	                                <div class="col_small floatL">32</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="4" width="100" class="textCenter">
+	                                <div class="col_small floatL">33</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="4" width="100" class="textCenter blackBox">
+	                                <div class="col_small floatL">34</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="5" width="150" class="textCenter">
+	                                <div class="col_small floatL">35</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE SPAN</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatL spaceFix m24left">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="5" width="150" class="textCenter">
+	                                <div class="col_small floatL">36</div>
+	                                <div class="spaceFix font12 oneLine">OCCURENCE SPAN</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatL spaceFix m24left">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="4" width="100"><div class="col_small floatL">37</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td width="50"><div class="leftLegend floatL">a</div><span class="floatL">&nbsp;</span></td>
+	                            <td colspan="3" width="75">&nbsp;</td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="3" width="75">&nbsp;</td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="3" width="75">&nbsp;</td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="3" width="75">&nbsp;</td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="2" width="75">&nbsp;</td>
+	                            <td colspan="2" width="75">&nbsp;</td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="2" width="75">&nbsp;</td>
+	                            <td colspan="2" width="75">&nbsp;</td>
+	                            <td colspan="4"><span class="floatL">&nbsp;</span><div class="rightLegend1">a</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td width="50" class="evenRow"><div class="leftLegend">b</div>&nbsp;</td>
+	                            <td colspan="3" width="75" class="evenRow">&nbsp;</td>
+	                            <td width="50" class="evenRow">&nbsp;</td>
+	                            <td colspan="3" width="75" class="evenRow">&nbsp;</td>
+	                            <td width="50" class="evenRow">&nbsp;</td>
+	                            <td colspan="3" width="75" class="evenRow">&nbsp;</td>
+	                            <td width="50" class="evenRow">&nbsp;</td>
+	                            <td colspan="3" width="75" class="evenRow">&nbsp;</td>
+	                            <td width="50" class="evenRow">&nbsp;</td>
+	                            <td colspan="2" width="75" class="evenRow">&nbsp;</td>
+	                            <td colspan="2" width="75" class="evenRow">&nbsp;</td>
+	                            <td width="50" class="evenRow">&nbsp;</td>
+	                            <td colspan="2" width="75" class="evenRow">&nbsp;</td>
+	                            <td colspan="2" width="75" class="evenRow">&nbsp;</td>
+	                            <td colspan="4" class="evenRow"><span class="floatL">&nbsp;</span><div class="rightLegend1">b</div></td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td width="750" colspan="14" rowspan="5" valign="top" class="whiteBg"><div class="col_small floatL">38</div><span  class="spaceFix">{!objPatientInsurance.Insurance_Company__r.Name}<br/>{!objPatientInsurance.Insurance_Company__r.Address__c}</span></td>
+	                            <td width="21" class="whiteBg" style="border-bottom:0px;">&nbsp;</td>
+	                            <td colspan="5" class="textCenter">
+	                                <div class="col_small floatL">39</div>
+	                                <div class="spaceFix font12 oneLine">VALUE CODES</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">AMOUNT</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="5" class="textCenter">
+	                                <div class="col_small floatL">40</div>
+	                                <div class="spaceFix font12 oneLine">VALUE CODES</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">AMOUNT</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="5" class="textCenter">
+	                                <div class="col_small floatL">41</div>
+	                                <div class="spaceFix font12 oneLine">VALUE CODES</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">AMOUNT</div>
+	                                </div>
+	                            </td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td class="col_small">a</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td width="135" colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td width="164" colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td width="176" colspan="4" class="textRight">&nbsp;</td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td class="col_small">b</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td class="col_small">c</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                        </tr>
+	                        <tr>
+	                            <td class="col_small">d</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                            <td width="70">&nbsp;</td>
+	                            <td colspan="4" class="textRight">&nbsp;</td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                          <td colspan="2" class="whiteBg">42 REV.CD.</td>
+	                          <td colspan="7" width="200" class="whiteBg">43 DESCRIPTION</td>
+	                          <td colspan="6" class="whiteBg">44 HCPCS/RATE/HIPPS CODE</td>
+	                          <td colspan="3" class="whiteBg">45 SERV.DATE</td>
+	                          <td colspan="3" class="whiteBg">46 SERV.UNITS</td>
+	                          <td colspan="4" class="whiteBg">47 TOTAL CHARGES</td>
+	                          <td colspan="4" class="whiteBg">48 NON-COVERED CHARGES</td>
+	                          <td class="whiteBg">49</td>
+	                      </tr>
+	                      <script>
+	                        var i = 1;
+	                      </script>
+	                    <apex:repeat value="{!lstDateOfService}" var="dos" >
+	                        <tr class="mTable">
+	                            <td colspan="2"><div class="leftLegend floatL" id="{!dos.id}num1"></div><span class="floatL">&nbsp;{!dos.Revenue_Code__c}</span></td>
+	                            <td colspan="7" width="200">{!dos.Notes__c}</td>
+	                            <td colspan="6">{!dos.Billing_Code__c}</td>
+	                            <!-- <td colspan="3" id="{!dos.id}">{!dos.Start_Date__c}</td> -->
+	                            <td colspan="3"><span id="{!dos.id}"></span></td>
+	                            <td colspan="3">1</td>
+	                            <td colspan="4">{!dos.Amount__c}</td>
+	                            <td colspan="4"></td>
+	                            <td><span class="floatL">&nbsp;</span><div class="rightLegend" id="{!dos.id}num2"></div></td>
+	                        </tr>
+	                        <script>
+	                            var date = new Date('{!dos.Start_Date__c}');
+	                            var year = date.getFullYear();
+	                            year = year.toString().substr(2,2);
+	                            var month = date.getMonth()+1;
+	                            if(month<10)
+	                                month = 0+''+month;
+	                            var day = date.getDate();
+	                            if(day<10)
+	                                day = 0+''+day;
+	                            var dateToDisplay = month+''+day+''+year;
+	                            if(dateToDisplay == 'NaNNaNNaN')
+	                            	document.getElementById("{!dos.id}").innerHTML = '';
+	                            else
+	                            	document.getElementById("{!dos.id}").innerHTML = dateToDisplay;
+	                            document.getElementById("{!dos.id}num1").innerHTML = i;
+	                            document.getElementById("{!dos.id}num2").innerHTML = i;
+	                            i++;
+	                        </script> 
+	                    </apex:repeat>
+	                    <apex:repeat value="{!lstNumberOfBlankRows}" var="row" >
+	                        <tr class="mTable">
+	                            <td colspan="2"><div class="leftLegend floatL">{!row}</div><span class="floatL">&nbsp;</span></td>
+	                            <td colspan="7" width="200"></td>
+	                            <td colspan="6"></td>
+	                            <td colspan="3"></td>
+	                            <td colspan="3"></td>
+	                            <td colspan="4"></td>
+	                            <td colspan="4"></td>
+	                            <td><span class="floatL">&nbsp;</span><div class="rightLegend">{!row}</div></td>
+	                        </tr>
+	                    </apex:repeat>
+	                      <!-- <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">3</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">3</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">4</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">4</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">5</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">5</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">6</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">6</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">7</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">7</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">8</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">8</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">9</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">9</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">10</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">10</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">11</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">11</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">12</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">12</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">13</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">13</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">14</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">14</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">15</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">15</div></td>
+	                      </tr> 
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">16</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">16</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">17</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">17</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">18</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">18</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                        <td colspan="2"><div class="leftLegend floatL">19</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">19</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">20</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">20</div></td>
+	                      </tr>
+	                      <tr class="mTable">
+	                          <td colspan="2"><div class="leftLegend floatL">21</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">21</div></td>
+	                      </tr>
+	                      <tr>
+	                          <td colspan="2"><div class="leftLegend floatL">22</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="7" width="200"></td>
+	                          <td colspan="6"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="3"></td>
+	                          <td colspan="4"></td>
+	                          <td colspan="4"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">22</div></td>
+	                      </tr> -->
+	                      <tr>
+	                          <td colspan="2" class="topBorder"><div class="leftLegend floatL">23</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="13" width="200" class="titleText topBorder"><span class="floatL">PAGE _1_ OF _1_</span>          <span class="floatR">CREATION DATE</span></td>
+	                          <td colspan="3" class="topBorder"><b id="printedDate" style="font-size: 150%;"></b></td>
+	                          <script>
+	                           	var date = new Date();
+	                            var year = date.getFullYear();
+	                            year = year.toString().substr(2,2);
+	                            var month = date.getMonth()+1;
+	                            if(month<10)
+	                                month = 0+''+month;
+	                            var day = date.getDate();
+	                            if(day<10)
+	                                day = 0+''+day;
+	                            var dateToDisplay = month+''+day+''+year;
+	                            if(dateToDisplay == 'NaNNaNNaN')
+	                            	document.getElementById("printedDate").innerHTML = '';
+	                            else
+	                            	document.getElementById("printedDate").innerHTML = dateToDisplay;
+	                          </script>
+	                          <td colspan="3" class="blackBox titleText wText topBorder">TOTALS <img src="{!URLFOR($Resource.Arrow)}" border="0" align="absmiddle" /></td>
+	                          <td colspan="4" class="topBorder"><b style="font-size: 150%;">{!TotalAmount}</b></td>
+	                          <td colspan="4" class="topBorder"></td>
+	                          <td><span class="floatL">&nbsp;</span><div class="rightLegend">23</div></td>
+	                      </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td colspan="8" width="200">50 PAYER NAME</td>
+	                            <td colspan="6" width="200">51 HEALTH PLAN ID</td>
+	                            <td width="40" class="textCenter"><span class="spaceFix">52 REL. INFO</span></td>
+	                            <td class="col_small">&nbsp;</td>
+	                            <td width="45" class="textCenter"><span class="spaceFix">53 ASG. BEN</span></td>
+	                            <td colspan="3" width="100">54 PRIOR PAYMENTS</td>
+	                            <td colspan="3" width="100">55 EST. AMOUNT DUE</td>
+	                            <td colspan="2" width="40">56 NPI</td>
+	                            <td colspan="5" width="100">&nbsp;</td>
+	                      </tr>
+	                    <tr class="mTable">
+	                          <td colspan="8"><div class="leftLegend floatL">A</div><span class="floatL">&nbsp;{!objPatientInsurance.Insurance_Company__r.Name}</span></td>
+	                          <td colspan="6">&nbsp;{!objPatientInsurance.Insurance_Company__r.Health_Plan_Id__c}</td>
+	                          <td>&nbsp;Y</td>
+	                          <td class="col_small">&nbsp;</td>
+	                          <td>&nbsp;Y</td>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="2" class="whiteBg">57</td>
+	                          <td colspan="5"><span class="floatL">&nbsp;</span><div class="rightLegend2">A</div></td>
+	                        </tr>
+	                    <tr class="mTable">
+	                          <td colspan="8"><div class="leftLegend floatL">B</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="6">&nbsp;</td>
+	                          <td>&nbsp;<span id="secondary1"></span></td>
+	                          <td class="col_small">&nbsp;</td>
+	                          <td>&nbsp;<span id="secondary2"></span></td>
+	                          <script>
+	                          	var isSecondaryInsurance = '{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.IsSecondaryInsurance__c}';
+	                          	if(isSecondaryInsurance == 'True')
+	                          	{
+	                          		document.getElementById("secondary1").innerHTML = 'Y';
+	                          		document.getElementById("secondary2").innerHTML = 'Y';
+	                          	}
+	                          	else
+	                          	{
+	                          		document.getElementById("secondary1").innerHTML = '';
+	                          		document.getElementById("secondary2").innerHTML = '';
+	                          	}
+	                          </script>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="2" class="whiteBg">OTHER</td>
+	                          <td colspan="5"><span class="floatL">&nbsp;</span><div class="rightLegend2">B</div></td>
+	                        </tr>
+	                        <tr>
+	                          <td colspan="8"><div class="leftLegend floatL">C</div><span class="floatL">&nbsp;</span></td>
+	                          <td colspan="6">&nbsp;</td>
+	                          <td>&nbsp;</td>
+	                          <td class="col_small">&nbsp;</td>
+	                          <td>&nbsp;</td>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="3">&nbsp;</td>
+	                          <td colspan="2">PRV ID</td>
+	                          <td colspan="5"><span class="floatL">&nbsp;</span><div class="rightLegend2">C</div></td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td colspan="10" width="170">58 INSURED'S NAME</td>
+	                            <td width="50">59 P.REL</td>
+	                            <td colspan="7" width="100">60 INSURED'S UNIQUE ID</td>
+	                            <td colspan="6" width="100">61 GROUP NAME</td>
+	                            <td colspan="6" width="100">62 INSURANCE GROUP NO.</td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td colspan="10" width="170"><div class="leftLegend floatL">A</div><span class="floatL">&nbsp;{!objAccount.LastName}, {!objAccount.Salutation} {!objAccount.FirstName}</span></td>
+	                            <td width="50">&nbsp;<span id="relation"></span></td>
+	                            <script>
+	                            	var relation = '{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuredRelationshipToClient__c}';
+	                            	if(relation == 'Self')
+		                            	document.getElementById("relation").innerHTML = '18';
+		                            else if(relation == 'Child')
+		                            	document.getElementById("relation").innerHTML = '19';
+		                            else
+		                            	document.getElementById("relation").innerHTML = '';
+	                            </script>
+	                            <td colspan="7" width="100">&nbsp;{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceID__c}</td>
+	                            <td colspan="6" width="100">&nbsp;</td>
+	                            <td colspan="6" width="100"><span class="floatL">&nbsp;{!lstDateOfService[0].Utilization_Review_Form__r.VOB__r.InsuranceGroupNumber__c}</span><div class="rightLegend3">A</div></td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td colspan="10" width="170"><div class="leftLegend floatL">B</div><span class="floatL">&nbsp;</span></td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="7" width="100">&nbsp;</td>
+	                            <td colspan="6" width="100">&nbsp;</td>
+	                            <td colspan="6" width="100"><span class="floatL">&nbsp;</span><div class="rightLegend3">B</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="170"><div class="leftLegend floatL">C</div><span class="floatL">&nbsp;</span></td>
+	                            <td width="50">&nbsp;</td>
+	                            <td colspan="7" width="100">&nbsp;</td>
+	                            <td colspan="6" width="100">&nbsp;</td>
+	                            <td colspan="6" width="100"><span class="floatL">&nbsp;</span><div class="rightLegend3">C</div></td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                          <td colspan="10" width="300">63 TREATMENT AUTHORIZATION CODES</td>
+	                          <td colspan="10" width="300">64 DOCUMENT CONTROL NUMBER</td>
+	                          <td colspan="10" width="300">65 EMPLOYER NAME</td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td colspan="10" width="300"><div class="leftLegend floatL">A</div><span class="floatL">&nbsp;{!AuthorizationNumber}</span></td>
+	                            <td colspan="10" width="300">&nbsp;</td>
+	                            <td colspan="10" width="300"><span class="floatL">&nbsp;</span><div class="rightLegend4">A</div></td>
+	                        </tr>
+	                        <tr class="mTable">
+	                            <td colspan="10" width="300"><div class="leftLegend floatL">B</div><span class="floatL">&nbsp;</span></td>
+	                            <td colspan="10" width="300">&nbsp;</td>
+	                            <td colspan="10" width="300"><span class="floatL">&nbsp;</span><div class="rightLegend4">B</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="300"><div class="leftLegend floatL">C</div><span class="floatL">&nbsp;</span></td>
+	                            <td colspan="10" width="300">&nbsp;</td>
+	                            <td colspan="10" width="300"><span class="floatL">&nbsp;</span><div class="rightLegend4">C</div></td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td class="col_small" width="30">
+	                                <span class="spaceFix">66 DX</span>
+	                            </td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">67</div>
+	                                <div class="frontContent"><span id="d1"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">A</div>
+	                                <div class="frontContent"><span id="d2"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">B</div>
+	                                <div class="frontContent"><span id="d3"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">C</div>
+	                                <div class="frontContent"><span id="d4"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">D</div>
+	                                <div class="frontContent"><span id="d5"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">E</div>
+	                                <div class="frontContent"><span id="d6"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">F</div>
+	                                <div class="frontContent"><span id="d7"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">G</div>
+	                                <div class="frontContent"><span id="d8"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">H</div>
+	                                <div class="frontContent"><span id="d9"></span></div>
+	                            </td>
+	                            <td class="col_small" width="30">&nbsp;</td>            
+	                          <td width="60" colspan="2" valign="top" class="whiteBg"><div class="col_small floatL">68</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="col_small" width="30"><span class="spaceFix"></span></td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">I</div>
+	                                <div class="frontContent"><span id="d10"></span></div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">J</div>
+	                                <div class="frontContent"><span id="d11"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">K</div>
+	                                <div class="frontContent"><span id="d12"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">L</div>
+	                                <div class="frontContent"><span id="d13"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">M</div>
+	                                <div class="frontContent"><span id="d14"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">N</div>
+	                                <div class="frontContent"><span id="d15"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">O</div>
+	                                <div class="frontContent"><span id="d16"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">P</div>
+	                                <div class="frontContent"><span id="d17"></span></div>
+	                            </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">Q</div>
+	                                <div class="frontContent"><span id="d18"></span></div>
+	                            </td>
+	                            <script>
+	                            	var allDiagnosis = '{!lstDateOfService[0].Utilization_Review_Form__r.Diagnosis__c}';
+	                            	var arrDiagnosis = allDiagnosis.split(",");
+	                            	for(i=1; i<=arrDiagnosis.length; i++)
+	                            	{
+	                            		var newDiagnosisCode = arrDiagnosis[i-1].replace(".", "");
+	                            		document.getElementById('d'+i).innerHTML =  newDiagnosisCode;
+	                            	}
+	                            </script>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>            
+	                          <td colspan="2" width="60">&nbsp;</td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td colspan="2" width="45">
+	                                <span class="spaceFix">69 ADMIT DX</span>
+	                            </td>
+	                            <td width="60" class="whiteBg">&nbsp;{!lstDateOfService[0].Utilization_Review_Form__r.Primary_Diagnosis_Code__r.Name}</td>
+	                            <td colspan="2" width="60">
+	                                <span class="spaceFix">70 PATIENT REASON DX</span>
+	                            </td>
+	                            <td colspan="2" width="60" class="whiteBg">
+	                                <div class="backNumber">a</div>
+	                                <div class="frontContent">BCBS</div>
+	                            </td>
+	                            <td colspan="2" width="60" class="whiteBg">
+	                                <div class="backNumber">b</div>
+	                                <div class="frontContent">0</div>
+	                            </td>
+	                            <td colspan="2" width="60" class="whiteBg">
+	                                <div class="backNumber">c</div>
+	                                <div class="frontContent">{!lstDateOfService[0].Utilization_Review_Form__r.Primary_Diagnosis_Code__r.Name}</div>
+	                            </td>
+	                            <td colspan="2" width="30">
+	                                <span class="spaceFix">71 PPS Code</span>
+	                            </td>
+	                            <td colspan="2" width="50" class="whiteBg">&nbsp;</td>
+	                            <td colspan="2" width="10">
+	                                <span class="spaceFix">72 ECI</span>
+	                            </td>
+	                            <td width="60" colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">a</div>
+	                                <div class="frontContent">Something</div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td width="60" colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">b</div>
+	                                <div class="frontContent">Something</div>
+	                            </td>
+	                            <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                            <td width="60" colspan="2" class="hideRightLine whiteBg bLine">
+	                                <div class="backNumber">c</div>
+	                                <div class="frontContent">Something</div>
+	                          </td>
+	                          <td class="col_small greyBg bLine" width="30">&nbsp;</td>
+	                          <td colspan="3" width="80" class="whiteBg">
+	                            <div class="col_small floatL">73</div>
+	                          </td>
+	                        </tr>
+	                    </table>
+	                    <table cellpadding="0" cellspacing="0" border="0" align="center" class="mWrapper">
+	                        <tr>
+	                            <td colspan="6" class="textCenter greyBg" width="100">
+	                                <div class="col_small floatL">74</div>
+	                                <div class="spaceFix oneLine">PRINCIPLE PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="6" class="textCenter blackBox" width="100">
+	                                <div class="col_small floatL">a</div>
+	                                <div class="spaceFix oneLine">OTHER PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="6" class="textCenter greyBg" width="100">
+	                                <div class="col_small floatL">b</div>
+	                                <div class="spaceFix oneLine">OTHER PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td width="40" colspan="2" rowspan="4" valign="top" class="whiteBg">
+	                                <div class="col_small floatL">75</div>
+	                            </td>
+	                            <td colspan="3" width="40">76 ATTENDING</td>
+	                            <td colspan="3" width="80" class="whiteBg">NPI</td>
+	                            <td width="20">QUAL</td>
+	                            <td width="20" class="whiteBg">&nbsp;</td>
+	                            <td colspan="2" width="60" class="whiteBg">&nbsp;{!objPhysiciansUnderFacility.Facility__r.Name}</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="5" class="whiteBg" width="120">LAST&nbsp;&nbsp;{!objPhysiciansUnderFacility.Contact__r.LastName}, {!objPhysiciansUnderFacility.Contact__r.Salutation}</td>
+	                            <td colspan="5" class="whiteBg" width="70">FIRST&nbsp;&nbsp;{!objPhysiciansUnderFacility.Contact__r.FirstName}</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="6" class="textCenter blackBox" width="100">
+	                                <div class="col_small floatL">c</div>
+	                                <div class="spaceFix oneLine">OTHER PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="6" class="textCenter greyBg" width="100">
+	                                <div class="col_small floatL">d</div>
+	                                <div class="spaceFix oneLine">PRINCIPLE PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="6" class="textCenter blackBox" width="100">
+	                                <div class="col_small floatL">e</div>
+	                                <div class="spaceFix oneLine">OTHER PROCEDURE</div>
+	                                <div class="splitMiddle">
+	                                    <div class="floatL spaceFix">CODE</div>
+	                                    <div class="floatR spaceFix">DATE</div>
+	                                </div>
+	                            </td>
+	                            <td colspan="3" width="40">77 OPERATING</td>
+	                            <td colspan="3" width="80" class="whiteBg">NPI</td>
+	                            <td width="20">QUAL</td>
+	                            <td width="20" class="whiteBg">&nbsp;</td>
+	                            <td colspan="2" width="60" class="whiteBg">&nbsp;</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="3" width="50"></td>
+	                            <td colspan="5" class="whiteBg" width="120">LAST</td>
+	                            <td colspan="5" class="whiteBg" width="70">FIRST</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="210" class="whiteBg">80 REMARKS</td>
+	                            <td width="20" align="right" class="whiteBg">
+	                                <span class="spaceFix">81CC a</span>
+	                            </td>
+	                            <td width="30" class="whiteBg"></td>
+	                            <td colspan="4" width="120" class="whiteBg"></td>
+	                            <td colspan="4" width="120" class="whiteBg"></td>
+	                            <!-- dont change -->
+	                            <td colspan="3" width="40">78 OTHER</td>
+	                            <td colspan="3" width="80" class="whiteBg">NPI</td>
+	                            <td width="20">QUAL</td>
+	                            <td width="20" class="whiteBg">&nbsp;</td>
+	                            <td colspan="2" width="60" class="whiteBg">&nbsp;</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="210" class="whiteBg"></td>
+	                            <td width="20" align="right" class="greyBg">
+	                                <span class="spaceFix">b</span>
+	                            </td>
+	                            <td width="30" class="greyBg"></td>
+	                            <td colspan="4" width="120" class="greyBg"></td>
+	                            <td colspan="4" width="120" class="greyBg"></td>
+	                            <td colspan="5" class="whiteBg" width="120">LAST</td>
+	                            <td colspan="5" class="whiteBg" width="70">FIRST</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="210" class="whiteBg"></td>
+	                            <td width="20" align="right" class="whiteBg">
+	                                <span class="spaceFix">c</span>
+	                            </td>
+	                            <td width="30" class="whiteBg"></td>
+	                            <td colspan="4" width="120" class="whiteBg"></td>
+	                            <td colspan="4" width="120" class="whiteBg"></td>
+	                            <td colspan="3" width="40">79 OTHER</td>
+	                            <td colspan="3" width="80" class="whiteBg">NPI</td>
+	                            <td width="20">QUAL</td>
+	                            <td width="20" class="whiteBg">&nbsp;</td>
+	                            <td colspan="2" width="60" class="whiteBg">&nbsp;</td>
+	                        </tr>
+	                        <tr>
+	                            <td colspan="10" width="210" class="whiteBg"></td>
+	                            <td width="20" align="right" class="greyBg">
+	                                <span class="spaceFix">d</span>
+	                            </td>
+	                            <td width="30" class="greyBg"></td>
+	                            <td colspan="4" width="120" class="greyBg"></td>
+	                            <td colspan="4" width="120" class="greyBg"></td>
+	                            <td colspan="5" class="whiteBg" width="120">LAST</td>
+	                            <td colspan="5" class="whiteBg" width="70">FIRST</td>
+	                        </tr>
+	                    </table>
+	                </div>
+	            </div>
+	        </body>
+		</apex:outputPanel>
+		<apex:outputPanel rendered="{!if(lstDateOfService.size == 0, true, false)}">
+            <apex:pageBlock id="UBO4" title="UBO4 Form">
+                <span style="font-style: italic;">No Dates of Service record present for this Claim</span>
+            </apex:pageBlock>   
+        </apex:outputPanel>
+    </html>
+</apex:page>

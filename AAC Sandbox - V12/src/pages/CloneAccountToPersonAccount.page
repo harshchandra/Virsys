@@ -1,0 +1,12 @@
+<apex:page standardController="Account" extensions="CloneToPersonAccountExt" showHeader="false" sidebar="false" title="New Person Account">
+<apex:sectionHeader subtitle="Specify new Person Account Name"/>
+<apex:form >
+<apex:pageBlock id="mainBlock">
+<apex:pageMessages />
+Please verify spelling before clicking submit.<br/>
+First Name:<apex:inputText id="txtFirstName" label="First Name" value="{!FirstName}"/><br/>
+Last Name:<apex:inputText id="txtLastName" label="Last Name" value="{!LastName}"/>
+<apex:commandButton id="btnSubmit" value="Submit" action="{!save}" />
+</apex:pageBlock>
+</apex:form>
+</apex:page>

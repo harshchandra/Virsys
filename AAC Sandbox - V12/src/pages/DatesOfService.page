@@ -1,0 +1,241 @@
+<apex:page StandardController="Dates_of_Service__c" extensions="DatesOfServiceController" showheader="false" sidebar="false" docType="html-5.0">
+   <html lang="en">
+      <head>
+         <!-- Bootstrap -->
+         <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+         <title>Dates of Service</title>
+      </head>
+      <body>
+      <apex:form >
+      <vs:importvisualstrap />
+      <vs:visualstrapblock rendered="{!!DOSReady}">
+      <apex:outputPanel layout="block" styleClass="container">
+      <div class="panel panel-primary">
+      <div class="panel-heading">Missing Information</div>
+      <div class="panel-body">
+      	<h3>You must complete the following information before you can create Dates of Service for this record.</h3>
+      	<br/>
+      	<br/>
+      	<div class="form-group">
+				<label for="txtTherapistName">Therapist Name:</label><apex:inputField id="txtTherapistName" value="{!ParentForm.Therapist_Name__c}" styleClass="form-control" style="width:250px"/><br/>
+				<label for="txtTherapistPhoneNumber">Therapist Phone:</label><apex:inputField id="txtTherapistPhoneNumber" value="{!ParentForm.Therapist_Phone_Number__c}" styleClass="form-control" style="width:250px"/><br/>
+				<label for="txtPrimaryDiagnosisCode">Primary Diagnosis Code:</label><br/><apex:inputField id="txtPrimaryDiagnosisCode" value="{!ParentForm.Primary_Diagnosis_Code__c}"  style="width:250px"/><br/>
+				<br/>
+				</div>
+				<apex:commandButton value="Save" styleClass="btn-primary" action="{!SaveParent}"/>
+				
+      </div>
+      </div>
+      </apex:outputPanel>
+      </vs:visualstrapblock>
+      <vs:visualstrapblock rendered="{!DOSReady}">
+      <apex:outputPanel layout="block" styleClass="container jumbotron">
+               <div class="col-md-6">
+                   <h1>{!ParentForm.Client_Name__c}</h1>
+               </div>
+               <div class="col-md-6">
+                   <h4>Utilization Review Form: <a href="/{!ParentForm.Id}">{!ParentForm.Name}</a></h4><br/>
+                   <h4>Case: <a href="/{!ParentForm.Case__c}">{!ParentForm.Case__r.CaseNumber}</a></h4><br/>
+                   <h4>Insurance Verification Form: <a href="/{!ParentForm.VOB__r.Id}">{!ParentForm.VOB__r.Name}</a></h4><br/>
+               </div>
+      </apex:outputPanel>
+      
+          <div class="container">
+               <apex:outputPanel id="pnlErrors">
+                   <apex:actionRegion rendered="{!FormInvalid}">
+                   <div class="panel panel-default">
+                   <div class="panel-heading">Error Report</div>
+                       <div class="panel-body">
+                        <apex:repeat id="rptErrors" rendered="{!FormInvalid}" value="{!Messages}" var="message">
+                        <div class="alert {!IF(message.Severity=='confirm','alert-success',IF(message.Severity=='info','alert-info',IF(message.Severity=='warn','alert-warning','alert-danger')))}">
+                        {!message.Message}
+                        </div>
+                        </apex:repeat>
+                       </div>
+                   </div>
+                   </apex:actionRegion>
+               </apex:outputPanel>
+               
+               <div class="panel panel-default">
+                   <div class="panel-heading">Dates of Service Information</div>
+                   <div class="panel-body">
+                       <div class="form-group">
+                           <div class="col-md-12">
+                           <apex:actionRegion >
+                               <label for="loc">Level of Care:</label><apex:inputField id="loc" value="{!Form.Level_of_Care__c}" styleClass="form-control" required="true"><apex:actionSupport event="onchange" action="{!LevelOfCareRules}" reRender="pnlDaysOfWeekApex, daysPerWeekRegion, infoRegion, pnlStatus, lblLoc" /></apex:inputField><br/>
+                               <apex:outputLabel id="lblLoc" value="{!}" rendered="{!ShowLocLabel}"/>
+                           </apex:actionRegion>
+                           <apex:outputPanel id="pnlStatus">
+                           <apex:actionRegion >
+                               <apex:outputLabel for="locStatus" value="Status:"/><apex:inputField id="locStatus" value="{!Form.Status__c}" styleClass="form-control"><apex:actionSupport event="onchange" action="{!StatusRules}" reRender="pnlDaysOfWeekApex, daysPerWeekRegion, infoRegion, pnlQuestions" /></apex:inputField><br/>
+													 </apex:actionRegion>
+													</apex:outputPanel>													 
+													 <br/><br/>
+													 </div>
+                       </div>
+                                              
+                       <div class="form-group">
+                           <div class="col-md-6">
+                           		<apex:actionRegion >
+                               <label for="startDate">Start Date:</label><apex:inputField id="startDate" required="true" value="{!Form.Start_Date__c}" styleClass="form-control" style="width:250px;">
+                               	<apex:actionSupport event="onchange" action="{!CalculateCalendarDays}" rerender="totalCalendarDays"/>
+                               </apex:inputField>
+                               <script>document.getElementById('{!$Component.startDate}').disabled = {!StartDateEnabled}; </script>
+                               <br/>
+                               </apex:actionRegion>
+                               <apex:actionRegion >
+                               <label for="endDate">End Date:</label><apex:inputField id="endDate" required="true" value="{!Form.End_Date__c}" styleClass="form-control" style="width:250px">
+                               <apex:actionSupport event="onchange" action="{!CalculateCalendarDays}" rerender="totalCalendarDays, infoRegion"/>
+                               </apex:inputField>
+                               </apex:actionRegion>
+                               <br/>
+                               <apex:outputPanel id="daysPerWeekRegion">
+                               <apex:actionRegion >
+                               	<apex:outputLabel rendered="{!ShowDaysPerWeek}" value="Days Per Week:" for="daysPerWeek"/>
+                                <apex:inputField id="daysPerWeek" value="{!Form.Days_Per_Week__c}" styleClass="form-control" style="width:250px;" rendered="{!ShowDaysPerWeek}" required="true" >
+                                    <apex:actionSupport event="onchange" action="{!SetDaysOfWeekVisibility}" rerender="pnlDaysOfWeekApex"/>
+                                </apex:inputField>
+                                </apex:actionRegion>
+                                <apex:actionRegion >
+                                <apex:outputLabel for="totalCalendarDays" value="Total Calendar Days:"/><apex:outputText id="totalCalendarDays" value="{!NumberOfDays}" styleClass="form-control" style="width:250px" /><br/>
+                                </apex:actionRegion>                    
+                                </apex:outputPanel>          
+                               <br/>
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <div class="col-md-6">
+                          <apex:outputPanel id="infoRegion">
+                          	<apex:actionRegion >
+                               <apex:outputLabel for="totalDaysAuthorized" rendered="{!ShowTotalDays}" value="Total Days Authorized:" /><apex:inputField id="totalDaysAuthorized" required="true" rendered="{!ShowTotalDays}" value="{!Form.Total_Days_Authorized__c}" styleClass="form-control" style="width:250px" /><br/>
+                               <apex:outputLabel for="authorizationNumber" rendered="{!ShowAuthorizationNumber}" value="Authorization Number:"/><apex:inputField id="authorizationNumber" required="true" rendered="{!ShowAuthorizationNumber}" value="{!Form.Authorization_Number__c}" styleClass="form-control" style="width:250px" /><br/>
+                               <apex:outputLabel for="cm" rendered="{!ShowCM}" value="CM:"/><apex:inputField id="cm" value="{!Form.CM__c}" rendered="{!ShowCM}" styleClass="form-control" style="width:250px" /><br/>                               
+                               <apex:outputLabel for="dateOfReview" rendered="{!ShowDateOfNextReview}" value="Date of Next Review:"/><apex:inputField id="dateOfReview" value="{!Form.Date_of_Review__c}" rendered="{!ShowDateOfNextReview}" styleClass="form-control" style="width:250px" /><br/>
+                               <apex:outputLabel for="reviewAssignedTo" rendered="{!ShowReviewAssignedTo}" value="Review Assigned To:"/><apex:inputField id="reviewAssignedTo" value="{!Form.Review_Assigned_To_Lookup__c}" rendered="{!ShowReviewAssignedTo}" styleClass="form-control" style="width:250px" required="true" /><br/>
+														</apex:actionRegion>                               
+													</apex:outputPanel>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+               
+               <apex:outputpanel id="pnlDaysOfWeekApex">
+               <apex:actionRegion rendered="{!ShowDaysOfWeek}">
+               <div id="pnlDaysOfWeek" class="panel panel-default">
+                   <div class="panel-heading">Days of the Week</div>
+                   <div class="panel-body">
+                       <div class="form-group">
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkMonday" disabled="{!DisableDays}" value="{!Monday}"/>Monday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkTuesday" disabled="{!DisableDays}" value="{!Tuesday}"/>Tuesday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkWednesday" disabled="{!DisableDays}" value="{!Wednesday}"/>Wednesday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkThursday" disabled="{!DisableDays}" value="{!Thursday}"/>Thursday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkFriday" disabled="{!DisableDays}" value="{!Friday}"/>Friday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkSaturday" disabled="{!DisableDays}" value="{!Saturday}"/>Saturday</label>
+                       <label class="checkbox-inline"><apex:inputCheckbox id="chkSunday" disabled="{!DisableDays}" value="{!Sunday}"/>Sunday</label>
+                       </div>
+                   </div>
+               </div>
+               </apex:actionRegion>
+              </apex:outputpanel>
+              <apex:outputPanel id="pnlQuestions">
+              <apex:actionRegion rendered="{!ShowAdminDenialQuestion}">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Questions</div>
+                      <div class="panel-body">
+                          <div class="form-group">
+                              <div class="col-md-12">
+                              		<apex:outputLabel for="questionAdminDenial" value="{!QuestionAdminDenialText}" rendered="{!ShowAdminDenialQuestion}"/><apex:inputText id="questionAdminDenial" value="{!QuestionAdminDenial}" required="{!ShowAdminDenialQuestion}" styleClass="form-control" style="width:100%" /><br/>
+                              </div>
+                          </div>
+                     </div>
+              </div>
+              </apex:actionRegion>
+							<apex:actionRegion rendered="{!ShowClinicalDenialQuestions}">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Questions</div>
+                      <div class="panel-body">
+                          <div class="form-group">
+                              <div class="col-md-12">
+                              		<apex:outputLabel for="questionClinicalDenial1" value="{!QuestionClinicalDenialText1}" rendered="{!ShowClinicalDenialQuestions}"/><apex:inputText id="questionClinicalDenial1" value="{!QuestionClinicalDenial1}" required="{!ShowClinicalDenialQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                              		<apex:outputLabel for="questionClinicalDenial2" value="{!QuestionClinicalDenialText2}" rendered="{!ShowClinicalDenialQuestions}"/><apex:inputText id="questionClinicalDenial2" value="{!QuestionClinicalDenial2}" required="{!ShowClinicalDenialQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                              		<apex:outputLabel for="questionClinicalDenial3" value="{!QuestionClinicalDenialText3}" rendered="{!ShowClinicalDenialQuestions}"/><apex:inputText id="questionClinicalDenial3" value="{!QuestionClinicalDenial3}" required="{!ShowClinicalDenialQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                              </div>
+                          </div>
+                     </div>
+              </div>
+              </apex:actionRegion>
+              <apex:actionRegion rendered="{!ShowPostServiceClaimQuestion}">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Questions</div>
+                      <div class="panel-body">
+                          <div class="form-group">
+                              <div class="col-md-12">
+                              		<apex:outputLabel for="questionPostServiceClaim" value="{!QuestionPostServiceClaimText}" rendered="{!ShowPostServiceClaimQuestion}"/><apex:inputText id="questionPostServiceClaim" value="{!QuestionPostServiceClaim}" required="{!ShowPostServiceClaimQuestion}" styleClass="form-control" style="width:100%" /><br/>
+                              </div>
+                          </div>
+                     </div>
+              </div>
+              </apex:actionRegion>              
+              <apex:actionRegion rendered="{!ShowQuestions}">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Questions</div>
+                      <div class="panel-body">
+                          <div class="form-group">
+                              <div class="col-md-12">
+                                  <apex:outputLabel for="question1" value="{!Question1Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question1" value="{!Question1}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <label class="checkbox-inline"><apex:inputCheckbox id="chkDTX" rendered="{!ShowQuestions}"  value="{!DTX}"/>DTX</label>
+				                          <label class="checkbox-inline"><apex:inputCheckbox id="chkIR"  rendered="{!ShowQuestions}" value="{!IR}"/>IR</label>
+				                          <label class="checkbox-inline"><apex:inputCheckbox id="chkRTC" rendered="{!ShowQuestions}" value="{!RTC}"/>RTC</label>
+					                        <label class="checkbox-inline"><apex:inputCheckbox id="chkPHP" rendered="{!ShowQuestions}" value="{!PHP}"/>PHP</label>
+					                        <label class="checkbox-inline"><apex:inputCheckbox id="chkIOP" rendered="{!ShowQuestions}" value="{!IOP}"/>IOP</label><br/>
+                                  <apex:outputLabel for="question3" value="{!Question3Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question3" value="{!Question3}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <apex:outputLabel for="question4" value="{!Question4Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question4" value="{!Question4}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <apex:outputLabel for="question5" value="{!Question5Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question5" value="{!Question5}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <apex:outputLabel for="question6" value="{!Question6Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question6" value="{!Question6}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <apex:outputLabel for="question7" value="{!Question7Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question7" value="{!Question7}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                                  <apex:outputLabel for="question8" value="{!Question8Text}" rendered="{!ShowQuestions}"/><apex:inputText id="question8" value="{!Question8}" required="{!ShowQuestions}" styleClass="form-control" style="width:100%" /><br/>
+                              </div>
+                          </div>
+                     </div>
+              </div>
+              </apex:actionRegion>
+              </apex:outputPanel>
+              <div class="panel panel-default">
+                  <div class="panel-heading">Notes</div>
+                      <div class="panel-body">
+                          <div class="form-group">
+                              <div class="col-md-12">
+                                  <label for="notes">Notes:</label><apex:inputField id="notes" value="{!Form.Notes__c}" styleClass="form-control" style="width:100%" /><br/>
+                              </div>
+                          </div>
+                     </div>
+              </div>
+
+              <apex:commandButton value="Save" styleClass="btn-primary" action="{!Save}"/><br/><br/><br/>             
+
+             <apex:outputPanel id="pnlExistingDatesOfService">
+             <apex:actionRegion rendered="{!HasExistingDatesOfService}">
+              <div class="panel panel-default">
+                  <div class="panel-heading">Existing Dates of Service Records</div>
+                  <div class="panel-body">
+                  <apex:dataTable styleClass="table table-striped" value="{!ExistingDatesOfService}" var="item">
+                      <apex:column value="{!item.Level_of_Care__c}" headerValue="Level of Care"/>
+                      <apex:column value="{!item.Status__c}" headerValue="Status"/>
+                      <apex:column value="{!item.Start_Date__c}" headerValue="Start Date"/>
+                      <apex:column value="{!item.End_Date__c}" headerValue="End Date"/>
+                  </apex:dataTable>
+                  </div>
+              </div>
+              </apex:actionRegion>
+              </apex:outputPanel>
+
+         </div>
+         <!-- /container -->
+         <!-- Bootstrap core JavaScript -->
+         <!-- Placed at the end of the document so the pages load faster -->
+        </vs:visualstrapblock>
+        </apex:form>
+      </body>
+   </html>
+</apex:page>

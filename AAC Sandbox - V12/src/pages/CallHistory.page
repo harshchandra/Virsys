@@ -1,0 +1,92 @@
+<apex:page StandardController="Account" showHeader="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+<html>
+<head>
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-1.10.2.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-ui-1.10.4.custom.min.js')}"></script>
+<!-- Include one of jTable styles. -->
+<link href="{!URLFOR($Resource.CallScripts, 'CallScripts/jtable/themes/metro/darkgray/jtable.min.css')}" rel="stylesheet" type="text/css" />
+<!-- Include jTable script file. -->
+<script src="{!URLFOR($Resource.CallScripts, 'CallScripts/jtable/jquery.jtable.min.js')}" type="text/javascript"></script>
+</head>
+<body>
+<div id="callsTable2">
+</div>
+
+<script type="text/javascript">
+var phoneNumber = '{!Account.Phone}';
+phoneNumber = phoneNumber.replace(/\D/g, '');
+var DDI = '{!Account.DID__c}';
+DDI = DDI.replace(/\D/g, '');
+var lookupNumber = '';
+if({!Account.IsPersonAccount} == true)
+    lookupNumber = phoneNumber;
+else
+    lookupNumber = DDI;
+    
+$(document).ready(function () {
+     $('#callsTable2').jtable({
+            title: 'Last 20 Call History For ' + phoneNumber,
+            actions: {
+                listAction: getTableData,
+            },
+            fields: {
+        CallListId: {
+                    title: 'Call ID',
+                    key: true,
+                    list: true,
+                    width: '10%'
+                },
+        CategoryId: { 
+                    title: 'CategoryId', 
+                    list: false 
+                    },
+        CLI: {
+               title: 'Caller ID',
+               width: '10%'
+             },
+        DDI: {
+               title: 'Number Dialed',
+               width: '10%'
+              },
+        CallDurationInSeconds: {
+            title: 'Call Duration (seconds)',
+            width: '10%'
+        },
+        CreateDate: {
+            title: 'Call Date/Time',
+            width: '20%'
+        },
+        CallDirection: { 
+            title: 'Call Direction', 
+            width: '10%'
+            }
+          }
+        });
+
+    $('#callsTable2').jtable('load');
+    });
+
+function getTableData() {     
+    var ret;
+    return $.Deferred(function ($dfd) {
+    $.ajax({
+            url: 'http://68.71.110.242:8080/Calls/' + lookupNumber + '/20',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                ret = {
+                    'Result': "OK",
+                    'Records': data.Records
+                };
+                $dfd.resolve(ret);
+            },
+            error: function () {
+                $dfd.reject();
+            }
+        });
+    });
+}
+</script>
+</body>
+</html>
+</apex:page>

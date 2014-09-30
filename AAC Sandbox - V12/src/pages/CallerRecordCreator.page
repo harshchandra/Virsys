@@ -1,0 +1,130 @@
+<apex:page standardController="Account" extensions="PhonePageExt">
+<apex:form >
+<apex:outputPanel layout="block">
+<apex:pageMessages />
+<apex:pageBlock id="mainBlock" title="Information Gathering">
+<apex:pageblockButtons >
+<apex:commandButton id="btnSubmitAccount" value="New Account" action="{!NewAccount}" />
+</apex:pageblockButtons>
+<apex:pageBlockSection title="Where did the call come from?" columns="1" rendered="false">
+</apex:pageBlockSection>
+
+<apex:pageBlockSection id="secondaryBlock" title="Call Details" columns="1">
+<table style="width:600px">
+<tr><td colspan="2"><apex:inputField id="lstAccount" value="{!Account.Parent_Account__c}" styleClass="txtAccount"/></td></tr>
+<tr><td colspan="2"><apex:inputCheckbox id="chkNoName" label="Anonymous Caller?" title="Anonymous Caller?" value="{!NoName}"><apex:actionSupport event="onchange" action="{!DisplayNameFields}" reRender="secondaryBlock"/></apex:inputCheckbox></td></tr>
+<tr><td colspan="2"><apex:inputText id="txtFirstName" label="First Name" value="{!FirstName}" rendered="{!ShowName}" styleClass="txtName"/></td></tr>
+<tr><td colspan="2"><apex:inputText id="txtLastName" label="Last Name" value="{!LastName}"  rendered="{!ShowName}" styleClass="txtName"/></td></tr>
+<tr><td colspan="2"><apex:outputLabel value="Scratch Pad"/></td></tr>
+<tr><td></td><td><apex:inputTextarea id="txtScratchPad" cols="80" rows="5" richText="false" value="{!ScratchPad}"  /></td></tr>
+</table>
+</apex:pageBlockSection>
+<apex:pageBlockSection id="marketingBlock" title="Marketing Details" columns="1" rendered="false">
+<apex:outputPanel >
+<table style="width:600px">
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="How did you get our phone number?"/>
+	</td>
+	<td>
+		<apex:selectList value="{!CallType}" size="1" multiselect="false" id="calltype">
+		<apex:actionSupport event="onchange" action="{!DisplayCallTypeFields}" rerender="marketingBlock"/>
+		<apex:selectOptions value="{!CallTypes}"/>
+		</apex:selectList>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="Specify Other:" rendered="{!ShowOther}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtOther" value="{!OtherText}" label="Specify Other:" title="Specify Other:"  styleClass="txtOther" rendered="{!ShowOther}"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="Which website are you calling us from:" rendered="{!ShowInternet}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtInternet" value="{!InternetText}" label="Which website are you calling us from:" title="Which website are you calling us from:"  styleClass="txtOther" rendered="{!ShowInternet}"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="What drove you to that website:" rendered="{!ShowInternet}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtInternetWebsite" value="{!InternetWebsiteText}" label="What drove you to that website:" title="What drove you to that website:"  styleClass="txtOther" rendered="{!ShowInternet}"/>
+	</td>
+</tr>
+
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="What station did you hear about us on:" rendered="{!ShowRadio}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtRadio" value="{!RadioText}" label="What station did you hear about us on:" title="What station did you hear about us on:"  styleClass="txtOther" rendered="{!ShowRadio}"/>
+	</td>
+</tr>
+
+
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="What terms did you search for:" rendered="{!ShowSearchEngine}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtSearchEngine" value="{!SearchEngineText}" label="What terms did you search for:" title="What terms did you search for:"  styleClass="txtOther" rendered="{!ShowSearchEngine}"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="Which website did that search take you to:" rendered="{!ShowSearchEngine}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtSearchEngineSite" value="{!SearchEngineSiteText}" label="Which website did that search take you to:" title="Which website did that search take you to:"  styleClass="txtOther" rendered="{!ShowSearchEngine}"/>
+	</td>
+</tr>
+
+
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="What is the name of your employer:" rendered="{!ShowEmployer}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtEmployerName" value="{!EmployerNameText}" label="What is the name of your employer:" title="What is the name of your employer:"  styleClass="txtOther" rendered="{!ShowEmployer}"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="Who at the company asked that you reach out to us:" rendered="{!ShowEmployer}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtEmployerWho" value="{!EmployerWhoText}" label="Who at the company asked that you reach out to us:" title="Who at the company asked that you reach out to us:"  styleClass="txtOther" rendered="{!ShowEmployer}"/>
+	</td>
+</tr>
+
+
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="What is the name of the clinic or practice:" rendered="{!ShowClinic}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtClinicName" value="{!ClinicNameText}" label="What is the name of the clinic or practice:" title="What is the name of the clinic or practice:"  styleClass="txtOther" rendered="{!ShowClinic}"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:200px">
+		<apex:outputLabel value="Who was the clinician that asked that you call us:" rendered="{!ShowClinic}"/>
+	</td>
+	<td>
+	<apex:inputText id="txtClinicWho" value="{!ClinicWhoText}" label="Who was the clinician that asked that you call us:" title="Who was the clinician that asked that you call us:"  styleClass="txtOther" rendered="{!ShowClinic}"/>
+	</td>
+</tr>
+
+</table>
+</apex:outputPanel>
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

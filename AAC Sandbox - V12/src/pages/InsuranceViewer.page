@@ -1,0 +1,956 @@
+<apex:page standardcontroller="InsuranceVerificationForm__c" extensions="InsuranceVerificationFormController" standardStylesheets="false" showHeader="false" sidebar="false" renderAs="pdf">
+<html>
+<head>
+<style>
+body {font-family: Arial, Verdana; font-size:10pt;}
+.pdfQuestion { font-size: 8px; font-weight:normal; color:black; font-family:Arial;}
+.pdfAnswer { font-size: 10px; font-weight:normal; color:red; font-family:Arial;}
+</style>
+<STYLE type="text/css">
+        table.vob
+        {
+            padding: 10px;
+        }
+
+        table.vob td
+        {
+            width: 200px;
+        }
+
+        table.vob td.label
+        {
+            font-weight: bold;
+            vertical-align: bottom;
+            margin: 0;
+            padding: 0;
+            padding-left: 3px;
+        }
+
+        table.vob td.label7
+        {
+            width: 100px;
+        }
+
+        table.vob td.label img
+        {
+            position: relative;
+            right: 0;
+            vertical-align: bottom;
+        }
+
+        table.vob td.label input
+        {
+            vertical-align: middle;
+            margin-top: -2px;
+            margin-left: -2px;
+            margin-right: 5px;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        table.vob td.value
+        {
+            padding: 0;
+            padding-bottom: 10px;
+        }
+
+        table.vob td.value7
+        {
+            width: 100px;
+            margin: 0;
+            padding: 0;
+        }
+
+        table.vob td.value input
+        {
+            width: 200px;
+        }
+
+        table.vob td.value7 input
+        {
+            width: 100px;
+            padding-bottom: 0;
+        }
+        
+        table.vob td.value input.colspan2
+        {
+            width: 413px;
+        }
+
+        table.vob td.value input.colspan3
+        {
+            width: 622px;
+        }
+
+        table.vob td.value textarea.colspan3
+        {
+            width: 622px;
+        }
+
+        table.vob td.value select
+        {
+            width: 203px;
+            height: 21px;
+            margin-top: 2px;
+        }
+
+        table.vob td.value7 select
+        {
+            width: 100px;
+            padding-bottom: 0;
+        }
+
+        table.vob td.value select.colspan2
+        {
+            width: 410px;
+        }
+
+        table.vob td.value select.colspan3
+        {
+            width: 622px;
+        }
+
+        table.vob td.value span.dateOnlyInput input
+        {
+            width: 120px;
+            margin-right: 5px;
+        }
+
+        table.vob td.value span.dateInput input
+        {
+            width: 200px;
+            margin-right: 5px;
+        }
+
+        table.vob td.value span.dateOnlyInput span.dateFormat
+        {
+            width: 75px;
+        }
+
+        table.vob td.value span.dateInput span.dateFormat
+        {
+            width: 100px;
+        }
+
+        table.vob td.rowHeader
+        {
+            width: 40px;
+        }
+
+        span.header
+        {
+            font-weight: bold;
+        }
+      </STYLE>
+</head>
+    <apex:pageBlock title="Insurance Verification Form {!IF(NOT(ISNULL(InsuranceVerificationForm__c.Case__r.CaseNumber)),'For Case ' + InsuranceVerificationForm__c.Case__r.CaseNumber, '')}">
+          
+      
+      <apex:outputText value="{!InsuranceVerificationForm__c.Case__r}" rendered="false"/>
+      <apex:outputText value="{!InsuranceVerificationForm__c.OwnerId}" rendered="false"/>
+		<table class="vob">
+		<tr>
+		    <td class="label" colspan="3">
+			<apex:outputText value="{!FieldLabels['Insurance_Status__c']}" />
+			<span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['Insurance_Status__c']}" /></span>         
+			</td>
+		</tr>
+		<tr>
+			<td class="value" colspan="3"><apex:outputText value="{!InsuranceVerificationForm__c.Insurance_Status__c}"/></td>
+		</tr>
+		</table><br/>
+      <apex:pageBlockSection title="Account Client Information" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+              <tr>
+                  <td class="label">
+                    <apex:outputText value="{!FieldLabels['ClientName__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClientName__c']}" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText value="{!FieldLabels['ClientSocialSecurityNumber__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClientSocialSecurityNumber__c']}" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText value="{!FieldLabels['ClientDateOfBirth__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClientDateOfBirth__c']}" /></span>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText value="{!ParentCase.Account.Name}" /></td>
+                  <td class="value"><apex:outputText value="{!ParentCase.Contact_SSN__c}" /></td>
+                  <td class="value"><apex:outputText value="{!ParentCase.Contacts_DOB__c}" /></td>
+              </tr>
+              <tr>
+                  <td colspan="3" class="label">
+                    <apex:outputText value="Client Address" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClientAddressLine1__c']}" /></span>
+                  </td>
+                  <td />
+              </tr>
+              <tr>
+                  <td colspan="3" class="value">
+                  <apex:outputText styleClass="colspan2" value="{!ParentCase.Contact_Address__c}" /></td>                    
+                  <td />
+              </tr>
+              <tr>
+                  <td class="label">
+                    <apex:outputText value="{!FieldLabels['ClientPhoneNumber__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClientPhoneNumber__c']}" /></span>
+                  </td>
+                  <td colspan="2" />
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText value="{!ParentCase.Contact.Phone}" /></td>
+                  <td colspan="2" />
+              </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Insurance Information" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          	<tr>
+          	<td class="label">
+          		<apex:outputText value="{!FieldLabels['Benefit_Type__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['Benefit_Type__c']}" /></span>
+          	</td>
+          	<td class="label" colspan="2">
+          		<apex:outputText value="{!InsuranceVerificationForm__c.IsSecondaryInsurance__c}"/>
+          		<apex:outputText value="{!FieldLabels['IsSecondaryInsurance__c']}"/>
+          		<span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['IsSecondaryInsurance__c']}" /></span>
+          	</td>
+          	</tr>
+          	<tr>
+          	<td class="label" colspan="3">
+          		<apex:outputText value="{!InsuranceVerificationForm__c.Benefit_Type__c}"/>
+          	</td>
+          	</tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredName__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredName__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredSocialSecurityNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredSocialSecurityNumber__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredDateOfBirth__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredDateOfBirth__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredName__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredSocialSecurityNumber__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredDateOfBirth__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredPhoneNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredPhoneNumber__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredRelationshipToClient__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredRelationshipToClient__c']}" /></span>
+              </td>
+              <td />                    
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredPhoneNumber__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredRelationshipToClient__c}" /></td>
+              <td />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredEmployer__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredEmployer__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuredEmployerPhoneNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuredEmployerPhoneNumber__c']}" /></span>
+              </td>
+              <td />                    
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredEmployer__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuredEmployerPhoneNumber__c}" /></td>
+              <td />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuranceCompany__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuranceCompany__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsurancePhoneNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsurancePhoneNumber__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['TypeOfPlan__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['TypeOfPlan__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuranceCompany__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsurancePhoneNumber__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.TypeOfPlan__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuranceID__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuranceID__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuranceGroupNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuranceGroupNumber__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['InsuranceReferenceNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['InsuranceReferenceNumber__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuranceID__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuranceGroupNumber__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.InsuranceReferenceNumber__c}" /></td>
+            </tr>
+            <tr>
+              <td colspan="3" class="label">
+                <apex:outputText value="{!FieldLabels['PolicyEffectiveDate__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PolicyEffectiveDate__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="value"><apex:outputText value="{!InsuranceVerificationForm__c.PolicyEffectiveDate__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.PolicyIsActive__c}" />
+                <apex:outputText value="{!FieldLabels['PolicyIsActive__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PolicyIsActive__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.PolicyIsCOBRA__c}" />
+                <apex:outputText value="{!FieldLabels['PolicyIsCOBRA__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PolicyIsCOBRA__c']}" /></span>
+              </td>
+              <td class="label">
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td colspan="3" class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.PolicyCoversPreExistingConditions__c}" />
+                <apex:outputText value="{!FieldLabels['PolicyCoversPreExistingConditions__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PolicyCoversPreExistingConditions__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="value"><apex:outputText styleClass="colspan3" value="{!InsuranceVerificationForm__c.PolicyPreExistingConditionTerms__c}" /></td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Substance Abuse Coverage" columns="1">
+        <apex:outputPanel layout="block">
+          <span class="header">Client's Policy Covers:</span>
+          <table class="vob">
+            <tr>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForDTX__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForDTX__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForDTX__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForIP__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForIP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForIP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForRES__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForRES__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForRES__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForPHP__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForPHP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForPHP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForIOP__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForIOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForIOP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.GoodForOP__c}" />
+                <apex:outputText value="{!FieldLabels['GoodForOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['GoodForOP__c']}" /></span>
+              </td>                 
+            </tr>
+          </table>
+          <span class="header">Alcohol/Substance Abuse Benefits:</span>
+          <table class="vob">
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['SubstanceAbuseBenefitsCopay__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbuseBenefitsCopay__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['SubstanceAbuseBenefitsCopayMet__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbuseBenefitsCopayMet__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseBenefitsCopay__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseBenefitsCopayMet__c}" /></td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['SubstanceAbuseBenefitsOutOfPocket__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbuseBenefitsOutOfPocket__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['SubstanceAbuseBenefitsOutOfPocketMet__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbuseBenefitsOutOfPocketMet__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseBenefitsOutOfPocket__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseBenefitsOutOfPocketMet__c}" /></td>
+              <td class="value" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseBenefitsOOPInDeductible__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbuseBenefitsOOPInDeductible__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbuseBenefitsOOPInDeductible__c']}" /></span>
+              </td>
+              <td class="label" />
+              <td class="label" />
+            </tr>
+            <tr>
+             <td class="label">
+                <apex:outputText value="{!FieldLabels['Plan_Maximum__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['Plan_Maximum__c']}" /></span>
+              </td>
+              <td class="label" />
+              <td class="label" />
+            </tr>
+            <tr>
+            <td class="value">
+            	<apex:outputText value="{!InsuranceVerificationForm__c.Plan_Maximum__c}" />
+            </td>
+            <td class="value" />
+            <td class="value" />
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+          </table>
+          <span class="header">Precertification:</span>
+          <table class="vob">
+            <tr>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForDTX__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForDTX__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForDTX__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForIP__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForIP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForIP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForRES__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForRES__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForRES__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForPHP__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForPHP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForPHP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForIOP__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForIOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForIOP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertifiedForOP__c}" />
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertifiedForOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertifiedForOP__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td class="label" colspan="6">
+                <apex:outputText value="{!FieldLabels['SubstanceAbusePrecertificationPenalty__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SubstanceAbusePrecertificationPenalty__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="6"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePrecertificationPenalty__c}" /></td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+          </table>
+          <span class="header">Benefit Limits:</span>
+          <table class="vob">
+            <tr>
+              <td class="label rowHeader" />
+              <td class="label label7">Copay</td>
+              <td class="label label7">%</td>
+              <td class="label label7">Rate Type</td>
+              <td class="label label7">Days/Year</td>
+              <td class="label label7">Days Used</td>
+              <td class="label label7">LFTM Max</td>
+              <td class="label label7">LFTM Used</td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">DTX</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseDTXLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">IP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">RES</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseRESLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">PHP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbusePHPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">IOP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseIOPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">OP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.SubstanceAbuseOPLifetimeUsed__c}" /></td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Mental Health Coverage" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob noinset">
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthAndSubstanceAbuseCombined__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthAndSubstanceAbuseCombined__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthAndSubstanceAbuseCombined__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" />
+            </tr>
+          </table>           
+          <span class="header">Mental Health Benefits:</span>
+          <table class="vob">
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['MentalHealthBenefitsCopay__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthBenefitsCopay__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['MentalHealthBenefitsCopayMet__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthBenefitsCopayMet__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthBenefitsCopay__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthBenefitsCopayMet__c}" /></td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['MentalHealthBenefitsOutOfPocket__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthBenefitsOutOfPocket__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['MentalHealthBenefitsOutOfPocketMet__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthBenefitsOutOfPocketMet__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthBenefitsOutOfPocket__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthBenefitsOutOfPocketMet__c}" /></td>
+              <td class="value" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthBenefitsOOPInDeductible__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthBenefitsOOPInDeductible__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthBenefitsOOPInDeductible__c']}" /></span>
+              </td>
+              <td class="label" />
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+          </table>
+          <span class="header">Precertification:</span>
+          <table class="vob">
+            <tr>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertifiedForIP__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertifiedForIP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertifiedForIP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertifiedForRES__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertifiedForRES__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertifiedForRES__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertifiedForPHP__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertifiedForPHP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertifiedForPHP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertifiedForIOP__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertifiedForIOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertifiedForIOP__c']}" /></span>
+              </td>
+              <td class="label label7">
+                <apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertifiedForOP__c}" />
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertifiedForOP__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertifiedForOP__c']}" /></span>
+              </td>
+              <td class="label label7" />
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td class="label" colspan="6">
+                <apex:outputText value="{!FieldLabels['MentalHealthPrecertificationPenalty__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['MentalHealthPrecertificationPenalty__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="6"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPrecertificationPenalty__c}" /></td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+          </table>
+          <span class="header">Benefit Limits:</span>
+          <table class="vob">
+            <tr>
+              <td class="label rowHeader" />
+              <td class="label label7">Copay</td>
+              <td class="label label7">%</td>
+              <td class="label label7">Rate Type</td>
+              <td class="label label7">Days/Year</td>
+              <td class="label label7">Days Used</td>
+              <td class="label label7">LFTM Max</td>
+              <td class="label label7">LFTM Used</td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">IP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">RES</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthRESLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">PHP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthPHPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">IOP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthIOPLifetimeUsed__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label rowHeader">OP</td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPCopay__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPPercentage__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPRateType__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPDaysPerYear__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPDaysUsed__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPLifetimeMax__c}" /></td>
+              <td class="value value7"><apex:outputText value="{!InsuranceVerificationForm__c.MentalHealthOPLifetimeUsed__c}" /></td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Miscellaneous" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['PrecertificationCompanyName__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PrecertificationCompanyName__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['PrecertificationCompanyPhoneNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PrecertificationCompanyPhoneNumber__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.PrecertificationCompanyName__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.PrecertificationCompanyPhoneNumber__c}" /></td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td class="label" colspan="2">
+                <apex:outputText value="{!FieldLabels['BillToName__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['BillToName__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value" colspan="2"><apex:outputText styleClass="colspan2" value="{!InsuranceVerificationForm__c.BillToName__c}" /></td>
+              <td class="value" />
+            </tr>
+            <tr>
+              <td colspan="2" class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressCountry__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressCountry__c']}" /></span>
+              </td>
+              <td />
+            </tr>
+            <tr>
+              <td colspan="2" class="value"><apex:outputText styleClass="colspan2" value="{!InsuranceVerificationForm__c.ClaimsAddressCountry__c}" /></td>                    
+              <td />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressLine1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressLine1__c']}" /></span>
+              </td>
+              <td colspan="2" />
+            </tr>
+            <tr>
+              <td colspan="3" class="value"><apex:outputText styleClass="colspan3" value="{!InsuranceVerificationForm__c.ClaimsAddressLine1__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressLine2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressLine2__c']}" /></span>
+              </td>
+              <td colspan="2" />
+            </tr>
+            <tr>
+              <td colspan="3" class="value"><apex:outputText styleClass="colspan3" value="{!InsuranceVerificationForm__c.ClaimsAddressLine2__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressCity__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressCity__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressState__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressState__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['ClaimsAddressZipCode__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['ClaimsAddressZipCode__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.ClaimsAddressCity__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.ClaimsAddressState__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.ClaimsAddressZipCode__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['LicenseReq__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['LicenseReq__c']}" /></span>
+              </td>
+              <td />
+              <td />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.LicenseReq__c}" /></td>                    
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.CanClientGoOutOfState__c}" />
+                <apex:outputText value="{!FieldLabels['CanClientGoOutOfState__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['CanClientGoOutOfState__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.FreeStandingFacility__c}" />
+                <apex:outputText value="{!FieldLabels['FreeStandingFacility__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['FreeStandingFacility__c']}" /></span>
+              </td>
+              <td />
+            </tr>                  
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!InsuranceVerificationForm__c.PolicyOffersPharmacyBenefit__c}" />
+                <apex:outputText value="{!FieldLabels['PolicyOffersPharmacyBenefit__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PolicyOffersPharmacyBenefit__c']}" /></span>
+              </td>
+              <td colspan="2" />
+            </tr>
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['PharmacyName__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PharmacyName__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['PharmacyPhoneNumber__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['PharmacyPhoneNumber__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.PharmacyName__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.PharmacyPhoneNumber__c}" /></td>
+              <td class="value" />
+            </tr>
+            <tr>
+              <td class="label" colspan="3">
+                <apex:outputText value="{!FieldLabels['SummaryOfBenefits__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['SummaryOfBenefits__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3"><apex:outputText styleClass="colspan3" value="{!InsuranceVerificationForm__c.SummaryOfBenefits__c}" /></td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Verification" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+            <tr>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['CompletedBy__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['CompletedBy__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['VerifiedBy1st__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['VerifiedBy1st__c']}" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText value="{!FieldLabels['VerifiedBy2nd__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['VerifiedBy2nd__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.CompletedBy__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.VerifiedBy1st__c}" /></td>
+              <td class="value"><apex:outputText value="{!InsuranceVerificationForm__c.VerifiedBy2nd__c}" /></td>
+            </tr>
+            <tr>
+              <td class="label" colspan="2">
+                <apex:outputText value="{!FieldLabels['VerificationCompleted__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['VerificationCompleted__c']}" /></span>
+              </td>
+              <td class="label" />
+            </tr>
+            <tr>
+              <td class="value" colspan="2"><apex:outputText value="{!InsuranceVerificationForm__c.VerificationCompleted__c}" /></td>
+              <td class="value" />
+            </tr>
+            <tr>
+              <td class="label" colspan="3">
+                <apex:outputText value="{!InsuranceVerificationForm__c.VerificationComplete__c}" />
+                <apex:outputText value="{!FieldLabels['VerificationComplete__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['VerificationComplete__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3" />
+            </tr>
+            <tr>
+              <td class="label" colspan="3">
+                <apex:outputText value="{!FieldLabels['RejectionNotes__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="{!FieldHelpText['RejectionNotes__c']}" /></span>
+              </td>
+            </tr>
+            <tr>
+              <td class="value" colspan="3"><apex:outputText styleClass="colspan3" value="{!InsuranceVerificationForm__c.RejectionNotes__c}" /></td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+    </html>
+</apex:page>

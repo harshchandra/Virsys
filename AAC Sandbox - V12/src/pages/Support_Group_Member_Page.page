@@ -1,0 +1,31 @@
+<apex:page standardController="Support_Group_Member__c" extensions="SupportGroupExtension">
+<apex:sectionHeader title="New" subtitle="Support Group Member for {!accountName}"/>
+<apex:form >
+<apex:pageBlock >
+<apex:pageBlockSection title="New">
+<apex:inputField value="{!Support_Group_Member__c.Name}" required="true"/>
+<apex:inputField value="{!Support_Group_Member__c.Person_Account__c}" required="true"/>
+<apex:inputField value="{!Support_Group_Member__c.Relationship_To_Client__c}" required="true"/>
+<apex:inputfield value="{!Support_Group_Member__c.Authorized_on_Release_Form__c}"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Contact Information">
+<apex:inputField value="{!Support_Group_Member__c.Home_Phone__c}"/>
+<apex:inputField value="{!Support_Group_Member__c.Email__c}"/>
+<apex:inputField value="{!Support_Group_Member__c.Mobile_Phone__c}"/>
+<apex:inputField value="{!Support_Group_Member__c.Address_1__c}"/>
+<apex:inputField value="{!Support_Group_Member__c.Work_Phone__c}"/>
+<apex:inputField value="{!Support_Group_Member__c.Address_2__c}"/>
+<apex:inputHidden />
+<apex:inputField value="{!Support_Group_Member__c.City__c}"/>
+<apex:inputHidden />
+<apex:inputField value="{!Support_Group_Member__c.State__c}"/>
+<apex:inputHidden />
+<apex:inputField value="{!Support_Group_Member__c.Zip__c}"/>
+</apex:PageBlockSection>
+<apex:pageblockbuttons >
+<apex:commandButton value="Save" action="{!save}" oncomplete="window.parent.location.href='https://na11.salesforce.com/{!accountId}'"/>
+</apex:pageblockbuttons>
+
+</apex:pageBlock>
+</apex:form>
+</apex:page>

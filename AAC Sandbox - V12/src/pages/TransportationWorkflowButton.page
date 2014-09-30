@@ -1,0 +1,5 @@
+<apex:page standardController="Case" extensions="TransportationWorkflowController" showChat="false" showheader="false" sidebar="false">
+  <apex:form >
+    <apex:commandButton value="{!ButtonText}" action="{!ButtonAction}" oncomplete="javascript: alert('{!ButtonText} successful'); parent.location.href='/{!Case.Id}';" />
+  </apex:form>
+</apex:page>

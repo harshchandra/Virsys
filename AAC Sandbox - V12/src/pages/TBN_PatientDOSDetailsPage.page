@@ -1,0 +1,604 @@
+<apex:page controller="TBN_PatientDOSDetailsController" tabStyle="Post_Payment__tab">
+
+    <style>
+    
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+        
+        .title
+        {
+            color:#4a4a56; 
+            font-size: 91%; 
+            font-weight: bold;
+            margin-left: 237px;
+        }
+        
+        .customPopup
+        {
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 16%;
+            padding: 2%;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            top: 26%;
+            width: 70%;
+        }
+        
+        .popupBackground
+        {
+            background-color:black;
+            opacity: 0.5;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;     
+            display:none;       
+        }
+        
+        .popupTopMargin
+        {
+        	margin-top: 1.5%;
+        }
+            
+    </style>
+    
+    <apex:form >
+        <apex:pagemessages id="error" />
+        <apex:actionFunction name="createBatchClaim" action="{!createBatchClaim}" status="processingImg" rerender="error"> 
+            <apex:param name="checkedDOSIds" assignTo="{!strCheckedDOSIds}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="okPopup" action="{!ok}" rerender="mainpopup,OPPAnelID,error" status="processingImg"> 
+            <apex:param name="dosTransactionDetails" assignTo="{!strDOSTransactionDetails}" value=""/>
+            <apex:param name="showPopUpFlag" assignTo="{!showPopUp}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="viewAndPost" action="{!viewAndPost}" rerender="mainpopup" status="processingImg"> 
+            <apex:param name="dosId" assignTo="{!viewPostDOSId}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction name="saveDOSPatientRecord" action="{!saveDOSPatientRecord}" rerender="error,pb"> 
+            <apex:param name="editedDOSIds" assignTo="{!strEditedDosiIDs}" value=""/>
+        </apex:actionFunction> 
+        <apex:actionFunction name="cancelToPatienPaymentInfo" action="{!cancelToPatienPaymentInfo}" rerender="error,pb"/>
+        <apex:actionstatus id="processingImg" startText="Loading...">
+            <apex:facet name="start">
+                <div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+                    <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+                        <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+                            <table align="center" valign="middle" style="width: 100%; height: 100%">
+                                <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+                                    <td valign="middle" style="padding-top: 15px;" >
+                                         <img src="/img/loading.gif"/>
+                                         <span class="waitingDescription">
+                                             <b>Loading...</b>
+                                         </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "></div>
+                <script>
+                    document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+                </script>
+            </apex:facet>
+            <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        <apex:outputPanel id="up" rendered="{!if(lstDOSForPatient.size > 0, true, false)}">
+            <apex:pageBlock id="pb" title="All Date of Service for Selected Patient">
+                <apex:pageBlockSection title="Patient Details" columns="2">
+                	<apex:outputText value="{!srtPatient}" label="Patient Name    :   "/>
+                	<apex:outputText value="{!primaryInsuranceCompany.Insurance_Company__r.Name}" label="Primary Insurance   :   "/>
+                    <apex:outputText value="{!strInsuranceCompanyName}" label="Insurance Company  :   "/>
+                    <apex:outputText value="{!secondaryInsuranceCompany.Insurance_Company__r.Name}" label="Secondary Insurance   :   "/>
+                    <apex:outputText value="{!strInsurance}" label="Insurance Type  :   "/>
+                    <apex:outputText value="{!tertiaryInsuranceCompany.Insurance_Company__r.Name}" label="Tertiary Insurance   :   "/>
+                    <apex:outputText value="{!lstDOSForPatient[0].Facility__c}" label="Facility    :   "/>
+                    <apex:outputText value="" label=""/>
+                    <apex:outputText value="{0, number, ###,###,###,##0.00}" label="Check Amount    :   "> 
+						<apex:param value="{!decAmount}"/>
+					</apex:outputText>
+					<apex:outputText value="" label=""/>
+                    <apex:outputText >
+                    	<span class="title" style="margin-left: 19%"> Balance Amount :   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span id="paidAmount">{!decCheckBalanceAmount}</span>
+                    </apex:outputText> 
+                </apex:pageBlockSection>
+                <div>
+                	<input type="button" style="margin-left: 45%;" class="btn" value="Print Paper Claim" onclick="printPaperClaim();" />
+                </div>
+                <apex:pageBlockSection title="Date of Service" columns="1" id="pbSection">
+                    <apex:outputPanel id="OPPAnelID">
+                        <apex:pageBlockTable value="{!lstDOSForPatient}" var="dos" id="table1">
+                        	<apex:column >
+                        		<input type="checkbox" id="{!dos.Id}_check" onclick="check('{!dos.Id}');"/>
+		                			<!-- <apex:inputCheckbox value="{!isChecked}" id="inid" onclick="check(this,'{!dos.Id}')" /> -->
+		                	</apex:column>
+                            <apex:column >
+                                    <a value="View/Post" id="editLink" style="color: #015ba7; cursor: pointer;" onclick="editDOS('{!dos.Id}');">View/Post</a>
+                            </apex:column> 
+                            <apex:column headerValue="DOS Id" >
+                            	<apex:outputField value="{!dos.Name}" />
+<!--                                 <apex:facet name="header"> -->
+<!--                                     <apex:commandLink action="{!sort}" value="Name{!IF(sortExpression=='Name',IF(sortDirection='ASC','?','?'),'?')}" rerender="pbSection" status="processingImg"> -->
+<!--                                         <apex:param value="Name" name="column" assignTo="{!sortExpression}" ></apex:param> -->
+<!--                                     </apex:commandLink> -->
+<!--                                 </apex:facet> -->
+                            </apex:column>
+                            <apex:column headerValue="Level Of Care">
+                                    <apex:outputField value="{!dos.Level_of_Care__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Bill Status">
+<!--                                 <apex:facet name="header"> -->
+<!--                                     <apex:commandLink action="{!sort}" value="Bill Status{!IF(sortExpression=='Bill_Status__c',IF(sortDirection='ASC','?','?'),'?')}" rerender="pbSection" status="processingImg"> -->
+<!--                                         <apex:param value="Bill_Status__c" name="column" assignTo="{!sortExpression}" ></apex:param> -->
+<!--                                     </apex:commandLink> -->
+<!--                                 </apex:facet> -->
+                                <apex:outputField value="{!dos.Bill_Status__c}" />
+                            </apex:column>
+                            <apex:column headerValue="End Date">
+                                    <apex:outputField value="{!dos.End_Date__c}" />
+                            </apex:column>
+                             <apex:column headerValue="Bill Amount">
+                                <apex:outputField value="{!dos.Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Paid Amount">
+                                <apex:outputText value="{!dos.Amount_Paid__c}" /> 
+                            </apex:column>
+                            <apex:column headerValue="Allowed Amount">
+                                <apex:outputField value="{!dos.Allowed_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Insurance Adjusted Amount">
+                                <apex:outputField value="{!dos.Patient_Responsibility_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Unpaid Balance">
+                                <apex:outputField value="{!dos.Insurance_Adjusted_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Other Adjustment Amount">
+                                <apex:outputField value="{!dos.Adj_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Balance Amount">
+                                <apex:outputField value="{!dos.Balance_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Utilization Review Form">
+                                    <apex:outputField value="{!dos.Utilization_Review_Form__c}" />
+                            </apex:column>
+                        </apex:pageBlockTable>
+                        
+                        <input  style="display: block; float: left; margin-left: 38%" type="button" class="btn" id="saveNext" value="Save & Next Patient" onclick="saveDOSPatientAmount();"/>
+	                   	<input style="float:left; margin-left: 0.5%" type="button" class="btn" id="cancel" value="Cancel" onclick="cancelToPatienPaymentInfo();"/>
+                        <input  style="display: block; float: right; margin-right: 45.5%" type="button" class="btn" id="save" value="Save" onclick="saveDOSPatientAmount();"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSection>  
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!if(lstDOSForPatient.size == 0, true, false)}">
+            <apex:pageBlock id="facilityBlock1" title="All Date of Service for Selected Patient">
+                <span style="font-style: italic;">No record to display</span>
+            </apex:pageBlock>   
+        </apex:outputPanel>
+        
+        <!-- <div id="popup" style="display: none;"> -->
+        <apex:outputPanel id="mainpopup"> 
+	        <apex:outputPanel id="popup" rendered="{!showPopUp}"> 
+	            <div class="popupBackground" layout="block" style="display: block;"/>
+	            <div class="customPopup">
+	                <div>
+	                    <div>
+	                    	<span class="title">Patient Name    :   </span><span style="margin-left: 14%;">{!srtPatient}</span>
+	                    </div>
+	                    <div class="popupTopMargin">
+	                    	<span class="title">Facility    :   </span><span id="facilityPopUp" style="margin-left: 18%;">{!objEditedDOS.Facility__c}</span>
+	                    </div>
+	                    <div class="popupTopMargin">
+	                    	<span class="title">Level of Care   :   </span><span id="loc" style="margin-left: 14%;">{!objEditedDOS.Level_of_Care__c}</span>
+	                    </div>
+<!-- 	                    <div class="popupTopMargin"> -->
+<!-- 	                    	<span class="title">Insurance Adjustment Amount   :   </span><span id="adjustedAmount" style="margin-left: 3.5%;">{!objEditedDOS.Insurance_Adjusted_Amount__c}</span> -->
+<!-- 	                    </div> -->
+	                    <div class="popupTopMargin">
+	                    	<span class="title">End Date   :   </span><span id="endDate" style="margin-left: 16.7%;"><apex:outputField value="{!objEditedDOS.End_Date__c}" /></span>
+	                    </div>
+	                    <div class="popupTopMargin">
+		                    <span class="title">Bill Amount   :   </span>
+		                    <span id="newAmount" style="margin-left: 14.8%;">{!objEditedDOS.Amount__c}</span>
+	                    </div>
+					</div><br/>
+					<div style="border-style: solid; border-width: 1px;"></div><br/>
+					<div>
+						<input type="button" class="btn" name="Add" value="Add" style="margin-left: 45%;" onclick="addDOSTransaction();"/>&nbsp;
+						<input type="button" class="btn" name="Scholarship" value="Scholarship" onclick="addDOSScholarshipTransaction();"/><br/><br/>
+						<apex:pageBlock rendered="{!if(lstDOSTransaction.size > 0, true, false)}">
+							<apex:pageBlockTable value="{!lstDOSTransaction}" var="dosTransaction" id="tableTransaction">
+	                        	<apex:column >
+	                        		<a value="edit" id="editTransaction" style="color: #015ba7; cursor: pointer; margin-right: 50%;" onclick="editdosTransaction('{!dosTransaction.Id}');">Edit</a>
+			                	</apex:column>
+			                	<apex:column headerValue="Name">
+		                            <apex:outputField value="{!dosTransaction.Name}" />
+		                        </apex:column>
+		                        <apex:column headerValue="Paid Amount">
+		                            <span id="{!dosTransaction.Id}PaidAmount">{!dosTransaction.Paid_Amount__c}</span>
+		                        </apex:column>
+		                        <apex:column headerValue="Allowed Amount">
+		                            <span id="{!dosTransaction.Id}AllowedAmount">{!dosTransaction.Allowed_Amount__c}</span>
+		                        </apex:column>
+		                        <apex:column headerValue="Insurance Adjustment Amount">
+		                            <span id="{!dosTransaction.Id}InsuranceAdjustmentAmount">{!dosTransaction.Patient_Responsibility_Amount__c}</span>
+		                        </apex:column>
+		                        <apex:column headerValue="Unpaid Balance">
+		                            <span id="{!dosTransaction.Id}UnpaidBalance">{!dosTransaction.Insurance_Adjusted_Amount__c}</span>
+		                        </apex:column>
+		                        <apex:column headerValue="Other Adjustment Amount">
+		                            <span id="{!dosTransaction.Id}OtherAdjustmentAmount">{!dosTransaction.Adjustment_Amount__c}</span>
+		                            <script>
+		                            	var amtValue = '{!dosTransaction.Adjustment_Amount__c}';
+		                            	var spId = '{!dosTransaction.Id}'+'OtherAdjustmentAmount';
+		                            	if(amtValue < 0 || amtValue.contains('-'))
+		                            	{
+		                            		amtValue = amtValue.substring(1, amtValue.length);
+		                            		document.getElementById(spId).innerHTML = '('+amtValue+')';
+		                            	}
+		                            </script>
+		                        </apex:column>
+		                        <apex:column headerValue="Adjustment Type">
+		                            <span id="{!dosTransaction.Id}AdjustmentType">{!dosTransaction.Adjustment_Type__c}</span>
+		                        </apex:column>
+		                        <apex:column headerValue="Adjustment Reason">
+		                            <span id="{!dosTransaction.Id}AdjustmentReason">{!dosTransaction.Adjustment_Reason__c}</span>
+		                        </apex:column>
+			                </apex:pageBlockTable>
+			            </apex:pageBlock>
+					</div><br/>
+					<div style="border-style: solid; border-width: 1px;"></div><br/>
+						<div id="editTransactionBlock" style="display: none">
+							<div class="popupTopMargin">
+			                    <span class="title">Paid Amount :   </span>
+			                    <span><input type="text" id="newPaidAmount" style="margin-left: 14.7%;" onchange="patientResponsibilityAmount(); insuranceAdjustedAmount();" onkeyup="collectDOSIds('{!objEditedDOS.Id}');"/></span><br/>
+		                    </div>
+		                    <div class="popupTopMargin" id="allowedAmount">
+			                    <span class="title">Allowed Amount  :   </span>
+			                    <span><input type="text" id="newAllowedAmount" style="margin-left: 12.3%;" onchange="insuranceAdjustedAmount(); patientResponsibilityAmount();"/></span><br/>
+		                	</div>
+		                	<div class="popupTopMargin" id="insuranceAdjustedAmount">
+			                    <span class="title">Insurance Adjusted Amount   :   &nbsp;&nbsp;</span>                     
+			                    <span id="newPatientAmount" style="margin-left: 4.5%;"></span>
+			                </div>
+			                <div class="popupTopMargin" id="unpaidBalance">
+			                    <span class="title">Unpaid Balance   :   &nbsp;&nbsp;</span>
+			                    <span id="newInsuranceAmount" style="margin-left: 12.5%;"></span>
+			                </div>
+			                <div class="popupTopMargin" id="otherAdjustmentAmountDiv">
+			                    <span class="title">Other Adjustment Amount   :   &nbsp;&nbsp;</span>
+			                    <span id="otherAdjustmentAmount" style="margin-left: 5.65%;"></span>
+			                </div>
+		                    <div class="popupTopMargin">
+			                    <span class="title">Adjustment Type :   </span>
+						        <select id="adjustmentSelect" style="margin-left: 12%;" onchange="showAdjustmentReason();">
+								  <option value="Secondary Insurance">Secondary Insurance</option>
+								  <option value="Tertiary Insurance">Tertiary Insurance</option>
+								  <option value="Other Adjustment">Other Adjustment</option>
+								</select>
+							</div>
+		                    <div class="popupTopMargin" id="adjustmentReason" style="display: none;">
+								<span class="title">Adjustment Reason :   </span>
+						        <select id="adjustmentReasonSelect" style="margin-left: 10.5%;">
+						        	<option value="">None</option>
+								  	<option value="Scholarship" id="scholarshipOption" style="display: none;">Scholarship</option>
+								  	<option value="Mail Refund Check">Mail Refund Check</option>
+								  	<option value="Write Off">Write Off</option>
+								  	<option value="Ins Recoup Credit">Ins Recoup Credit</option>
+								  	<option value="Ins Recoup Debit">Ins Recoup Debit</option>
+								  	<option value="Posting Error - duplicate">Posting Error - duplicate</option>
+								  	<option value="Service Not Authorized">Service Not Authorized</option>
+								  	<option value="HMO Pt / No OON Benefit">HMO Pt / No OON Benefit</option>
+								  	<option value="BCBS P2P">BCBS P2P</option>
+								  	<option value="Timely Filing">Timely Filing</option>
+								  	<option value="Denied COB">Denied COB</option>
+								  	<option value="Denied Medical Records">Denied Medical Records</option>
+								  	<option value="Patient Responsibility">Patient Responsibility</option>
+								</select>
+							</div>
+		                    <br/><br/><br/>
+		            	 </div>
+	                <div>             
+                    	<input class="btn" style="margin-left: 42%;" type="button" value="Ok" onclick="ok('{!objEditedDOS.Id}');"/>
+                        <apex:commandButton style="margin-left: 1%;" value="Cancel" action="{!closePopup}" rendered="{!showPopUp}" rerender="mainpopup"/>
+                	</div>
+	            </div>
+	            </apex:outputPanel>
+            </apex:outputPanel>
+        <!-- </div> -->
+    </apex:form>
+    
+    <script>
+        
+        var updatedAmount = '';	/*Updated Amount in the popup*/
+        var updatedAllowedAmount = '';	/*Updated allowed amount in the popup*/
+        var editedDosIds = '';	/*String contains comma seperated Edited DOS id's*/
+        var checkedDOSIds = ''; /*String contains comma seperated checked DOS id's*/
+        var arrCheckedDOSIds = [];	/*Array containing checked DOS id's*/
+        var editedDOSTransactionId = ''; /*Id of the edited dosTransaction record*/
+        
+        /*Fuction that will be called on click of edit link for particular DOS record to pay the amount.*/
+        function editDOS(dosId)
+        {
+        	viewAndPost(dosId);/*Calling action function to show the DOS Transaction records*/
+        }
+        
+        /*Function to save the new values of the DOS records on click of save button*/
+        function saveDOSPatientAmount()
+        {
+	        saveDOSPatientRecord(editedDosIds);
+        }
+         
+        /*To calculate patientResponsibilityAmount on popup*/
+        function patientResponsibilityAmount(id)
+        {
+        	updatedAmount = document.getElementById('newPaidAmount').value;
+			if(updatedAmount.indexOf(',') != -1)
+			{
+				while(updatedAmount.indexOf(',') != -1)
+				{
+				   updatedAmount = updatedAmount.replace(',','');
+				}
+				console.log('--updatedAmount---',updatedAmount);
+			}
+			
+			updatedAllowedAmount = document.getElementById('newAllowedAmount').value;
+			if(updatedAllowedAmount.indexOf(',') != -1)
+			{
+				while(updatedAllowedAmount.indexOf(',') != -1)
+				{
+				   updatedAllowedAmount = updatedAllowedAmount.replace(',','');
+				}
+				console.log('--updatedAllowedAmount---',updatedAllowedAmount);
+			}
+            document.getElementById('newInsuranceAmount').innerHTML = parseFloat(updatedAllowedAmount) - parseFloat(updatedAmount);
+            if(document.getElementById('newInsuranceAmount').innerHTML == 'NaN')
+               document.getElementById('newInsuranceAmount').innerHTML = '';   
+        }
+        
+        /*To calculate insuranceAdjustedAmount on popup*/
+        function insuranceAdjustedAmount()
+        {
+        	updatedAllowedAmount = document.getElementById('newAllowedAmount').value;
+			if(updatedAllowedAmount.indexOf(',') != -1)
+			{
+				while(updatedAllowedAmount.indexOf(',') != -1)
+				{
+				   updatedAllowedAmount = updatedAllowedAmount.replace(',','');
+				}
+				console.log('--updatedAllowedAmount---',updatedAllowedAmount);
+			}
+           	document.getElementById('newPatientAmount').innerHTML = parseFloat(document.getElementById('newAmount').innerHTML) - parseFloat(updatedAllowedAmount);
+           	if(document.getElementById('newPatientAmount').innerHTML == 'NaN')
+                document.getElementById('newPatientAmount').innerHTML = '';
+        }
+        
+        /*Function to collect the ids of all the edited DOS records*/
+        function collectDOSIds(id)
+        {
+        	if(editedDosIds.indexOf(id) == -1)
+        		editedDosIds+= id+',';
+        }
+        
+        /*Function to be called on click of "add" button from popup*/
+        function addDOSTransaction()
+        {
+        	editedDOSTransactionId = 'newDOSTransaction';
+        	document.getElementById('editTransactionBlock').style.display = 'block';
+        	document.getElementById('adjustmentReason').style.display = 'none';
+        	document.getElementById('scholarshipOption').style.display = 'none';
+        	document.getElementById('allowedAmount').style.display = 'block';
+        	document.getElementById('insuranceAdjustedAmount').style.display = 'block';
+        	document.getElementById('unpaidBalance').style.display = 'block';
+        	document.getElementById('otherAdjustmentAmountDiv').style.display = 'block';
+        	document.getElementById('adjustmentSelect').value = 'Primary Insurance';
+        	document.getElementById('adjustmentReasonSelect').value = 'None';
+        	document.getElementById('newPaidAmount').value  = '';
+        	document.getElementById('newAllowedAmount').value = '';
+        	document.getElementById('newPatientAmount').innerHTML = '';
+        	document.getElementById('newInsuranceAmount').innerHTML = '';
+        	document.getElementById('otherAdjustmentAmount').innerHTML = '';
+        }
+        
+        /*Function to be called on click of "Scholarship" button from popup*/
+        function addDOSScholarshipTransaction()
+        {
+        	editedDOSTransactionId = 'newDOSTransaction';
+        	document.getElementById('editTransactionBlock').style.display = 'block';
+        	document.getElementById('adjustmentReason').style.display = 'block';
+        	document.getElementById('scholarshipOption').style.display = 'block';
+        	document.getElementById('allowedAmount').style.display = 'none';
+        	document.getElementById('insuranceAdjustedAmount').style.display = 'none';
+        	document.getElementById('unpaidBalance').style.display = 'none';
+        	document.getElementById('otherAdjustmentAmountDiv').style.display = 'none';
+        	document.getElementById('adjustmentSelect').value = 'Other Adjustment';
+        	document.getElementById('adjustmentReasonSelect').value = 'Scholarship';
+        	document.getElementById('newPaidAmount').value  = '';
+        }
+        
+        /*Function to be called on click of edit link form the popup DOS transaction record*/
+        function editdosTransaction(dosTransactionId)
+        {
+        	editedDOSTransactionId = dosTransactionId;
+        	document.getElementById('editTransactionBlock').style.display = 'block';
+        	document.getElementById('scholarshipOption').style.display = 'none';
+        	document.getElementById('allowedAmount').style.display = 'block';
+        	document.getElementById('insuranceAdjustedAmount').style.display = 'block';
+        	document.getElementById('unpaidBalance').style.display = 'block';
+        	document.getElementById('otherAdjustmentAmountDiv').style.display = 'block';
+        	if(document.getElementById(dosTransactionId+'AdjustmentType').innerHTML == 'Other Adjustment')
+        	{
+        		document.getElementById('adjustmentReason').style.display = 'block';
+        		document.getElementById('adjustmentSelect').value = document.getElementById(dosTransactionId+'AdjustmentType').innerHTML;
+	        	document.getElementById('adjustmentReasonSelect').value = document.getElementById(dosTransactionId+'AdjustmentReason').innerHTML;
+	        	document.getElementById('newPaidAmount').value  = document.getElementById(dosTransactionId+'PaidAmount').innerHTML;
+	        	document.getElementById('newAllowedAmount').value = document.getElementById(dosTransactionId+'AllowedAmount').innerHTML;
+	        	document.getElementById('newPatientAmount').innerHTML = document.getElementById(dosTransactionId+'InsuranceAdjustmentAmount').innerHTML;
+	        	document.getElementById('newInsuranceAmount').innerHTML = document.getElementById(dosTransactionId+'UnpaidBalance').innerHTML;
+	        	document.getElementById('otherAdjustmentAmount').innerHTML = document.getElementById(dosTransactionId+'OtherAdjustmentAmount').innerHTML;
+        	}
+        	else
+        	{
+        		document.getElementById('adjustmentSelect').value = document.getElementById(dosTransactionId+'AdjustmentType').innerHTML;
+	        	document.getElementById('adjustmentReasonSelect').value = document.getElementById(dosTransactionId+'AdjustmentReason').innerHTML;
+	        	document.getElementById('newPaidAmount').value  = document.getElementById(dosTransactionId+'PaidAmount').innerHTML;
+	        	document.getElementById('newAllowedAmount').value = document.getElementById(dosTransactionId+'AllowedAmount').innerHTML;
+	        	document.getElementById('newPatientAmount').innerHTML = document.getElementById(dosTransactionId+'InsuranceAdjustmentAmount').innerHTML;
+	        	document.getElementById('newInsuranceAmount').innerHTML = document.getElementById(dosTransactionId+'UnpaidBalance').innerHTML;
+	        	document.getElementById('otherAdjustmentAmount').innerHTML = document.getElementById(dosTransactionId+'OtherAdjustmentAmount').innerHTML;
+        	}
+        	
+        	if(document.getElementById(dosTransactionId+'AdjustmentType').innerHTML == 'Other Adjustment' && document.getElementById(dosTransactionId+'AdjustmentReason').innerHTML == 'Scholarship')
+        	{
+        		document.getElementById('scholarshipOption').style.display = 'block';
+	        	document.getElementById('allowedAmount').style.display = 'none';
+	        	document.getElementById('insuranceAdjustedAmount').style.display = 'none';
+	        	document.getElementById('unpaidBalance').style.display = 'none';
+	        	document.getElementById('otherAdjustmentAmountDiv').style.display = 'none';
+        		document.getElementById('adjustmentReason').style.display = 'block';
+        		document.getElementById('adjustmentSelect').value = document.getElementById(dosTransactionId+'AdjustmentType').innerHTML;
+	        	document.getElementById('adjustmentReasonSelect').value = document.getElementById(dosTransactionId+'AdjustmentReason').innerHTML;
+	        	document.getElementById('newPaidAmount').value  = document.getElementById(dosTransactionId+'PaidAmount').innerHTML;
+	        	document.getElementById('newAllowedAmount').value = document.getElementById(dosTransactionId+'AllowedAmount').innerHTML;
+	        	document.getElementById('newPatientAmount').innerHTML = document.getElementById(dosTransactionId+'InsuranceAdjustmentAmount').innerHTML;
+	        	document.getElementById('newInsuranceAmount').innerHTML = document.getElementById(dosTransactionId+'UnpaidBalance').innerHTML;
+	        	document.getElementById('otherAdjustmentAmount').innerHTML = document.getElementById(dosTransactionId+'OtherAdjustmentAmount').innerHTML;
+        	}
+        	document.getElementById('paidAmount').innerHTML = parseFloat(document.getElementById('paidAmount').innerHTML) + parseFloat(document.getElementById('newPaidAmount').value);
+        }
+        
+        /*Function to be called on click of OK button from pop-up to set the different amount value.*/
+        function ok(id)
+        {   
+        	var strDOSTransactionDetails = '';
+        	if(document.getElementById('adjustmentSelect').value == '')
+        		document.getElementById('adjustmentSelect').value = 'Secondary Insurance';
+        	if(document.getElementById('adjustmentReasonSelect').value == '')
+        		document.getElementById('adjustmentReasonSelect').value = 'None';
+        	if(document.getElementById('newPaidAmount').value == '')
+        		document.getElementById('newPaidAmount').value = 0;
+        	if(document.getElementById('newAllowedAmount').value == '')
+        		document.getElementById('newAllowedAmount').value = 0;
+        	if(document.getElementById('newPatientAmount').innerHTML == '')
+        		document.getElementById('newPatientAmount').innerHTML = '0';
+        	if(document.getElementById('newInsuranceAmount').innerHTML == '')
+        		document.getElementById('newInsuranceAmount').innerHTML = '0';
+        	if(document.getElementById('otherAdjustmentAmount').innerHTML == '')
+        		document.getElementById('otherAdjustmentAmount').innerHTML = '0';
+        	
+        	if(document.getElementById('adjustmentSelect').value == 'Other Adjustment' && document.getElementById('adjustmentReasonSelect').value == 'Scholarship')
+        		strDOSTransactionDetails = id+','+editedDOSTransactionId+','+document.getElementById('adjustmentSelect').value+','+document.getElementById('adjustmentReasonSelect').value+','+document.getElementById('newPaidAmount').value+','+'0'+','+'0'+','+'0'+','+(-document.getElementById('newPaidAmount').value);
+        	else
+        		strDOSTransactionDetails = id+','+editedDOSTransactionId+','+document.getElementById('adjustmentSelect').value+','+document.getElementById('adjustmentReasonSelect').value+','+document.getElementById('newPaidAmount').value+','+document.getElementById('newAllowedAmount').value+','+document.getElementById('newPatientAmount').innerHTML+','+document.getElementById('newInsuranceAmount').innerHTML+','+document.getElementById('otherAdjustmentAmount').innerHTML;
+        	
+        	if(editedDOSTransactionId != '')
+        	{
+        		if(parseFloat(document.getElementById('paidAmount').innerHTML) - parseFloat(document.getElementById('newPaidAmount').value) == 0)
+        		{
+        			alert('You have used all your balance amount');
+        		}
+        		else if (parseFloat(document.getElementById('paidAmount').innerHTML) - parseFloat(document.getElementById('newPaidAmount').value) < 0)
+        		{
+        			alert('Paid amount is greater than balance amount');
+        			return;
+        		}
+        		
+        		if(document.getElementById('editTransactionBlock').style.display == 'block')
+        			okPopup(strDOSTransactionDetails, true);
+        		else
+        		{
+        			strDOSTransactionDetails = 'closePopup';
+        			okPopup(strDOSTransactionDetails, false);
+        		}
+        			
+        		document.getElementById('paidAmount').innerHTML = parseFloat(document.getElementById('paidAmount').innerHTML) - parseFloat(document.getElementById('newPaidAmount').value);
+        	}
+        	else
+        	{
+        		strDOSTransactionDetails = 'closePopup';
+        		okPopup(strDOSTransactionDetails, false);
+        	}
+        }
+        
+        /*Function to show and hide the "Adjustment Reason" picklist from the popup based on the selcetd value from "Adjustment Select" picklist*/
+        function showAdjustmentReason()
+        {
+        	if(document.getElementById('adjustmentSelect').value == 'Other Adjustment')
+        	{
+        		document.getElementById('adjustmentReason').style.display = 'block';
+        		document.getElementById('otherAdjustmentAmount').innerHTML = document.getElementById('newInsuranceAmount').innerHTML;
+        		document.getElementById('newInsuranceAmount').innerHTML = '';
+        	}
+        	
+        	if((document.getElementById('adjustmentSelect').value == 'Secondary Insurance' || document.getElementById('adjustmentSelect').value == 'Tertiary Insurance') && document.getElementById('otherAdjustmentAmount').innerHTML != '')
+        	{
+        		document.getElementById('adjustmentReason').style.display = 'none';
+        		document.getElementById('adjustmentReasonSelect').value = 'None';
+        		document.getElementById('newInsuranceAmount').innerHTML = document.getElementById('otherAdjustmentAmount').innerHTML;
+        		document.getElementById('otherAdjustmentAmount').innerHTML = '';
+        	}
+        }
+        
+        /*To get the all checked DOS records for generating UBO4 form for Secondary Insurance*/
+        function check(dosID)
+        {
+        	if(document.getElementById(dosID+'_check').checked == true)
+				arrCheckedDOSIds.push(dosID);
+			else
+			{
+				var i = arrCheckedDOSIds.indexOf(dosID);
+				if(i != -1)
+					arrCheckedDOSIds.splice(i, 1);
+			}
+        }
+        
+        /*Function to be called from  "Print Paper Claim" button*/
+        function printPaperClaim()
+        {
+        	var csvDOSIDs = '';
+        	for(i=0; i<arrCheckedDOSIds.length; i++)
+        		csvDOSIDs += arrCheckedDOSIds[i]+',';
+        	alert(csvDOSIDs);
+        	if(csvDOSIDs == '')
+        		alert('Please select some records by clicking on check box to perom this operation!');
+        	else
+        		createBatchClaim(csvDOSIDs);
+        }
+        
+    </script>
+    
+</apex:page>

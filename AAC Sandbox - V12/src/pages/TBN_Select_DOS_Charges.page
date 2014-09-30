@@ -1,0 +1,417 @@
+<apex:page controller="TBN_Select_DOS_Charges" tabstyle="Select_Dates_Of_Service__tab">
+
+    <style>
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+        
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 21.3%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: auto;
+            margin-left: -250px;
+            top:100px;
+            margin-left: -280px;
+            top: 100px;
+            width: 95%;
+            overflow: auto;
+            height : auto;
+        }
+        
+        .popupb{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+    </style>
+    <apex:form id="FormId" >
+    <!-- Next Page using Shortcut -->
+    <apex:actionFunction name="nShortcut" action="{!nextPage}"  rerender="OPPAnelID,pb" status="processingImg" />
+    <!-- Previous Page using Shortcut -->
+    <apex:actionFunction name="pShortcut" action="{!previousPage}"  rerender="OPPAnelID,pb" status="processingImg" /> 
+    <!-- Popup window open after confirmation  -->
+    <apex:actionFunction name="popupwindow" action="{!null}"  rerender="popup" status="processingImg" /> 
+    <!-- on click of Apply Exception button -->
+    <apex:actionFunction name="applyException" action="{!applyException}" status="processingImg" oncomplete="history.go(0)">
+    	<apex:param name="expRevCode" assignTo="{!expRevnueCode}" value="" />
+       	<apex:param name="expBillCode" assignTo="{!expBillingCode}" value="" />
+    </apex:actionFunction>
+    
+    <apex:pageMessages id="errorMessageId"/>
+         <!-- handle selected item -->
+        <apex:actionFunction name="aSelectItem" action="{!doSelectItem}" status="processingImg" rerender="Dummy,errorMessageId">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:outputPanel id="Dummy"/>
+         
+        <!-- handle deselected item -->
+        <apex:actionFunction name="aDeselectItem" action="{!doDeselectItem}" status="processingImg" rerender="Dummy,errorMessageId">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:actionstatus id="processingImg" startText="Loading...">
+           <apex:facet name="start">
+                <div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+                    <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+                        <table align="center" valign="middle" style="width: 100%; height: 100%">
+                            <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+                                <td valign="middle" style="padding-top: 15px;" >
+                                    <img src="/img/loading.gif"/>
+                                    <span class="waitingDescription">
+                                        <b>Loading...</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+                <script>
+                    document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+                    var allCheckedIds = [];
+                </script>
+           </apex:facet>
+           <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        <apex:pageBlock id="pb" rendered="{!if(lstwrapperToShowOnPage.size > 0, true, false)}">       
+            <apex:pageBlockButtons > 
+                        <apex:commandButton style="float:left; margin-left:-43.5%;" action="{!previousPage}" Id="previousButton"  rendered="{!!(page==1)}" value="Previous" rerender="OPPAnelID,pb" status="processingImg"/>
+                        <apex:commandButton style="margin-left:18%;" value="Save and Confirm" action="{!renderToViewSelectedDOScharges}" rerender="changedValue,errorMessageId"  onComplete="changedAmount()"  />
+                        <input type="button" name="Apply Exceptions" value="Apply Exceptions" class="btn" onclick="return applyExceptions();"/>
+                        <apex:commandButton style="float:right;" action="{!nextPage}" Id="nextButton" rendered="{!!(page == lastPage)}" value="Next"  rerender="OPPAnelID,pb" status="processingImg"/> 
+            </apex:pageBlockButtons>
+            <apex:actionFunction name="test1" action="{!selectAll}" status="processingImg," rerender="Dummy,errorMessageId">
+                <apex:param name="q" value="this.value" AssignTo="{!isAllSelected}"/>
+            </apex:actionFunction>
+            
+            <!-- Displaying all the Dos records whose facility equal to selected -->
+           	<apex:outputPanel id="OPPAnelID">
+           		<div>
+           			<span style="margin-left: 75%; width: 6%; font-size: 70%; font-weight: 600;">Billing Code Exception</span>
+           			<span style="margin-left: 0.5%; width: 6%; font-size: 70%; font-weight: 600;">Revenue Code Exception</span>
+           		</div>
+               	<Input type="text" id="exceptionsBillingCode" style="margin-left: 75%; width: 6%;"/>
+                <Input type="text" id="exceptionsRevenueCode" style="width: 6%;"/>
+                <apex:pageBlockTable value="{!lstwrapperToShowOnPage}" var="c" id="table" >
+                    <apex:column headervalue="Select All">
+                        <apex:facet name="header" >
+                            <apex:inputCheckbox onclick="checkall(this,'inid')" onChange="test1(this.checked)">                              
+                            </apex:inputCheckbox>
+                        </apex:facet>                       
+                        <apex:inputCheckbox value="{!c.isSelect}" id="inid" onclick="check(this,'{!c.objDatesOfService.Id}')" />
+                    </apex:column> 
+                    <apex:column headervalue="Action" >
+                        <a onclick="OnClickEdit('{!c.objDatesOfService.Id}')" href="#">Edit</a>
+                    </apex:column> 
+                    <apex:column headerValue="Facility">
+                        <apex:outputText value="{!c.objDatesOfService.Facility__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Case">
+                        <a href="/{!c.objDatesOfService.Case_Id__c}" target="_blank"><apex:outputText value="{!c.objDatesOfService.Case__c}" /></a>
+                    </apex:column>
+                    <apex:column value="{!c.objDatesOfService.Patient__c}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sort}" value="Patient{!IF(sortExpression=='Patient__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="OPPAnelID" status="processingImg">
+                            <apex:param value="Patient__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column value="{!c.objDatesOfService.Level_of_Care__c}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sort}" value="Level of Care{!IF(sortExpression=='Level_of_Care__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="OPPAnelID" status="processingImg">
+                            <apex:param value="Level_of_Care__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column headerValue="Billable Day">
+                        <apex:outputField value="{!c.objDatesOfService.Billable_Day__c}" />
+                    </apex:column>
+                    <apex:column value="{!c.objDatesOfService.End_Date__c}">
+                        <apex:facet name="header">
+                            <apex:commandLink action="{!sort}" value="End Date{!IF(sortExpression=='Facility__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="OPPAnelID" status="processingImg">
+                            <apex:param value="End_Date__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+                            </apex:commandLink>
+                        </apex:facet>
+                    </apex:column>
+                    <apex:column headerValue="Bill Amount">
+                        <apex:outputField value="{!c.objLevelOfCare.Bill_Amount__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Status">
+                        <apex:outputField value="{!c.objDatesOfService.Status__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Utilization Review Form">
+                        <apex:outputField value="{!c.objDatesOfService.Utilization_Review_Form__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Total Calendar Days">
+                        <apex:outputField value="{!c.objDatesOfService.Total_Calendar_Days__c}" />
+                    </apex:column>
+                    <apex:column headerValue="Exception">
+                        <apex:outputField value="{!c.objDatesOfService.Exception__c}" />
+                    </apex:column>
+                   <apex:column headerValue="Billing Code" >
+                   		<span id="{!c.objDatesOfService.Id}BillingCode">
+                       		<apex:inputField value="{!c.objDatesOfService.New_CPT_HCSPCS_Code__c}" style="width:95%;"/>
+                       	</span> 
+                       <!-- <span id="{!c.objDatesOfService.Id}BillingCode" style="display: {!IF(c.objDatesOfService.Exception__c == true, 'block', 'none')}">{!c.objDatesOfService.New_CPT_HCSPCS_Code__c}</span> -->
+                       <!-- <input type="textBox" id="{!c.objDatesOfService.Id}BillingCode" value="{!c.objDatesOfService.New_CPT_HCSPCS_Code__c}" style="width:95%; display: {!IF(c.objDatesOfService.Exception__c == false, 'block', 'none')}"/> -->
+                   </apex:column>
+                   <apex:column headerValue="Revenue Code">
+                       <span id="{!c.objDatesOfService.Id}RevenueCode">
+                       		<apex:inputField value="{!c.objDatesOfService.New_Revenue_Code__c}"  style="width:95%;"/>
+                       </span>
+                       <!-- <span id="{!c.objDatesOfService.Id}RevenueCode" style="display: {!IF(c.objDatesOfService.Exception__c == true, 'block', 'none')}">{!c.objDatesOfService.New_Revenue_Code__c}</span> -->
+                      <!-- <input type="textBox" id="{!c.objDatesOfService.Id}RevenueCode" value="{!c.objDatesOfService.New_Revenue_Code__c}" style="width:95%; display: {!IF(c.objDatesOfService.Exception__c == false, 'block', 'none')}"/> -->
+                   </apex:column>
+					<apex:column headerValue="Diagnosis">
+                   		<apex:outputField value="{!c.objDatesOfService.Diagnosis__c}" /> 
+              		</apex:column> 
+                	<apex:column headerValue="Auth Number">
+                    	<apex:outputField value="{!c.objDatesOfService.Authorization_Number__c}" />
+                    	<script>
+                    		allCheckedIds.push('{!c.objDatesOfService.Id}');
+                    	</script>	
+					</apex:column>
+            </apex:pageBlockTable>
+            <br/>
+            <apex:outputText value="(Page {!page} of {!LastPage})"/>
+            <input type="hidden" id="hidPage" value="{!page}" />                                
+         
+            </apex:outputPanel>
+            <br/>
+         </apex:pageBlock>
+         <apex:outputPanel id="changedValue">
+<!--          <input type="hidden" id="confrmBox" value="{!isChanged}" /> -->
+         <input type="hidden" id="errormsg" value="{!displayPopup}" />
+         </apex:outputPanel>
+         <apex:outputPanel rendered="{!if(lstwrapperToShowOnPage.size == 0, true, false)}">
+            <apex:pageBlock id="facilityBlock1" title="Select Date Of Service">
+                <span style="font-style: italic;">No record to display</span>
+            </apex:pageBlock>   
+        </apex:outputPanel>
+         
+        <apex:pageBlock >
+            <apex:outputPanel id="popup">   
+                <apex:outputPanel styleClass="popupb" layout="block" rendered="{!displayPopUp}"/>
+                    <apex:outputPanel styleClass="customPopup"  rendered="{!displayPopUp}"> 
+                        <apex:commandButton style="margin-left:38%;" value="Cancel" action="{!closePopup}" rendered="{!displayPopUp}" rerender="popup"/>
+                        <apex:commandButton value="Save" action="{!save}" status="processingImg" rerender="popup" oncomplete="reloadPage();"/> <!-- oncomplete="document.location.reload(true);" -->                         
+                        <apex:pageBlockTable value="{!lstPopUpView}" var="c" id="table1" >
+                            <apex:column headerValue="Facility">
+                                <apex:outputField value="{!c.objDatesOfService.Facility__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Case">
+                                <apex:outputField value="{!c.objDatesOfService.Case__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Patient">
+                                <apex:outputField value="{!c.objDatesOfService.Patient__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Level of Care">
+                                <apex:outputField value="{!c.objDatesOfService.Level_of_Care__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Billable Day">
+                                <apex:outputField value="{!c.objDatesOfService.Billable_Day__c}" />
+                            </apex:column>
+                            <apex:column headerValue="End Date">
+                                <apex:outputField value="{!c.objDatesOfService.End_Date__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Bill Amount">
+<!--                                <apex:outputText value="{!c.decAmout}" /> -->
+                                <apex:outputField value="{!c.objLevelOfCare.Bill_Amount__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Status">
+                                <apex:outputField value="{!c.objDatesOfService.Status__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Utilization Review Form">
+                                <apex:outputField value="{!c.objDatesOfService.Utilization_Review_Form__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Total Calendar Days">
+                                <apex:outputField value="{!c.objDatesOfService.Total_Calendar_Days__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Exception">
+                                <apex:outputField value="{!c.objDatesOfService.Exception__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Billing Code">
+                                <apex:outputField value="{!c.objDatesOfService.New_CPT_HCSPCS_Code__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Revenue Code">
+                                <apex:outputField value="{!c.objDatesOfService.New_Revenue_Code__c}" />
+                            </apex:column>
+                            <apex:column headerValue="Diagnosis">
+	                        	<apex:outputField value="{!c.objDatesOfService.Diagnosis__c}" /> 
+	                   		</apex:column> 
+                            <apex:column headerValue="Auth Number">
+                                <apex:outputField value="{!c.objDatesOfService.Authorization_Number__c}" />
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+       </apex:pageBlock>
+<!--        <apex:outputPanel rendered="{!if(lstPopUpView.size == 0, true, false)}"> -->
+<!--            <apex:pageBlock id="facilityBlock1" title="Select Date Of Service"> -->
+<!--                <span style="font-style: italic;">Please select atleast one record </span> -->
+<!--            </apex:pageBlock>    -->
+<!--        </apex:outputPanel> -->
+    </apex:form>
+    <script type="text/javascript">
+    	/*Contains all checked Dos Id's*/
+  		var checkedIds = [];
+  		
+        function check(cb,cbid)
+        {   
+            if(cb.checked==true)
+            {   
+            	aSelectItem(cbid);
+            	checkedIds.push(cbid);
+            }
+            else
+            {
+            	aDeselectItem(cbid);
+            	/*For removing the unselected id's*/
+            	var i = checkedIds.indexOf(cbid);
+				if(i != -1) 
+				{
+					checkedIds.splice(i, 1);
+				}
+            }
+            return false;
+        }  
+        
+        function checkall(cb,cbid)
+        {
+             var inputElem = document.getElementsByTagName("input");
+             for(var i=0; i<inputElem.length; i++)
+             {            
+                  if(inputElem[i].id.indexOf(cbid)!=-1)
+                  {                                
+                     inputElem[i].checked = cb.checked;
+                 }
+             }
+            //allselect();
+            
+            checkedIds = allCheckedIds;
+           return false;  
+        }       
+        
+        function OnClickEdit(idd)
+        {
+                //https://aac--v12.cs10.my.salesforce.com/a0JG000000GP9Jb/e?retURL=%2Fa0JG000000GP9Jb
+                var strUrl = '{!strBaseURl}'+'/'+ idd +'/'+'e?retURL=/'+idd;
+                window.open(strUrl, '_blank');
+        }
+        
+        function reloadPage()
+        {
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            var pair = vars[0].split("=");   
+            location.href = 'apex/TBN_SubmitAndPrintBatch?facility='+pair[1];   
+        }
+       
+        function doc_keyUp(e) 
+        {       
+            var pageValue = document.getElementById('hidPage').value;       
+            
+            if((pageValue != 1) && (e.keyCode == 37))
+            {           
+                pShortcut();            
+            }
+            if((pageValue != {!lastPage}) && (e.keyCode ==  39))
+            {
+                nShortcut();                    
+            }
+            
+        }                
+        document.addEventListener('keyup', doc_keyUp, false);
+        
+            
+        function changedAmount()
+        {
+            //var changedValue = document.getElementById('confrmBox').value;
+            var errorResult = document.getElementById('errormsg').value;                     
+            //if(changedValue == "true" && errorResult == "true")
+            if(errorResult == "true")
+            {
+            	popupwindow();  
+            }
+            
+        }
+        
+        /*Function to be called on click of "Apply Exceptions Button"*/
+        function applyExceptions()
+        {
+        	if(checkedIds.length == 0)
+        		alert('Please select at least one Date of Service record to Apply Exception');
+        	else if(document.getElementById('exceptionsBillingCode').value == '' && document.getElementById('exceptionsRevenueCode').value == '')
+        		alert('Please put exception Billing Code or exception Revenue Code in the Text box');
+        	else
+        	{
+        		for(var i=0; i<checkedIds.length; i++)
+				{
+					if(document.getElementById('exceptionsBillingCode').value != '' && document.getElementById('exceptionsRevenueCode').value == '')
+					{
+						var billingSpan = document.getElementById(checkedIds[i]+'BillingCode');
+						billingSpan.getElementsByTagName('input')[0].value = document.getElementById('exceptionsBillingCode').value;
+					}
+					else if(document.getElementById('exceptionsBillingCode').value == '' && document.getElementById('exceptionsRevenueCode').value != '')
+					{
+						var revenueSpan = document.getElementById(checkedIds[i]+'RevenueCode');
+						revenueSpan.getElementsByTagName('input')[0].value = document.getElementById('exceptionsRevenueCode').value;
+					}
+					else
+					{      
+		                 var billingSpan = document.getElementById(checkedIds[i]+'BillingCode');
+		                 var revenueSpan = document.getElementById(checkedIds[i]+'RevenueCode');
+		                 billingSpan.getElementsByTagName('input')[0].value = document.getElementById('exceptionsBillingCode').value;
+						 revenueSpan.getElementsByTagName('input')[0].value = document.getElementById('exceptionsRevenueCode').value;
+					}
+				}
+				
+				expRevCode = document.getElementById('exceptionsRevenueCode').value;
+				expBillCode = document.getElementById('exceptionsBillingCode').value;
+				/*Calling Action function*/
+				applyException(expRevCode, expBillCode);
+        	}
+        }
+       
+    </script>
+</apex:page>

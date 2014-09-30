@@ -1,0 +1,205 @@
+<apex:page StandardController="Client_Calculator__c" extensions="ClientCalculatorExt" tabStyle="Client_Calculator__c" docType="html-5.0">
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-1.10.2.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.CallScripts, 'CallScripts/jquery/js/jquery-ui-1.10.4.custom.min.js')}"></script>
+<script src="/support/console/30.0/integration.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	sforce.console.setTabTitle('Client Calc - {!Client_Calculator__c.Name}');
+});              
+</script>
+<apex:form >
+<apex:pageBlock title="Client Calculator for Case {!CaseNumber}">
+<center>
+<apex:pageblockbuttons >
+<apex:commandButton action="{!save}" value="Save" />
+<apex:commandButton action="{!cancel}" value="Cancel"/>
+</apex:pageblockbuttons>
+
+</center>
+<br/>
+<apex:pageblocksection title="Base Rate Information" columns="1">
+<apex:messages /><br/>
+<apex:actionregion >
+<apex:outputPanel >
+
+<table cellspacing="5" cellpadding="2">
+<tr>
+<td><apex:outputLabel value="Case: "/></td><td><apex:outputLink id="lnkCase" value="/{!CaseId}">{!CaseNumber}</apex:outputLink></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="Facility: "/></td>
+<td><apex:selectList id="lstFacility" multiselect="false" value="{!SelectedFacilityName}" size="1">
+<apex:actionSupport event="onchange" action="{!UpdateDayRate}" reRender="txtFacilityDayRate, pnlRates, pnlTotals" />
+<apex:selectOptions value="{!Facilities}"/></apex:selectList>
+</td>
+</tr>
+<tr>
+<td><apex:outputLabel value="Facility Day Rate: "/></td>
+<td><apex:outputText id="txtFacilityDayRate" value="{!FacilityDayRate}"/></td>
+</tr>
+</table>
+<apex:actionStatus startText="Updating facility day rate.." id="facilitystatus" />
+</apex:outputPanel>
+</apex:actionregion>
+<br/>
+<apex:actionRegion >
+<apex:outputPanel id="pnlRates" title="Base Rates" >
+<apex:actionStatus startText="Updating calculations."  stopText="Calculations complete." id="ratestatus"/>
+<table cellspacing="5" cellpadding="5" id="tblRates">
+<tr><td></td><td>Rate</td><td>Days</td><td>Co-Ins%</td><td>Subtotal</td><td>Client Portion</td></tr>
+<tr>
+<td><apex:outputLabel value="DTX: "/></td>
+<td><apex:outputField id="dtxRate" value="{!Calc.DTX_Rate__c}" /></td>
+<td>
+<apex:inputText id="dtxDays" maxlength="3" style="width:25px" value="{!Calc.DTX_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals" status="ratestatus" />
+</apex:inputText>
+</td>
+<td><apex:outputField id="dtxCoIns" value="{!Calc.DTX_Co_Ins__c}"/></td>
+<td><apex:outputField id="dtxSubTotal" value="{!Calc.DTX_Subtotal__c}"/></td>
+<td><apex:outputField id="dtxClientPortion" value="{!Calc.DTX_Client_Portion__c}"/>
+</td>
+</tr>
+<tr>
+<td><apex:outputLabel value="IP/RTC: "/></td>
+<td><apex:outputField id="rtcRate" value="{!Calc.IP_RTC_Rate__c}"/></td>
+<td><apex:inputText id="rtcDays" maxlength="3" style="width:25px"  value="{!Calc.IP_RTC_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals" />
+</apex:inputText>
+</td>
+<td><apex:outputField id="rtcCoIns" value="{!Calc.IP_RTC_Co_Ins__c}"/></td>
+<td><apex:outputField id="rtcSubTotal" value="{!Calc.IP_RTC_Subtotal__c}"/></td>
+<td><apex:outputField id="rtcClientPortion" value="{!Calc.IP_RTC_Client_Portion__c}"/></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="PHP: "/></td>
+<td><apex:outputField id="phpRate" value="{!Calc.PHP_Rate__c}"/></td>
+<td><apex:inputText id="phpDays" maxlength="3" style="width:25px"  value="{!Calc.PHP_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals" />
+</apex:inputText>
+</td>
+<td><apex:outputField id="phpCoIns" value="{!Calc.PHP_Co_Ins__c}"/></td>
+<td><apex:outputField id="phpSubTotal" value="{!Calc.PHP_Subtotal__c}"/></td>
+<td><apex:outputField id="phpClientPortion" value="{!Calc.PHP_Client_Portion__c}"/></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="IOP: "/></td>
+<td><apex:outputField id="iopRate" value="{!Calc.IOP_Rate__c}"/></td>
+<td><apex:inputText id="iopDays" maxlength="3" style="width:25px"  value="{!Calc.IOP_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals" />
+</apex:inputText>
+</td>
+<td><apex:outputField id="iopCoIns" value="{!Calc.IOP_Co_Ins__c}"/></td>
+<td><apex:outputField id="iopSubTotal" value="{!Calc.IOP_Subtotal__c}"/></td>
+<td><apex:outputField id="iopClientPortion" value="{!Calc.IOP_Client_Portion__c}"/></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="RES: "/></td>
+<td><apex:outputField id="resRate" value="{!Calc.RES_Rate__c}"/></td>
+<td><apex:inputText id="resDays" maxlength="3"  style="width:25px" value="{!Calc.RES_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals" />
+</apex:inputText>
+</td>
+<td><apex:outputField id="resCoIns" value="{!Calc.RES_Co_Ins__c}"/></td>
+<td><apex:outputField id="resSubTotal" value="{!Calc.RES_Subtotal__c}"/></td>
+<td><apex:outputField id="resClientPortion" value="{!Calc.RES_Client_Portion__c}"/></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="OP: "/></td>
+<td><apex:outputField id="opRate" value="{!Calc.OP_Rate__c}"/></td>
+<td><apex:inputText id="opDays" maxlength="3" style="width:25px"  value="{!Calc.OP_Days__c}">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals"/>
+</apex:inputText>
+</td>
+<td><apex:outputField id="opCoIns" value="{!Calc.OP_Co_Ins__c}"/></td>
+<td><apex:outputField id="opSubTotal" value="{!Calc.OP_Subtotal__c}"/></td>
+<td><apex:outputField id="opClientPortion" value="{!Calc.OP_Client_Portion__c}"/></td>
+</tr>
+<tr>
+<td colspan="2"><apex:outputLabel value="Total Days: "/></td>
+<td><apex:outputField id="totalDays" value="{!Calc.Total_Days__c}"/></td>
+<td colspan="2"><apex:outputLabel value="Total Client Portion: "/></td>
+<td><apex:outputField id="totalClientPortion" value="{!Calc.Total_Client_Portion__c}"/></td>
+</tr>
+</table>
+</apex:outputPanel>
+</apex:actionRegion>
+</apex:pageblocksection>
+
+<apex:pageBlockSection title="Calculated Totals">
+<apex:actionregion >
+<apex:outputpanel id="pnlTotals">
+<apex:actionStatus id="totalsstatus"/>
+<table cellpadding="5" cellspacing="5">
+<tr>
+<td><apex:outputLabel value="Grand Total: "/></td>
+<td><apex:outputField id="grandTotal" value="{!Calc.Grand_Total__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Plan Maximum:"/></td>
+<td><apex:outputField value="{!Calc.Plan_Maximum__c}"/></td>
+</tr>
+<tr>
+<td><apex:outputLabel value="Client Deductible: "/></td>
+<td><apex:outputField value="{!Calc.Client_Deductible__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Deductible Met: "/></td>
+<td><apex:outputField value="{!Calc.Deductible_Met__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="CoPays: "/></td>
+<td><apex:outputField value="{!Calc.CoPays__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Out of Pocket Maximum: "/></td>
+<td><apex:outputField value="{!Calc.Out_of_Pocket_Maximum__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Out of Pocket Met: "/></td>
+<td><apex:outputField value="{!Calc.Out_of_Pocket_Met__c}"/></td>
+</tr>
+
+
+<tr>
+<td><apex:outputLabel value="Lifetime Maximum: "/></td>
+<td><apex:outputField value="{!Calc.Lifetime_Maximum__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Non-covered/Ancillary: "/></td>
+<td><apex:inputField value="{!Calc.Non_covered_Ancillary__c}" style="width:50px">
+<apex:actionSupport event="onblur" action="{!DoCalculations}" reRender="pnlRates, pnlTotals"/>
+</apex:inputField>
+</td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Total Client Contribution: "/></td>
+<td><apex:outputField value="{!Calc.Total_Client_Contribution__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Estimated Insurance Dollars Received: "/></td>
+<td><apex:outputField value="{!Calc.Estimated_Insurance_Dollars_Received__c}"/></td>
+</tr>
+
+<tr>
+<td><apex:outputLabel value="Daily Net Revenue: "/></td>
+<td><apex:outputField value="{!Calc.Daily_Net_Revenue__c}"/></td>
+</tr>
+
+</table>
+</apex:outputpanel>
+</apex:actionregion>
+
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

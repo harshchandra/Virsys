@@ -1,0 +1,74 @@
+<apex:page standardController="Utilization_Review__c" extensions="DatesOfServiceBilledController" showheader="false" sidebar="false" docType="html-5.0">
+<html lang="en">
+   <head>
+      <!-- Bootstrap -->
+   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+   <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
+   <title>Dates of Service Billing</title>
+</head>
+<body>
+<apex:form >
+<vs:importvisualstrap />
+<vs:visualstrapblock >
+<div class="container-fluid">
+	<br/><br/>
+	<div class="panel panel-default">
+		<div class="panel-heading">Dates of Service Billing</div>
+		<div class="panel-body">
+			<h3>Specify the date range of the Dates of Service records you want to mark as "has been billed".  If the days that fall in the date range provided are billable days it will automatically update all of the records.</h3>
+			<br/>
+			<div class="form-group">
+			<label for="dtStartDate">Start Date:</label><apex:inputField id="dtStartDate" styleClass="form-control" style="width:250px" value="{!PlaceHolder.Start_Date__c}"/>
+			<label for="dtEndDate">End Date:</label><apex:inputField id="dtEndDate" styleClass="form-control" style="width:250px" value="{!PlaceHolder.End_Date__c}"/>
+			</div>
+			<apex:outputPanel >
+				<apex:actionRegion >
+				<apex:outputLabel id="lblError" value="{!ErrorText}" rendered="{!IsError}"/>
+				</apex:actionRegion>
+			</apex:outputPanel>
+			<br/>
+			<apex:commandButton value="Save" styleClass="btn-primary" action="{!Save}"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<apex:commandButton value="Cancel" styleClass="btn-primary" action="{!RedirectToParent}"/>
+			</div>
+		</div>
+</div>
+<apex:dataTable value="{!DatesOfService}" var="d" id="dtDos" styleClass="table table-striped">
+<apex:facet name="caption">Dates of Service Records</apex:facet>
+<apex:column >
+	<apex:facet name="header">Record</apex:facet>
+	<apex:outputField value="{!d.Name}"/>
+</apex:column> 
+
+<apex:column >
+	<apex:facet name="header">Start Date</apex:facet>
+	<apex:outputField value="{!d.Start_Date__c}"/>
+</apex:column> 
+
+
+<apex:column >
+	<apex:facet name="header">End Date</apex:facet>
+	<apex:outputField value="{!d.End_Date__c}"/>
+</apex:column> 
+
+
+<apex:column >
+	<apex:facet name="header">Level of Care</apex:facet>
+	<apex:outputField value="{!d.Level_of_Care__c}"/>
+</apex:column> 
+
+
+<apex:column >
+	<apex:facet name="header">Billable Day</apex:facet>
+	<apex:outputField value="{!d.Billable_Day__c}"/>
+</apex:column> 
+ 
+<apex:column >
+	<apex:facet name="header">Has been Billed</apex:facet>
+	<apex:outputField value="{!d.Has_Been_Billed__c}"/>
+</apex:column> 
+ </apex:dataTable>
+</vs:visualstrapblock>
+</apex:form>
+</body>
+</html>
+</apex:page>

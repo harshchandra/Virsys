@@ -1,0 +1,97 @@
+<apex:page standardController="Case" tabStyle="Case" extensions="SupervisorViewExt" >
+<apex:sectionHeader title="Pending Assessment & Placement - {!State}"/>
+<apex:form >
+<apex:inputHidden value="{!Case.Account.Name}"/>
+<apex:pageBlock title="" id="pageBlock">
+<apex:pageBlockButtons location="top">
+<apex:commandButton value="Refresh" action="{!PlacementViewData}" id="theButton" rerender="pageBlock"/>
+</apex:pageBlockButtons>
+<apex:pageMessages />
+<apex:pageBlockTable value="{!PlacementCases}" var="pc" rendered="{!NOT(ISNULL(placementcases))}">
+<apex:column >
+    <apex:facet name="header">
+    <apex:commandLink action="{!PlacementViewData}" value="Client Name{!IF(sortExpressionPlacement=='Account.Name',IF(sortDirectionPlacement='ASC','▼','▲'),'')}" id="cmdSort">
+    <apex:param value="Account.Name" name="column" assignTo="{!sortExpressionPlacement}" />
+    </apex:commandLink>
+     </apex:facet>
+     <apex:outputLink value="/{!pc.Id}" target="_blank">{!pc.Account.Name}</apex:outputLink>
+</apex:column>
+<apex:column value="{!pc.CaseNumber}">
+<apex:facet name="header">
+<apex:commandLink action="{!PlacementViewData}" value="Case Number{!IF(sortExpressionPlacement=='CaseNumber',IF(sortDirectionPlacement='ASC','▼','▲'),'')}">
+<apex:param value="CaseNumber" name="column" assignTo="{!sortExpressionPlacement}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!pc.CreatedDate}">
+<apex:facet name="header">
+<apex:commandLink action="{!PlacementViewData}" value="Created Date{!IF(sortExpressionPlacement=='CreatedDate',IF(sortDirectionPlacement='ASC','▼','▲'),'')}">
+<apex:param value="CreatedDate" name="column" assignTo="{!sortExpressionPlacement}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!pc.Insurance_Status__c}">
+<apex:facet name="header">
+<apex:commandLink action="{!PlacementViewData}" value="Insurance Status{!IF(sortExpressionPlacement=='InsuranceStatus__c',IF(sortDirectionPlacement='ASC','▼','▲'),'')}">
+<apex:param value="InsuranceStatus__c" name="column" assignTo="{!sortExpressionPlacement}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!pc.Priority}">
+<apex:facet name="header">
+<apex:commandLink action="{!PlacementViewData}" value="Priority{!IF(sortExpressionPlacement=='Priority',IF(sortDirectionPlacement='ASC','▼','▲'),'')}">
+<apex:param value="Priority" name="column" assignTo="{!sortExpressionPlacement}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+<br/>
+<apex:sectionHeader title="Pending Admission - {!Department}"/>
+<apex:pageBlock title="" id="pageBlock2">
+<apex:pageBlockButtons location="top">
+<apex:commandButton value="Refresh" action="{!AdmissionsViewData}" id="theButton2" rerender="pageBlock2"/>
+</apex:pageBlockButtons>
+<apex:pageMessages />
+<apex:pageBlockTable value="{!AdmissionsCases}" var="ad" rendered="{!NOT(ISNULL(admissionscases))}">
+<apex:column >
+    <apex:facet name="header">
+    <apex:commandLink action="{!AdmissionsViewData}" value="Client Name{!IF(sortExpressionAdmissions=='Account.Name',IF(sortDirectionAdmissions='ASC','▼','▲'),'')}" id="cmdSort">
+    <apex:param value="Account.Name" name="column" assignTo="{!sortExpressionAdmissions}" />
+    </apex:commandLink>
+     </apex:facet>
+     <apex:outputLink value="/{!ad.Id}" target="_blank">{!ad.Account.Name}</apex:outputLink>
+</apex:column>
+<apex:column value="{!ad.CaseNumber}">
+<apex:facet name="header">
+<apex:commandLink action="{!AdmissionsViewData}" value="Case Number{!IF(sortExpressionAdmissions=='CaseNumber',IF(sortDirectionAdmissions='ASC','▼','▲'),'')}">
+<apex:param value="CaseNumber" name="column" assignTo="{!sortExpressionAdmissions}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!ad.CreatedDate}">
+<apex:facet name="header">
+<apex:commandLink action="{!AdmissionsViewData}" value="Created Date{!IF(sortExpressionAdmissions=='CreatedDate',IF(sortDirectionAdmissions='ASC','▼','▲'),'')}">
+<apex:param value="CreatedDate" name="column" assignTo="{!sortExpressionAdmissions}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!ad.Insurance_Status__c}">
+<apex:facet name="header">
+<apex:commandLink action="{!AdmissionsViewData}" value="Insurance Status{!IF(sortExpressionAdmissions=='InsuranceStatus__c',IF(sortDirectionAdmissions='ASC','▼','▲'),'')}">
+<apex:param value="InsuranceStatus__c" name="column" assignTo="{!sortExpressionAdmissions}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+<apex:column value="{!ad.Priority}">
+<apex:facet name="header">
+<apex:commandLink action="{!AdmissionsViewData}" value="Priority{!IF(sortExpressionAdmissions=='Priority',IF(sortDirectionAdmissions='ASC','▼','▲'),'')}">
+<apex:param value="Priority" name="column" assignTo="{!sortExpressionAdmissions}" />
+</apex:commandLink>
+</apex:facet>
+</apex:column>
+</apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

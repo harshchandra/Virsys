@@ -1,0 +1,1727 @@
+<apex:page standardController="Assessment__c" extensions="AssessmentFormController" standardStylesheets="false" showHeader="false" sidebar="false" renderAs="pdf">
+<html>
+<head>
+<style>
+body {font-family: Arial, Verdana; font-size:10pt;}
+.pdfQuestion { font-size: 8px; font-weight:normal; color:black; font-family:Arial;}
+.pdfAnswer { font-size: 10px; font-weight:normal; color:red; font-family:Arial;}
+</style>
+</head>
+
+<apex:pageBlock title="Assessment Form - {!Assessment__c.Client_Name__c}">
+<apex:outputText styleClass="pdfQuestion"  value="Case: "/><apex:outputText styleClass="pdfAnswer"  value="{!ParentCase.CaseNumber}"/><br/>
+<apex:outputText styleClass="pdfQuestion"  value="Insurance: "/><apex:outputLink value="/apex/pages/InsuranceVerificationForm?id={!InsuranceForm.Id}">{!InsuranceForm.Name}</apex:outputLink><br/>
+<apex:outputText styleClass="pdfQuestion"  value="Assessment Status: "/><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Assessment_Status__c}"/><br/>
+      <apex:outputText styleClass="pdfQuestion"  value="{!Assessment__c.Case__r}" rendered="false"/>
+      <apex:pageBlockSection title="Pre-Admission Assessment for Detox & Facility Determination" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+                <tr>
+                <td class="label" colspan="3">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Rejection_Notes__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                </td>
+                </tr>
+                <tr>
+                <td class="value" colspan="3">
+                    <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Rejection_Notes__c}" style="width:100%"/> 
+                </td>
+                </tr>
+              <tr>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['assessment_datetime__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Person_Completing_Assessment__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Assessment_Approved_By__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.assessment_datetime__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Person_Completing_Assessment__r.Name}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Assessment_Approved_By__r.Name}" /></td>
+              </tr>
+           </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       <apex:pageBlockSection title="Employment Information" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+              <tr>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_employed__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_occupation__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_full_time_student__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_employed__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_occupation__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_full_time_student__c}" /></td>
+              </tr>
+              
+              <tr>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_primary_insured_employed__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_cobra_benefits__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_fmla_needed__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_primary_insured_employed__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_cobra_benefits__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_fmla_needed__c}" /></td>
+              </tr>
+              
+              <tr>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_eap_involvement__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                    <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_short_term_disability__c']}" />
+                    <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                  </td>
+                  <td class="label">
+                  </td>
+              </tr>
+              <tr>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_eap_involvement__c}" /></td>
+                  <td class="value"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_short_term_disability__c}" /></td>
+                  <td class="value"></td>
+              </tr>
+              <tr>
+              <td class="label" colspan="3">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['empl_comments__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              </tr>
+              <tr>
+                <td class="value" colspan="3"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.empl_comments__c}" style="width:100%" /></td>
+              </tr>              
+           </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+       <apex:pageBlockSection title="Precipitating Event(s)" columns="2">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+              <tr>
+                <td class="label" colspan="2">Please indicate this person's presenting problem(s) or reason(s) for seeking services.</td>
+              </tr>
+
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_need_for_change__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_need_for_change__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_medical_problems__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_medical_problems__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>             
+              </tr>
+              
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_positive_drug_screening__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_positive_drug_screening__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_divorce_or_separation__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_divorce_or_separation__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>             
+              </tr>
+              
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_job_loss__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_job_loss__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_onset_of_withdrawal_symptoms__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_onset_of_withdrawal_symptoms__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>             
+              </tr>
+              
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_employer_intervention__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_employer_intervention__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_financial_problems__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_financial_problems__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>             
+              </tr>          
+
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_legal_problems__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_legal_problems__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_family_intervention__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_family_intervention__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>             
+              </tr>              
+              
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_other_specify__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_other_specify__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_other_specify2__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_other_specify2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+              </td>
+              </tr>
+              <tr>
+              <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_other_specify_t__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_other_specify_t__c}" />
+              </td>
+              <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pe_other_specify2_t__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_other_specify2_t__c}" />
+              </td>             
+              </tr>              
+              <tr>
+                <td class="label" colspan="2">Comments (Exhibited behaviors as a result of substance use, ie: prostitution, selling drugs, etc.):</td>
+              </tr>
+              <tr>
+              <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pe_comments__c}" style="width:100%" />
+              </td>
+              </tr>
+              </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+        <apex:pageBlockSection title="Substance Abuse History" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          <tr>
+            <td class="label label100">Substance (Start with most recent use)</td>
+            <td class="label label50">Onset Age</td>
+            <td class="label label100">Onset Date of Current Use Episode</td>
+            <td class="label label100">Date &amp; Time of Last Use</td>
+            <td class="label label100">Amount Used</td>
+            <td class="label label100">Route of Administration (IV, Oral, Snorting, Smoking)</td>
+            <td class="label label100">Frequency (How often?)</td>
+            <td class="label label100">How Long Using At That Rate? (ATR)</td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance1__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage1__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate1__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse1__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused1__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm1__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency1__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing1__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance2__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage2__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate2__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse2__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused2__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm2__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency2__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing2__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance3__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage3__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate3__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse3__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused3__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm3__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency3__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing3__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance4__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage4__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate4__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse4__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused4__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm4__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency4__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing4__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance5__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage5__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate5__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse5__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused5__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm5__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency5__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing5__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance6__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage6__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate6__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse6__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused6__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm6__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency6__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing6__c}"/></td>
+          </tr>
+          <tr>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_substance7__c}"/></td>
+              <td class="label50"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetage7__c}" style="width:50px"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_onsetdate7__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_lastuse7__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_amountused7__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_routeofadm7__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_frequency7__c}"/></td>
+              <td class="label100"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_howlongusing7__c}"/></td>
+          </tr>
+          <tr>
+          <td class="label" colspan="8">Comments:</td>
+          </tr>
+          <tr>
+          <td class="label" colspan="8"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.sah_comments__c}" style="width:100%" /></td>
+          </tr>
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+       <apex:pageBlockSection title="Withdrawal Symptoms Currently Being Experienced (Rate Symptoms on a 1-10 Scale, 10 being the worst)" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+            <tr><td class="label">Primary Symptoms</td><td class="label"></td><td class="label">Secondary Symptoms</td><td class="label"></td></tr>
+            
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_anxiety_agitation__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_anxiety_agitation__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            <td class="label">
+            </td>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_constipation__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_constipation__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>     
+            <td class="label">
+            </td>           
+            </tr>           
+            <tr>
+            <td class="label nowrap">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_audio_visual_hallucinations__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_audio_visual_hallucinations__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_depression__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_depression__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>               
+            </tr>
+            
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_diaphoresis__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_diaphoresis__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            <td class="label">
+            </td>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_headache__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_headache__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>     
+            <td class="label">
+            </td>           
+            </tr>           
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_diarrhea__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_diarrhea__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_insomnia__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_insomnia__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>               
+            </tr>   
+            
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_epilepsy_seizures__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_epilepsy_seizures__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            <td class="label">
+            </td>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_restlessness__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_restlessness__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>     
+            <td class="label">
+            </td>           
+            </tr>           
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_gastro_intestinal_upset__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_gastro_intestinal_upset__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>
+            <td class="label nowrap">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_suppressed_appetite__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_suppressed_appetite__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            </td>               
+            </tr>
+            
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_mood_swings__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_mood_swings__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            <td class="label">
+            </td>
+            <td class="label">                
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other1_t__c']}" /><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other1_t__c}"/>
+            </td>     
+            <td class="label">           
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other1__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>           
+            </tr>           
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_nausea_with_emesis__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_nausea_with_emesis__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">            
+            </td>
+            <td class="label nowrap">                
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other2_t__c']}" /><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other2_t__c}"/>           
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other2__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            </tr>
+            
+            <tr>
+            <td class="label">                
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_tremors_delirium__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_tremors_delirium__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>               
+            <td class="label">
+            </td>
+            <td class="label">                
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other3_t__c']}" /><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other3_t__c}"/>
+            </td>     
+            <td class="label">            
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_other3__c}" />
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_other3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>           
+            </tr>
+            <tr>
+            <td class="label" colspan="4">                
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['ws_comments__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            </tr>
+            <tr>
+            <td colspan="4">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.ws_comments__c}" style="width:100%" />              
+            </td>
+            </tr>
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+
+       <apex:pageBlockSection title="History of Withdrawal (Specific Symptoms Experienced in Previous Withdrawal Episodes)" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['history_of_withdrawal__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.history_of_withdrawal__c}" style="width:100%"/>
+            </td>
+          </tr>
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+
+       <apex:pageBlockSection title="Previous Substance Abuse/Mental Health Treatment" columns="1">
+       <apex:outputPanel layout="block">
+       <table class="vob">
+        <tr><td class="label">     
+       <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Client_has_never_received_any_SA_MH_TX__c}"/>
+       <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Client_has_never_received_any_SA_MH_TX__c']}" />
+       <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>     
+        </td></tr>
+         </table>      
+       </apex:outputPanel>       
+       <apex:pageBlockSection title="Facility 1" >
+       <apex:outputPanel layout="block">
+       <table class="vob">
+          <tr>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_facility1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_when1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_where1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_completed_treatment1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_facility1__c}" />
+            </td>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_when1__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_where1__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_completed_treatment1__c}" />
+            </td>
+            </tr>
+            <tr>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_level_of_care1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_level_of_care1__c}" />
+            </td>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_length_of_stay1__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_length_of_stay1__c}" />
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Facility 2" >
+        <apex:outputPanel layout="block">
+        <table class="vob">
+          <tr>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_facility2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_when2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_where2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_completed_treatment2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_facility2__c}" />
+            </td>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_when2__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_where2__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_completed_treatment2__c}" />
+            </td>
+            </tr>
+            <tr>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_level_of_care2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_level_of_care2__c}" />
+            </td>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_length_of_stay2__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_length_of_stay2__c}" />
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Facility 3" >
+        <apex:outputPanel layout="block">
+        <table class="vob">
+          <tr>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_facility3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_when3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_where3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_completed_treatment3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_facility3__c}" />
+            </td>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_when3__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_where3__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_completed_treatment3__c}" />
+            </td>
+            </tr>
+            <tr>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_level_of_care3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_level_of_care3__c}" />
+            </td>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_length_of_stay3__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_length_of_stay3__c}" />
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+       <apex:pageBlockSection title="Facility 4" >
+       <apex:outputPanel layout="block">
+       <table class="vob">
+          <tr>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_facility4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_when4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_where4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_completed_treatment4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_facility4__c}" />
+            </td>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_when4__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_where4__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_completed_treatment4__c}" />
+            </td>
+            </tr>
+            <tr>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_level_of_care4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_level_of_care4__c}" />
+            </td>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_length_of_stay4__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_length_of_stay4__c}" />
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+       <apex:pageBlockSection title="Facility 5" >
+       <apex:outputPanel layout="block">
+       <table class="vob">
+           <tr>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_facility5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_when5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_where5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_completed_treatment5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_facility5__c}" />
+            </td>
+            <td>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_when5__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_where5__c}" />
+            </td>
+            <td class="label">
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_completed_treatment5__c}" />
+            </td>
+            </tr>
+            <tr>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_level_of_care5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_level_of_care5__c}" />
+            </td>
+            <td class="label" colspan="2">
+                <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_length_of_stay5__c']}" />
+                <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+                <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_length_of_stay5__c}" />
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+       <apex:pageBlockSection title="Treatment History" >
+       <apex:outputPanel layout="block">
+       <table class="vob">
+         <tr>
+         <td class="label" colspan="4">
+             <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['history_of_withdrawal__c']}" />
+             <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+             <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_step_involvement__c}" />
+         </td>
+         </tr>
+         <tr>
+         <td class="label" colspan="4">
+             <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_step_involvement_when__c']}" />
+             <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+             <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_step_involvement_when__c}" />
+         </td>
+         </tr>
+         <tr>
+         <td class="label" colspan="4">
+             <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_longest_period_of_sobriety__c']}" />
+             <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+             <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_longest_period_of_sobriety__c}" />
+         </td>
+         </tr>
+         <tr>
+         <td class="label" colspan="4">
+         <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['psa_comments__c']}" />
+         <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+         </td>
+         </tr>
+          <tr>
+            <td class="label" colspan="4">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.psa_comments__c}" style="width:100%"/>
+            </td>
+          </tr>
+          </table>
+          </apex:outputPanel>
+        </apex:pageBlockSection>
+       </apex:pageBlockSection>
+       
+        <apex:pageBlockSection title="Current Legal Problems" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_awaiting_trial__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_awaiting_trial__c}" />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_awaiting_trial_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>          
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_awaiting_trial_comments__c}" style="width:100%"/>
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_on_probation__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_on_probation__c}" />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_on_probation_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>          
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_on_probation_comments__c}" style="width:100%"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_on_parole__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_on_parole__c}" />
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['clp_currently_on_parole_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span><br/>          
+            </td>
+          </tr>
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.clp_currently_on_parole_comments__c}" style="width:100%"/>
+            </td>
+          </tr>
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+       
+        <apex:pageBlockSection title="Current Medical Problems" columns="1">
+        <apex:outputPanel layout="block">
+          <table class="vob">
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_cancer__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_cancer__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label nowrap">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_cardiovascular_disease__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_cardiovascular_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_chronic_obstructive_pulmonary__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_chronic_obstructive_pulmonary__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_chronic_pain_issues__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_chronic_pain_issues__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_coughing_vomiting_blood__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_coughing_vomiting_blood__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_degenerative_disc_disease__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_degenerative_disc_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+ 
+           <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_dementia__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_dementia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_diabetes__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_diabetes__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_epilepsy_seizure__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_epilepsy_seizure__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>         
+ 
+            <tr>
+            <td class="label nowrap">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_history_of_cerebrovascular_accident__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_history_of_cerebrovascular_accident__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_history_of_dts_myocardial_infarction__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_history_of_dts_myocardial_infarction__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_pregnant__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_pregnant__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>     
+ 
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_history_of_intracranial_injury__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_history_of_intracranial_injury__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_hiv_aids__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_hiv_aids__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_hypertension__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_hypertension__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>     
+ 
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_kidney_disease__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_kidney_disease__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_korsakoff_s_syndrome__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_korsakoff_s_syndrome__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_liver_disease_or_damage__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_liver_disease_or_damage__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>   
+
+ 
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_myocardial_infarction__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_myocardial_infarction__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_obesity__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_obesity__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_pancreatitis__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_pancreatitis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>           
+          
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_surgeries__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_surgeries__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_tuberculosis__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_tuberculosis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_ulcer_gastro_intestinal_problems__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_ulcer_gastro_intestinal_problems__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+          
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_blind__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_blind__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_deaf__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_deaf__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_mute__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_mute__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>           
+            </td>
+          </tr>
+          
+          
+          <tr>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_paralysis_walker_wheelchair__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_paralysis_walker_wheelchair__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_other__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_other__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_special_needs__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_special_needs__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          
+           <tr>
+            <td class="label" valign="top">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_hepatitis__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_hepatitis__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_other_t__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_other_t__c}" />             
+            </td>
+            <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_special_needs_t__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>               
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_special_needs_t__c}" />
+            </td>
+          </tr>          
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_participation_in_activities_of_daily__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_participation_in_activities_of_daily__c}" style="width:100%" />
+            </td>          
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cmp_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="label" colspan="3">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cmp_comments__c}" style="width:100%" />
+            </td>          
+          </tr>          
+          </table>
+        </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+       <apex:pageBlockSection title="Prescribed Medication">
+       <apex:outputPanel layout="block">
+       <table class="vob">
+        <tr>
+            <td class="label">Current Medications</td>
+            <td class="label">Dosage</td>
+            <td class="label">Frequency of Dosage</td>
+            <td class="label">Reason for Medication</td>
+        </tr>
+        <tr>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_current_medications1__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_dosage1__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_frequency_of_dosage1__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_reason_for_medication1__c}" /></td>
+        </tr>
+        <tr>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_current_medications2__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_dosage2__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_frequency_of_dosage2__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_reason_for_medication2__c}" /></td>
+        </tr>
+        <tr>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_current_medications3__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_dosage3__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_frequency_of_dosage3__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_reason_for_medication3__c}" /></td>
+        </tr>
+        <tr>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_current_medications4__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_dosage4__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_frequency_of_dosage4__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_reason_for_medication4__c}" /></td>
+        </tr>
+        <tr>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_current_medications5__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_dosage5__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_frequency_of_dosage5__c}" /></td>
+            <td class="label"><apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_reason_for_medication5__c}" /></td>
+        </tr>
+        <tr>
+        <td class="label" colspan="4">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['pm_efficacy_compliancy_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+        </td>
+        </tr>
+        <tr>
+        <td class="label" colspan="4">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.pm_efficacy_compliancy_comments__c}" style="width:100%"/>
+        </td>
+        </tr>           
+       </table>
+       </apex:outputPanel>
+       </apex:pageBlockSection>
+       
+       <apex:pageBlockSection title="Diagnosed Psychiatric Problems">
+       <apex:outputPanel layout="block">
+       <table class="vob">
+       <tr>
+           <td class="label">Condition</td>
+           <td class="label">When?</td>
+           <td class="label">Recent Behavioral Symptoms<br/>(Unstable mood, self-injury, audio/visual hallucinations, etc.)</td>
+       </tr>
+       <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_anxiety__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_anxiety__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_anxiety_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_anxiety_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+       
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_bipolar_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_bipolar_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_bipolar_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_bipolar_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_depression__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_depression__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_depression_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_depression_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_eating_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_eating_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_eating_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_eating_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_obsessive_compulsive_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_obsessive_compulsive_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_obsessive_compulsive_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_obsessive_compulsive_disorder_sympto__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_panic_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_panic_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_panic_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_panic_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_paranoia__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_paranoia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_paranoia_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_paranoia_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_post_traumatic_stress_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_post_traumatic_stress_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_post_traumatic_stress_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_post_traumatic_stress_disorder_sympt__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_schizophrenia__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_schizophrenia__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_schizophrenia_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_schizophrenia_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+
+      <tr>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_personality_disorder__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_personality_disorder__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_personality_disorder_when__c}" />
+           </td>
+           <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_personality_disorder_symptoms__c}" style="width:100%" />
+           </td>
+       </tr>
+       
+       <tr>
+           <td class="label" colspan="3">
+           <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['paa_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+           </td>
+       </tr>
+       <tr>
+           <td class="label" colspan="3">
+           <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.paa_comments__c}" style="width:100%" />
+           </td>
+       </tr>
+
+       </table>
+       </apex:outputPanel>
+       </apex:pageBlockSection>
+      
+      <apex:pageBlockSection title="Current Physician/Psychiatrist Information">
+      <apex:outputPanel layout="block">
+      <table class="vob">
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_primary_care_physician__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_primary_care_physician__c}" />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_primary_care_physician_contact__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_primary_care_physician_contact__c}" />         
+          </td>
+         <td class="label nowrap">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_primary_care_physician_release__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_primary_care_physician_release__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+          </td>
+      </tr>
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_psychiatrist__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_psychiatrist__c}" />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_psychiatrist_contact__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_psychiatrist_contact__c}" />       
+          </td>
+         <td class="label nowrap">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.cp_psychiatrist_release__c}" />
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['cp_psychiatrist_release__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+          </td>
+      </tr>
+      </table>
+      </apex:outputPanel>
+      </apex:pageBlockSection>
+       
+      <apex:pageBlockSection title="Risk Factors" columns="1">
+      
+      <apex:pageBlockSection title="Suicide">
+      <apex:outputPanel layout="block">
+      <table class="vob">
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_suicidal_ideations__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicidal_ideations__c}" />         
+          </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_suicidal_ideations_intent__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicidal_ideations_intent__c}" />
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_suicidal_ideations_plan__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicidal_ideations_plan__c}" />
+        </td>
+     </tr>
+      </table>
+      <table class="vob">
+      <tr>
+        <td class="label nowrap">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_suicide_attempts__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>               
+        </td>
+        <td class="label">How Many?</td>
+        <td class="label">When?</td>
+        <td class="label">When Last?</td>
+        <td class="label">Outcome<br/>(Was medical intervention necessary? etc.)</td>
+        <td class="label">Means/Type of Attempt</td>
+      </tr>
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts_how_many__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts_when__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts_when_last__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts_outcome__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_suicide_attempts_means__c}"  />
+          </td>
+      </tr>
+      </table>
+      </apex:outputPanel>
+      </apex:pageBlockSection>
+      
+      <apex:pageBlockSection title="Homicide">
+      <apex:outputPanel layout="block">
+      <table class="vob">
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_homicidal_ideations__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicidal_ideations__c}" />        
+          </td>
+      </tr>
+      <tr>
+        <td class="label">
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_homicidal_ideations_plan__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicidal_ideations_plan__c}" />
+        </td>
+     </tr>
+     <tr>
+        <td class="label">              
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_homicidal_ideations_plan_t__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>               
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicidal_ideations_plan_t__c}" style="width:100%"  />         
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+        <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_homicidal_ideations_victims__c']}" />
+        <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+        <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicidal_ideations_victims__c}" style="width:100%"  />
+        </td>
+      </tr>
+      </table>
+      <table class="vob">
+      <tr>
+        <td class="label nowrap">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_homicide_attempts__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>               
+        </td>
+        <td class="label">How Many?</td>
+        <td class="label">When?</td>
+        <td class="label">When Last?</td>
+        <td class="label">Outcome<br/>(Was medical intervention necessary? etc.)</td>
+        <td class="label">Means/Type of Attempt</td>
+      </tr>
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts_how_many__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts_when__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts_when_last__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts_outcome__c}"  />
+          </td>
+          <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_homicide_attempts_means__c}"  />
+          </td>
+      </tr>
+      </table>
+      </apex:outputPanel>
+      </apex:pageBlockSection>
+      
+      <apex:pageBlockSection title="Self-Injury">
+      <apex:outputPanel layout="block">
+      <table class="vob">
+      <tr>
+          <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_self_injury__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_self_injury__c}" />        
+          </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_self_injury_when_last__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_self_injury_when_last__c}" />          
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_self_injury_method__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+        </td>
+      </tr>
+      <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_self_injury_method__c}" style="width:100%" />
+        </td>
+     </tr>
+      </table>
+      </apex:outputPanel>
+      </apex:pageBlockSection>
+      <apex:outputPanel layout="block">
+      <table class="vob">
+      <tr>
+      <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['rf_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+      </td>
+      </tr>
+      <tr>
+      <td class="label">
+        <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.rf_comments__c}" style="width:100%" />
+      </td>
+      </tr>
+      </table>
+      </apex:outputPanel>
+      </apex:pageBlockSection> 
+
+    <apex:pageBlockSection title="Family/Home Life">
+    <apex:outputPanel layout="block">
+    <table class="vob">
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_use_substances_in_home__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_use_substances_in_home__c}" />
+        </td>
+    </tr>
+    
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_active_users_in_home__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_active_users_in_home__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_relationship1__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_relationship1__c}" />
+        </td>
+    </tr>
+        <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_relationship2__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_relationship2__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_relationship3__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_relationship3__c}" />
+        </td>
+    </tr>
+    <tr>
+    <td class="label">
+        <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_relationship4__c']}" />
+        <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+        <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_relationship4__c}" />
+    </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fh_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>   
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fh_comments__c}" style="width:100%" />
+        </td>
+    </tr>
+    </table>
+    </apex:outputPanel>
+    </apex:pageBlockSection>
+
+    <apex:pageBlockSection title="FitRx">
+    <apex:outputPanel layout="block">
+    <table class="vob">
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Age__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Age__c}" />        
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_height__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_height__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_weight__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_weight__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['BMI__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.BMI__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_eat_uncomfortable__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_eat_uncomfortable__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_eat_alone_feeling_embar__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_eat_alone_feeling_embar__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Does_Client_Purge__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Does_Client_Purge__c}" />
+            &nbsp;&nbsp;
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Purge_How_Often__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Purge_How_Often__c}" />
+
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_poor_body_image__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_poor_body_image__c}" />
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Does_Client_Isolate_Themself__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Does_Client_Isolate_Themself__c}" />
+        </td>
+    </tr>
+     <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Does_Client_Feel_Hopeless__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Does_Client_Feel_Hopeless__c}" />
+        </td>
+    </tr>   
+     <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Does_Client_Feel_Helpless__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Does_Client_Feel_Helpless__c}" />
+        </td>
+    </tr>   
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['Does_Client_Harm_Themself__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.Does_Client_Harm_Themself__c}" />
+        </td>
+    </tr>    
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfQuestion"  value="{!FieldLabels['fitrx_comments__c']}" />
+            <span class="helpButton"><img src="/s.gif" class="helpOrb" title="" /></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="label">
+            <apex:outputText styleClass="pdfAnswer"  value="{!Assessment__c.fitrx_comments__c}" style="width:100%" />
+        </td>
+    </tr>
+    </table>
+    </apex:outputPanel>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+    </html>
+</apex:page>

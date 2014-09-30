@@ -1,0 +1,360 @@
+<apex:page controller="MasterViewController" showHeader="false" sidebar="false">
+<apex:stylesheet value="/sCSS/21.0/sprites/1297816277000/Theme3/default/gc/versioning.css" />
+<apex:form >
+<script>
+jQuery.noConflict();
+</script>
+<apex:pageBlock id="pageBlock" title="Master View ({!UserState})">
+<apex:pageBlockButtons location="both">
+<apex:commandButton value="Refresh" action="{!Refresh}" rerender="pageBlock"/>
+</apex:pageBlockButtons>
+<apex:pageMessages />
+
+<apex:tabPanel switchType="ajax" id="theTabPanel" value="{!SelectedTab}">
+<apex:tab label="All ({!TotalCount})" switchType="ajax" name="allTab" id="allTab">
+<apex:pageBlockTable value="{!Items}" var="c" rendered="{!NOT(ISNULL(Items))}">
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Case Number{!IF(sortExpression=='CaseNumber',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="CaseNumber" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CaseNumber}</apex:outputLink>
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Case Status{!IF(sortExpression=='CaseStatus',IF(sortDirection='ASC','▼','▲'),'')}">
+            <apex:param value="CaseStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.Status}</apex:outputLink>
+        
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Date/Time Opened{!IF(sortExpression=='CreatedDate',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="CreatedDate" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CreatedDateString}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Client Name{!IF(sortExpression=='AccountName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="AccountName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.AccountId}" target="_parent">{!c.AccountName}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Assessment{!IF(sortExpression=='AssessmentName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="AssessmentName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.AssessmentId}" target="_parent">{!c.AssessmentName}</apex:outputLink>
+
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Assessment Status{!IF(sortExpression=='AssessmentStatus',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="AssessmentStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.AssessmentId}" target="_parent">{!c.AssessmentStatus}</apex:outputLink>
+        
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Insurance{!IF(sortExpression=='InsuranceName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="InsuranceName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.InsuranceName}</apex:outputLink>
+        
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Insurance Status{!IF(sortExpression=='InsuranceStatus',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="InsuranceStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.InsuranceStatus}</apex:outputLink>
+        
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Policy Type{!IF(sortExpression=='PolicyType',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="PolicyType" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.InsuranceId}" target="_parent">{!c.PolicyType}</apex:outputLink>
+        
+    </apex:column>
+
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Case Owner{!IF(sortExpression=='OwnerName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="OwnerName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.OwnerName}</apex:outputLink>
+        
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Parent Account Type{!IF(sortExpression=='ParentAccountType',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="ParentAccountType" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.AccountId}" target="_parent">{!c.ParentAccountType}</apex:outputLink>
+        
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortData}" value="Payment Status{!IF(sortExpression=='PaymentVerified',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="PaymentVerified" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.PaymentArrangementId}" target="_parent">{!c.PaymentArrangementStatus}</apex:outputLink>
+        
+    </apex:column>
+</apex:pageBlockTable>
+</apex:tab>
+
+<apex:tab label="In-Progress Insurance ({!TotalInsurance})" switchType="ajax" name="insTab" id="insTab">	
+<apex:pageBlockTable value="{!InsuranceItems}" var="c" rendered="{!NOT(ISNULL(InsuranceItems))}">
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Insurance{!IF(sortExpression=='InsuranceNumber',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="Insurance" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.Name}</apex:outputLink>
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Case{!IF(sortExpression=='Case',IF(sortDirection='ASC','▼','▲'),'')}">
+            <apex:param value="Case" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CaseNumber}</apex:outputLink>
+        
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Client Name{!IF(sortExpression=='ClientName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="ClientName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.ClientName}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Status{!IF(sortExpression=='InsuranceStatus',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="InsuranceStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.InsuranceStatus}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Owner{!IF(sortExpression=='OwnerName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="OwnerName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.OwnerName}</apex:outputLink>
+
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataInsurance}" value="Created Date{!IF(sortExpression=='CreatedDate',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="CreatedDate" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.CreatedDateString}</apex:outputLink>
+        
+    </apex:column>
+
+</apex:pageBlockTable>
+</apex:tab>
+
+<apex:tab label="In-Progress Assessments ({!TotalAssessments})" switchType="ajax" name="assessTab" id="assessTab">	
+<apex:pageBlockTable value="{!AssessmentItems}" var="c" rendered="{!NOT(ISNULL(AssessmentItems))}">
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Assessment{!IF(sortExpression=='Assessment',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="Assessment" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.Name}</apex:outputLink>
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Case{!IF(sortExpression=='Case',IF(sortDirection='ASC','▼','▲'),'')}">
+            <apex:param value="Case" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CaseNumber}</apex:outputLink>
+        
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Client Name{!IF(sortExpression=='ClientName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="ClientName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.ClientName}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Status{!IF(sortExpression=='AssessmentStatus',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="AssessmentStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.AssessmentStatus}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Owner{!IF(sortExpression=='OwnerName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="OwnerName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.OwnerName}</apex:outputLink>
+
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataAssessment}" value="Created Date{!IF(sortExpression=='CreatedDate',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="CreatedDate" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.CreatedDateString}</apex:outputLink>
+        
+    </apex:column>
+
+</apex:pageBlockTable>
+</apex:tab>
+
+<apex:tab label="In-Progress Payments ({!TotalPaymentArrangements})" switchType="ajax" name="paymentsTab" id="paymentsTab">	
+<apex:pageBlockTable value="{!PaymentArrangementItems}" var="c" rendered="{!NOT(ISNULL(PaymentArrangementItems))}">
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Payment Arrangement{!IF(sortExpression=='PaymentArrangement',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="PaymentArrangement" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.Name}</apex:outputLink>
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Case{!IF(sortExpression=='Case',IF(sortDirection='ASC','▼','▲'),'')}">
+            <apex:param value="Case" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.CaseId}" target="_parent">{!c.CaseNumber}</apex:outputLink>
+        
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Client Name{!IF(sortExpression=='ClientName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="ClientName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.ClientName}</apex:outputLink>
+
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Status{!IF(sortExpression=='PaymentArrangementStatus',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="PaymentArrangementStatus" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.PaymentArrangementStatus}</apex:outputLink>
+
+    </apex:column>
+
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Owner{!IF(sortExpression=='OwnerName',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="OwnerName" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.OwnerName}</apex:outputLink>
+
+    </apex:column>
+    
+    <apex:column >
+        <apex:facet name="header">
+        <apex:commandLink action="{!SortDataPaymentArrangement}" value="Created Date{!IF(sortExpression=='CreatedDate',IF(sortDirection='ASC','▼','▲'),'')}" >
+            <apex:param value="CreatedDate" name="column" assignTo="{!sortExpression}" />
+        </apex:commandLink>
+        </apex:facet>
+        
+        <apex:outputLink value="/{!c.Id}" target="_parent">{!c.CreatedDateString}</apex:outputLink>
+        
+    </apex:column>
+
+</apex:pageBlockTable>
+</apex:tab>
+
+</apex:tabPanel>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

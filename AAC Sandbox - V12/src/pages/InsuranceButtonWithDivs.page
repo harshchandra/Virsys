@@ -1,0 +1,37 @@
+<apex:page standardController="Case" showChat="false" showHeader="false" sidebar="false">
+<style type="text/css">
+.submitButtonDiv { 
+width:100px;
+height:20px;
+display: {!CASE(Case.Insurance_Status__c, '', 'block','none')};
+}
+.viewButtonDiv { 
+width:100px;
+height:20px;
+display: {!CASE(Case.Insurance_Status__c, 'In-progress','block','Verified','block','A&P Complete','block','A&P Denied','block','Resubmitted','block','Submitted','block','none')};
+}
+.resubmitButtonDiv
+{
+width:100px;
+height:20px;
+display:{!CASE(Case.Insurance_Status__c, 'Returned to TC', 'block', 'none')};
+}
+.btn
+{
+width:125px;
+height:25px;
+}
+</style>
+<center>
+<div class="submitButtonDiv">
+<button class="btn" name="btninsurance" onclick="javascript: parent.location.href='/apex/pages/InsuranceVerificationForm?caseid={!Case.Id}&casenumber={!Case.CaseNumber}';" type="button" value="Submit Insurance">Submit Insurance</button>
+</div>
+<div class="viewButtonDiv">
+<button class="btn" name="btninsurance" onclick="javascript: parent.location.href='/apex/pages/InsuranceVerificationForm?caseid={!Case.Id}&casenumber={!Case.CaseNumber}';" type="button" value="View Insurance">View Insurance</button>
+</div>
+<div class="resubmitButtonDiv">
+<button class="btn" name="btninsurance" onclick="javascript: parent.location.href='/apex/pages/InsuranceVerificationForm?caseid={!Case.Id}&casenumber={!Case.CaseNumber}';" type="button" value="View Insurance">Resubmit Insurance</button>
+</div>
+
+</center>
+</apex:page>

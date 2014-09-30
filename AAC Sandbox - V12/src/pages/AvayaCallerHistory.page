@@ -1,0 +1,17 @@
+<apex:page standardController="Account" extensions="AvayaLookupController" >
+<apex:form >
+<apex:pageBlock >
+<apex:pageMessages />
+<apex:pageBlockTable id="tbl" value="{!xCalls}" var="c">
+<apex:column value="{!c.CallId}" headerValue="Call ID"/>
+<apex:column value="{!c.Direction}" headerValue="Call Direction"/>
+<apex:column value="{!c.PhoneNumber}" headerValue="Phone Number"/>
+<apex:column value="{!c.DID}" headerValue="DID"/>
+<apex:column value="{!c.HuntGroup}" headerValue="Hunt Group"/>
+<apex:column value="{!c.AgentName}" headerValue="Agent"/>
+<apex:column value="{!c.CallDate}" headerValue="Call Date"/>
+<apex:column value="{!c.CallLength}" headerValue="Call Length (Seconds)"/>
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

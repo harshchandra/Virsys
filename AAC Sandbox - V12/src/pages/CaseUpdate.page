@@ -1,0 +1,10 @@
+<apex:page controller="CaseFormUpdateController" >
+<apex:form >
+<apex:outputPanel >
+<apex:pageMessages />
+<apex:commandButton action="{!CaseUpdate}" value="Update Facility"/>
+<apex:commandButton action="{!InsuranceBenefitTypeUpdate}" value="Update Benefit Type"/>
+<apex:commandButton action="{!RecordTypeUpdate}" value="Update Record Type"/>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

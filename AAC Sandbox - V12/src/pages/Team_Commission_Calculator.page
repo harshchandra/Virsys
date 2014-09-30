@@ -1,0 +1,586 @@
+<apex:page standardController="TTC__c">
+ <apex:form id="calfrm1">
+  <apex:pageBlock title="Edit Calculator">
+
+    <STYLE type="text/css">
+        body{ font: 12px Calibri; }
+        
+        input { border: none;padding:none;width: 80%; background-color: transparent; text-align: right; }
+        
+        table { border-bottom: 1px solid #000000; border-right: 1px solid #000000;}
+            td { border-top: 1px solid #000000;border-left: 1px solid #000000;}
+            tr {  }
+                tr span{ float: left; padding-left: 5px; }
+            tfoot td { border-left: 1px solid #000000;}
+            
+            .col2{ width: 130px;}
+            .col{ width: 150px;}
+            
+            caption{ background-color: #494529;color: #fff; font-size: 22px; margin-bottom: 20px; padding: 5px 0; }
+            thead{ background-color: #DDD9C4;text-align: center; font-weight: bold; }
+            tfoot, tfoot input { background-color: #C4BD97;text-align: center; font-weight: bold; }
+            
+            tbody tr td:nth-child(2), tbody tr td:nth-child(3) , 
+            tbody tr td:nth-child(5) , tbody tr td:nth-child(7) , 
+            tbody tr td:nth-child(9) , tbody tr td:nth-child(11)  { background-color:#EBF1DC; }
+                
+            tbody tr td:nth-child(13)  { background-color:#C2D69A; }
+                
+            .bigTd { width: 160px; }
+                
+            .bld { font-weight: bold; padding-left: 5px; background-color: #DDD9C4; }
+            
+        .blackBg { background-color: #000; width: 30px; }
+        
+        .container{ margin: 0 auto;  }
+        
+        .centered { text-align: center; width: 100%; }
+    </STYLE>      
+    
+<script>
+
+function findObject( sPattern ) {
+           
+    var getAllElements = document.getElementsByTagName( "input" );
+    
+    for( var i = 0; i <= getAllElements.length; i++ ) {
+        if( getAllElements[i].id.indexOf( sPattern ) != -1 ) {
+            return getAllElements[i];
+        }
+    }
+}
+
+function recalculate(ob)
+{
+    var cal = document.getElementById('{!$Component.calfrm}');
+
+    var intRow = ob.name.substring(ob.name.length-1, ob.name.length);
+    
+    var rAttainment = Number( findObject("rAttainment" + intRow).value.replace(',','') );
+    
+            
+            /* get Revenue Payout value */
+            var rPayout = 0;
+            
+            if( rAttainment > 7999 ) {
+                rPayout = rAttainment * 0.01;
+            }
+            
+            if( rAttainment > 23999 ) {
+                rPayout = rPayout + rAttainment * 0.01;
+            }
+            
+            if( rAttainment > 39999 ) {
+                rPayout = rPayout + rAttainment * 0.02;
+            }
+            
+            if( rAttainment > 59999 ) {
+                rPayout = rPayout + rAttainment * 0.02;
+            }
+            
+            if( rAttainment > 79999 ) {
+                rPayout = rPayout + rAttainment * 0.02;
+            }
+            
+            if( rAttainment > 99999 ) {
+                rPayout = rPayout + rAttainment * 0.01;
+            }
+            
+            if( rAttainment > 149999 ) {
+                rPayout = rPayout + rAttainment * 0.01;
+            }
+            
+            /* update Revenue Payout value */
+            findObject("rPayout" + intRow).value = rPayout;
+            
+            /* get Cash Attainment value */
+            var cAttainment = Number( findObject("cAttainment" + intRow).value.replace(',','') );
+            
+            /* update Cash Payout value */
+            var cPayout =  cAttainment * 0.02;
+
+            findObject("cPayout" + intRow).value = cPayout;
+            
+            /* get Bonus Attainment value */
+            var bAttainment = Number( findObject("bAttainment" + intRow).value.replace(',','') );
+            
+            /* get Bonus Payout value */
+            var bPayout = 0;
+            
+            if( bAttainment > 0.9 ) {
+                bPayout = bPayout + rAttainment * 0.005;
+            }
+            
+            if( bAttainment > 1.9 ) {
+                bPayout = bPayout + rAttainment * 0.005;
+            }
+            
+            if( bAttainment > 2.9 ) {
+                bPayout = bPayout + rAttainment * 0.005;
+            }
+            
+            if( bAttainment > 3.9 ) {
+                bPayout = bPayout + rAttainment * 0.005;
+            }
+            
+            if( bAttainment > 4.9 ) {
+                bPayout = bPayout + rAttainment * 0.005;
+            }
+            
+            /* update Bonus Payout value */
+            findObject("bPayout" + intRow).value = bPayout;
+            
+            /* get SPIFF Payout value */
+            var aSpiff = Number( findObject("aSpiff" + intRow).value.replace(',','') );
+            findObject("pSpiff" + intRow).value = aSpiff;
+            
+            /* update total payout */
+            var totalPayout = rPayout + cPayout + bPayout + aSpiff;
+            
+            findObject("totalPayout" + intRow).value = totalPayout;
+            
+            
+            /*-------------------------------------
+            ------ Sum Columns
+            ---------------------------------------*/
+            
+            /* Revenue Attainment total */
+            var trAttainment = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("rAttainment" + i).value.replace(',','') );
+                
+                trAttainment = trAttainment + getRowValue;
+            }
+            
+            findObject("trAttainment").value = trAttainment; 
+            
+            /* Revenue Payout total */
+            var trPayout = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("rPayout" + i).value.replace(',','') );
+                
+                trPayout = trPayout + getRowValue;
+            }
+            
+            findObject("trPayout").value = trPayout; 
+            
+            /* Cash Attainment total */
+            var tcAttainment = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("cAttainment" + i).value.replace(',','') );
+                
+                tcAttainment = tcAttainment + getRowValue;
+            }
+            
+            findObject("tcAttainment").value = tcAttainment; 
+            
+            /* Revenue Payout total */
+            var tcPayout = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("cPayout" + i).value.replace(',','') );
+                
+                tcPayout = tcPayout + getRowValue;
+            }
+            
+            findObject("tcPayout").value = tcPayout; 
+            
+            /* Bonus Payout total */
+            var tbcPayout = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("bPayout" + i).value.replace(',','') );
+                
+                tbcPayout = tbcPayout + getRowValue;
+            }
+            
+            findObject("tbPayout").value = tbcPayout; 
+            
+            /* spiff total */
+            var taSpiff = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("aSpiff" + i).value.replace(',','') );
+                
+                taSpiff = taSpiff + getRowValue;
+            }
+            
+            findObject("taSpiff").value = taSpiff; 
+            
+            /* spiff2 total */
+            var tpSpiff = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("pSpiff" + i).value.replace(',','') );
+                
+                tpSpiff = tpSpiff + getRowValue;
+            }
+            
+            findObject("tpSpiff").value = tpSpiff; 
+            
+            
+            /* total payout sum */
+            var toPayout = 0;
+            
+            for( var i = 1; i <= 19; i++ ) {
+                var getRowValue = Number( findObject("totalPayout" + i).value.replace(',','') );
+                
+                toPayout = toPayout + getRowValue;
+            }
+            
+            findObject("toPayout").value = toPayout; 
+            
+            
+    
+}
+
+
+</script>  
+
+    <div class="container">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <caption>CA Team Treatment Consultant Commission Calculator</caption>
+                <thead>
+                    <tr>
+                        <td class="col">Team</td>
+                        <td class="col">Last Name</td>
+                        <td class="col">First Name</td>
+                        <td class="blackBg"></td>
+                        <td class="col2">Revenue Attainment</td>
+                        <td class="col2">Revenue Payout</td>
+                        <td class="col2">Cash Attainment</td>
+                        <td class="col2">Cash Payout</td>
+                        <td class="col2">Bonus Attainment</td>
+                        <td class="col2">Bonus Payout</td>
+                        <td class="col2">SPIFF/Contest Attainment</td>
+                        <td class="col2">SPIFF Payout</td>
+                        <td class="bigTd">Total Payout</td>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td>Totals</td>
+                        <td></td>
+                        <td></td>
+                        <td class="blackBg"></td>
+                        <td><input id="trAttainment" name="trAttainment" type="text"/><span>$</span></td>
+                        <td><input id="trPayout" name="trPayout" type="text"/><span>$</span></td>
+                        <td><input id="tcAttainment" name="tcAttainment" type="text"/><span>$</span></td>
+                        <td><input id="tcPayout" name="tcPayout" type="text"/><span>$</span></td>
+                        <td></td>
+                        <td><input id="tbPayout"  name="tbPayout" type="text"/><span>$</span></td>
+                        <td><input id="taSpiff" name="taSpiff" type="text"/><span>$</span></td>
+                        <td><input id="tpSpiff" name="tpSpiff" type="text"/><span>$</span></td>
+                        <td><input id="toPayout" name="toPayout" type="text"/><span>$</span></td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    <tr>
+                        <td class="bld">Team Manager</td>
+                        <td><apex:inputField value="{!TTC__c.lastName1__c}" id="lastName1" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName1__c}" id="firstName1" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment1__c}" id="rAttainment1" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout1" name="rPayout1" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment1__c}" id="cAttainment1" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout1" name="cPayout1" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment1__c}" id="bAttainment1" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout1" name="bPayout1" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff1__c}" id="aSpiff1" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff1" name="pSpiff1" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout1" name="totalPayout1" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName2__c}" id="lastName2" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName2__c}" id="firstName2" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment2__c}" id="rAttainment2" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout2" name="rPayout2" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment2__c}" id="cAttainment2" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout2" name="cPayout2" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment2__c}" id="bAttainment2" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout2" name="bPayout2" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff2__c}" id="aSpiff2" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff2" name="pSpiff2" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout2" name="totalPayout2" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName3__c}" id="lastName3" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName3__c}" id="firstName3" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment3__c}" id="rAttainment3" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout3" name="rPayout3" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment3__c}" id="cAttainment3" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout3" name="cPayout3" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment3__c}" id="bAttainment3" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout3" name="bPayout3" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff3__c}" id="aSpiff3" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff3" name="pSpiff3" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout3" name="totalPayout3" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName4__c}" id="lastName4" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName4__c}" id="firstName4" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment4__c}" id="rAttainment4" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout4" name="rPayout4" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment4__c}" id="cAttainment4" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout4" name="cPayout4" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment4__c}" id="bAttainment4" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout4" name="bPayout4" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff4__c}" id="aSpiff4" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff4" name="pSpiff4" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout4" name="totalPayout4" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName5__c}" id="lastName5" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName5__c}" id="firstName5" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment5__c}" id="rAttainment5" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout5" name="rPayout5" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment5__c}" id="cAttainment5" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout5" name="cPayout5" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment5__c}" id="bAttainment5" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout5" name="bPayout5" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff5__c}" id="aSpiff5" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff5" name="pSpiff5" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout5" name="totalPayout5" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName6__c}" id="lastName6" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName6__c}" id="firstName6" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment6__c}" id="rAttainment6" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout6" name="rPayout6" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment6__c}" id="cAttainment6" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout6" name="cPayout6" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment6__c}" id="bAttainment6" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout6" name="bPayout6" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff6__c}" id="aSpiff6" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff6" name="pSpiff6" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout6" name="totalPayout6" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName7__c}" id="lastName7" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName7__c}" id="firstName7" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment7__c}" id="rAttainment7" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout7" name="rPayout7" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment7__c}" id="cAttainment7" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout7" name="cPayout7" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment7__c}" id="bAttainment7" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout7" name="bPayout7" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff7__c}" id="aSpiff7" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff7" name="pSpiff7" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout7" name="totalPayout7" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName8__c}" id="lastName8" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName8__c}" id="firstName8" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment8__c}" id="rAttainment8" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout8" name="rPayout8" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment8__c}" id="cAttainment8" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout8" name="cPayout8" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment8__c}" id="bAttainment8" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout8" name="bPayout8" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff8__c}" id="aSpiff8" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff8" name="pSpiff8" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout8" name="totalPayout8" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName9__c}" id="lastName9" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName9__c}" id="firstName9" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment9__c}" id="rAttainment9" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout9" name="rPayout9" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment9__c}" id="cAttainment9" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout9" name="cPayout9" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment9__c}" id="bAttainment9" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout9" name="bPayout9" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff9__c}" id="aSpiff9" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff9" name="pSpiff9" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout9" name="totalPayout9" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName10__c}" id="lastName10" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName10__c}" id="firstName10" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment10__c}" id="rAttainment10" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout10" name="rPayout10" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment10__c}" id="cAttainment10" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout10" name="cPayout10" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment10__c}" id="bAttainment10" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout10" name="bPayout10" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff10__c}" id="aSpiff10" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff10" name="pSpiff10" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout10" name="totalPayout10" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName11__c}" id="lastName11" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName11__c}" id="firstName11" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment11__c}" id="rAttainment11" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout11" name="rPayout11" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment11__c}" id="cAttainment11" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout11" name="cPayout11" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment11__c}" id="bAttainment11" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout11" name="bPayout11" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff11__c}" id="aSpiff11" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff11" name="pSpiff11" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout11" name="totalPayout11" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName12__c}" id="lastName12" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName12__c}" id="firstName12" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment12__c}" id="rAttainment12" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout12" name="rPayout12" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment12__c}" id="cAttainment12" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout12" name="cPayout12" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment12__c}" id="bAttainment12" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout12" name="bPayout12" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff12__c}" id="aSpiff12" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff12" name="pSpiff12" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout12" name="totalPayout12" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName13__c}" id="lastName13" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName13__c}" id="firstName13" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment13__c}" id="rAttainment13" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout13" name="rPayout13" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment13__c}" id="cAttainment13" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout13" name="cPayout13" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment13__c}" id="bAttainment13" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout13" name="bPayout13" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff13__c}" id="aSpiff13" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff13" name="pSpiff13" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout13" name="totalPayout13" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName14__c}" id="lastName14" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName14__c}" id="firstName14" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment14__c}" id="rAttainment14" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout14" name="rPayout14" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment14__c}" id="cAttainment14" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout14" name="cPayout14" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment14__c}" id="bAttainment14" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout14" name="bPayout14" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff14__c}" id="aSpiff14" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff14" name="pSpiff14" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout14" name="totalPayout14" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName15__c}" id="lastName15" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName15__c}" id="firstName15" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment15__c}" id="rAttainment15" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout15" name="rPayout15" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment15__c}" id="cAttainment15" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout15" name="cPayout15" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment15__c}" id="bAttainment15" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout15" name="bPayout15" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff15__c}" id="aSpiff15" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff15" name="pSpiff15" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout15" name="totalPayout15" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName16__c}" id="lastName16" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName16__c}" id="firstName16" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment16__c}" id="rAttainment16" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout16" name="rPayout16" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment16__c}" id="cAttainment16" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout16" name="cPayout16" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment16__c}" id="bAttainment16" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout16" name="bPayout16" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff16__c}" id="aSpiff16" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff16" name="pSpiff16" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout16" name="totalPayout16" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName17__c}" id="lastName17" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName17__c}" id="firstName17" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment17__c}" id="rAttainment17" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout17" name="rPayout17" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment17__c}" id="cAttainment17" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout17" name="cPayout17" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment17__c}" id="bAttainment17" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout17" name="bPayout17" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff17__c}" id="aSpiff17" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff17" name="pSpiff17" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout17" name="totalPayout17" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName18__c}" id="lastName18" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName18__c}" id="firstName18" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment18__c}" id="rAttainment18" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout18" name="rPayout18" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment18__c}" id="cAttainment18" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout18" name="cPayout18" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment18__c}" id="bAttainment18" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout18" name="bPayout18" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff18__c}" id="aSpiff18" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff18" name="pSpiff18" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout18" name="totalPayout18" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                    <tr>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.lastName19__c}" id="lastName19" onkeyup="recalculate(this)" /></td>
+                        <td><apex:inputField value="{!TTC__c.firstName19__c}" id="firstName19" onkeyup="recalculate(this)" /></td>
+                        <td class="blackBg"></td>
+                        <td><apex:inputField value="{!TTC__c.rAttainment19__c}" id="rAttainment19" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="rPayout19" name="rPayout19" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.cAttainment19__c}" id="cAttainment19" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="cPayout19" name="cPayout19" type="text" readonly="true" /><span>$</span></td>
+                        <td><apex:inputField value="{!TTC__c.bAttainment19__c}" id="bAttainment19" onkeyup="recalculate(this)" /></td>
+                        <td><input id="bPayout19" name="bPayout19" type="text" class="centered" value="" readonly="true" /></td>
+                        <td><apex:inputField value="{!TTC__c.aSpiff19__c}" id="aSpiff19" onkeyup="recalculate(this)" /><span>$</span></td>
+                        <td><input id="pSpiff19" name="pSpiff19" type="text" onkeyup="recalculate(this)" readonly="true" /><span>$</span></td>
+                        <td><input id="totalPayout19" name="totalPayout19" type="text" readonly="true" /><span>$</span></td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+
+<script>
+    window.setTimeout(callRecalculate,1000);
+    function callRecalculate() {
+        recalculate(document.getElementById('{!$Component.calfrm1}'));
+    }
+</script>
+    
+  <apex:pageBlockButtons >
+    <apex:commandButton value="Save" action="{!save}"/>
+    <apex:commandButton value="Cancel" action="{!cancel}"/>
+   </apex:pageBlockButtons> 
+  
+  
+  </apex:pageBlock>   
+ </apex:form>
+</apex:page>

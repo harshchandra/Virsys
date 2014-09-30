@@ -1,0 +1,113 @@
+<apex:page standardController="Account" extensions="AccountHudExt" showheader="false" sidebar="false" docType="html-5.0">
+<apex:stylesheet value="{!URLFOR($Resource.Bootstrap, 'Bootstrap3/css/bootstrap.min.css')}" />
+<script type="text/javascript" src="{!URLFOR($Resource.FullCalendar, 'jquery-1.11.1.min.js')}"></script>
+<script type="text/javascript" src="{!URLFOR($Resource.Bootstrap, 'Bootstrap3/js/bootstrap.min.js')}"></script>
+<apex:includeScript value="/soap/ajax/30.0/connection.js"/>
+<apex:includeScript value="/support/console/30.0/integration.js"/>
+<script type="text/javascript">
+
+var primaryTabs;
+var currentPrimaryTab;
+var primaryTabObjectId;
+
+var subTabs;
+var currentSubTab;
+var currentSubTabObjectId;
+
+
+function openEmailTab()
+{
+    
+    sforce.console.getPrimaryTabIds(getPrimaryTabIds);
+    sforce.console.getFocusedPrimaryTabId(getPrimaryTabId);
+    sforce.console.getFocusedPrimaryTabObjectId(getPrimaryObjectId);
+    sforce.console.getFocusedSubtabId(getSubTabId);
+    sforce.console.getFocusedSubtabObjectId(getSubTabObjectId);
+    //p2 = TO
+    //p3_mlktp = Related To dropdown
+    //p3_lkid = Related To ID
+    //sforce.console.openPrimaryTab(null, '/_ui/core/email/author/EmailAuthor?p2_lkid=003G0000019Do09&rtype=003&p3_lkid=500G000000E2vu4&retURL=%2F500G000000E2vu4' + subTabObjId, true,'Send Email', openSuccess, 'SendEmailTab');
+}
+var getPrimaryTabId = function getPrimaryTabId(result)
+{
+    currentPrimaryTab = result.id;
+};
+var getSubTabObjectId = function getSubTabObjectId(result)
+{
+    currentSubTabObjectId = result.id;
+    sforce.console.openSubtab(currentPrimaryTab , '/_ui/core/email/author/EmailAuthor?p2_lkid=' + primaryTabObjectId + '&rtype=003&p3_lkid=' + currentSubTabObjectId + '&retURL=' + currentSubTabObjectId, true, 'Send Email', null, openSuccess, 'Send Email ' + currentSubTabObjectId);
+};
+var openSuccess = new function openSuccess(result)
+{
+    
+};
+var getSubTabId = function getSubTabId(result)
+{
+    currentSubTab = result.id;
+};
+var getPrimaryObjectId = function getPrimaryObjectId(result)
+{
+    primaryTabObjectId = result.id;
+};
+var getPrimaryTabIds = function getPrimaryTabIds(result)
+{
+    primaryTabs = result.ids.split(",");
+};
+
+</script>
+<style>
+.headerCenter {text-align:center;}
+.table th {text-align:center;}
+</style>
+<apex:form >
+<div class="container-fluid">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="row">
+    <div class="col-md-4">
+        <div class="glow">
+            <div class="well" style="text-align:center">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="glyphicon glyphicon-phone-alt" style="font-size:15px"></div>
+                    </div>
+                    <div class="col-md-10">
+                        <h4><a href="javascript:void(0);" onclick="sforce.console.cti.sendCTIMessage('/CLICK_TO_DIAL?DN='+encodeURIComponent('{!Account.Phone}')+'&amp;ID={!Account.Id}&amp;ENTITY_NAME=Account&amp;OBJECT_NAME='+encodeURIComponent('{!Account.Name}'));return false;">{!Account.Phone}<img src="/img/btn_dial_inline.gif" alt="Click to dial" width="16" height="10" title="Click to dial"/><img src="/img/btn_nodial_inline.gif" alt="Click to dial disabled" width="16" height="10" style="display:none;" title="Click to dial disabled"/></a></h4>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="glyphicon glyphicon-envelope" style="font-size:15px"></div>
+                    </div>
+                    <div class="col-md-10">
+                        <h4><a href="#" onclick="openEmailTab();">{!Account.PersonEmail}</a></h4>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="well" style="text-align:center">
+            <div class="row">
+                <div class="col-md-12">
+                   <apex:dataTable value="{!SupportGroupMembers}" var="sp" styleClass="table table-striped" captionStyle="font-size:15px; font-weight:bold;" title="Support Group Members">
+                   <apex:facet name="caption">Support Group Members</apex:facet>
+                        <apex:column value="{!sp.Name}" headerValue="Name" />
+                        <apex:column headerValue="Phone">
+                        <a href="javascript:void(0);" onclick="sforce.console.cti.sendCTIMessage('/CLICK_TO_DIAL?DN='+encodeURIComponent('{!sp.Home_Phone__c}')+'&amp;ID={!sp.Id}&amp;ENTITY_NAME=Support_Group_Member__c&amp;OBJECT_NAME='+encodeURIComponent('{!sp.Name}'));return false;">{!sp.Home_Phone__c}<img src="/img/btn_dial_inline.gif" alt="Click to dial" width="16" height="10" title="Click to dial"/><img src="/img/btn_nodial_inline.gif" alt="Click to dial disabled" width="16" height="10" style="display:none;" title="Click to dial disabled"/></a>
+                        </apex:column>
+                        <apex:column value="{!sp.Relationship_To_Client__c}" headerValue="Relationship" />
+                        <apex:column value="{!sp.Authorized_on_Release_Form__c}" headerValue="Authorized" />
+                   </apex:dataTable>
+                </div>
+            </div>
+        </div>
+    </div> 
+    </div>
+  </div>
+</div>
+</div>
+</apex:form>
+</apex:page>

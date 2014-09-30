@@ -1,0 +1,21 @@
+<apex:page controller="FlightStatusController">
+<apex:form >
+<apex:pageBlock title="Flight Status Lookup">
+<apex:pageBlockSection columns="1" title="Input">
+<apex:selectList value="{!selectedCarrier}" label="Airline" multiselect="false" size="1">
+<apex:selectOptions value="{!CarrierList}" />
+</apex:selectList>
+<apex:inputText value="{!flightNumber}" label="Flight Number"/>
+<apex:inputText value="{!month}" label="Month"/>
+<apex:inputText value="{!day}" label="day"/>
+<apex:inputText value="{!year}" label="year"/>
+<apex:commandButton action="{!BasicFlightCallout}" value="Get Status"/>
+</apex:pageBlockSection>
+<apex:pageBlockSection title="Output" columns="1">
+<apex:outputText value="{!WebRequest}" label="request" rendered="false"/>
+<apex:outputText value="{!WebResponse}" label="response" rendered="true"/>
+<apex:outputText value="{!FormatResponse}" label="formatted response" />
+</apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
+</apex:page>

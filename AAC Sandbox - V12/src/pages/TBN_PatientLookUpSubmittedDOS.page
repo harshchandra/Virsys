@@ -1,0 +1,28 @@
+<apex:page standardController="Opportunity" tabStyle="Submitted_Claims__tab">
+	
+	<apex:form >
+		<apex:pageBlock Title="Select Patient" id="pb">
+			<apex:pageBlockSection Title="Select Patient" columns="1">
+				<apex:inputfield id="AccId" value="{!Opportunity.AccountId}" onchange="LookUpValue(this.value)" label="Patient"/>
+				<input type="button" name="submit"  class="btn" value="Proceed" style="margin-left:20%;"  onclick="redirectPage();"/>
+			</apex:pageBlockSection>
+			
+		</apex:pageBlock>
+	</apex:form>
+	
+	<script>
+		var patientName;
+		function LookUpValue(value)
+		{
+			
+			patientName=value;
+			
+		}
+		
+		function redirectPage()
+		{
+			
+			window.location="/apex/TBN_Submitted_DOS?patient="+patientName;
+		}
+	</script>
+</apex:page>

@@ -1,0 +1,317 @@
+<apex:page controller="MyTest" >
+
+    <style>
+        .waitingSearchDiv  
+        {
+            position:absolute;
+            text-align:center;
+            top:0px;
+            z-index: 9999;
+            left:0px;
+        }
+        .waitingSearchDiv .waitingHolder 
+        {
+            font-weight:bold;
+            font-size:1.20em;
+            position:fixed;
+            padding:0.5em;
+            white-space:nowrap;
+            margin: auto;
+            width: 40%;
+            top: 15%;
+            background-color:white;
+            border: 1px solid #333;
+        }
+        .waitingSearchDiv .waitingSearchHolder .waitingDescription 
+        {
+            padding:0 1.5em 0 0.5em;
+        }
+         
+    </style> 
+    
+    <apex:form id="FormId" >
+    
+    <apex:pageMessages id="errorMessageId"/>
+    
+    
+         <!-- handle selected item -->
+        <apex:actionFunction name="aSelectItem" action="{!doSelectItem}" status="processingImg" rerender="Dummy">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:outputPanel id="Dummy"/>
+        <!-- handle deselected item -->
+        <apex:actionFunction name="aDeselectItem" action="{!doDeselectItem}" status="processingImg" rerender="Dummy">
+            <apex:param name="contextItem" value="" assignTo="{!contextItem}"/>
+        </apex:actionFunction>
+         <apex:actionstatus id="processingImg" startText="Loading...">
+           <apex:facet name="start">
+                <div id="salesforceSource_blurybackground" style="position:absolute; left:1px; top:1px; width:100%; height:100%; text-align:center; vertical-align: middle; background-color: #dcdcdc; opacity:0.7;filter:alpha(opacity=60);z-index:9999;">
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; ">
+                    <div style="width: 200px;height: 50px;text-align:center;top:250px;left:550px" class="waitingHolder">
+                        <table align="center" valign="middle" style="width: 100%; height: 100%">
+                            <tr align="center" valign="middle" style="width: 100%; height: 30%;">
+                                <td valign="middle" style="padding-top: 15px;" >
+                                    <img src="/img/loading.gif"/>
+                                    <span class="waitingDescription">
+                                        <b>Loading...</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                </div>
+                <div id="ManageMembersViewport_loading" class="waitingSearchDiv" style="width: 100%; height: 100%; display: ''; "/>
+                <script>
+                    document.getElementById('ManageMembersViewport_loading').height = window.innerHeight * (3/4);
+                </script>
+           </apex:facet>
+           <apex:facet name="stop"></apex:facet>
+        </apex:actionstatus>
+        <apex:pageBlock id="pb">
+       
+        
+            
+<!--             <apex:outputLabel rendered="{!NOT(hasPrevious)}" value="Previous" /> -->
+<!-- 			<apex:outputLabel value=" (page {!pageNumber} of {!totalPages}) " />  -->
+<!--  			<apex:outputLabel rendered="{!NOT(hasNext)}" value="Next" /> -->
+            
+            <apex:pageBlockButtons >
+<!--                         <apex:commandButton value="Save" action="{!Save}" status="processingImg" rerender="OPPAnelID" />  -->
+						<apex:commandButton style="float:left; margin-left:-43.5%;" action="{!doPrevious}" rendered="{!hasPrevious}" value="Previous" rerender="pb" status="processingImg"/>
+                        <apex:commandButton style="margin-left:18%;" value="Save and Confirm" action="{!renderToViewSelectedDOScharges}" rerender="popup,errorMessageId" status="processingImg"/>
+                        <apex:commandButton style="float:right;" action="{!doNext}" rendered="{!hasNext}" value="Next"  rerender="pb" status="processingImg"/> 
+<!--                         <input type = "button" value="cancel" onclick="document.location.reload(true);" class="btn"/> -->
+                        <!-- <apex:commandButton value="Cancel" onClick="window.location.href='/apex/TBN_Select_DOS_Charges'"/> -->
+<!--                         <apex:commandButton value="Show Pop up" action="{!showPopup}" rerender="popup"/> -->
+            </apex:pageBlockButtons>
+            
+            
+            
+            <apex:actionFunction name="test1" action="{!selectAll}" status="processingImg" rerender="Dummy">
+            	<apex:param name="q" value="this.value" AssignTo="{!isAllSelected}"/>
+        	</apex:actionFunction>
+            
+            
+            <apex:outputPanel id="OPPAnelID" >
+                <apex:pageBlockTable value="{!DocWrapper}" var="c" id="table">
+                    <apex:column headervalue="Select All">
+                        <apex:facet name="header" >
+                            <apex:inputCheckbox onclick="checkall(this,'inid')" onChange="test1(this.checked)">                            	 
+                            </apex:inputCheckbox>
+                        </apex:facet>                       
+                        <apex:inputCheckbox value="{!c.isSelect}" id="inid" onclick="check(this,'{!c.objDatesOfService.Id}')"/>
+                    </apex:column>                   
+					<apex:column value="{!c.objDatesOfService.Facility__c}">
+						<apex:facet name="header">
+	           				<apex:commandLink action="{!sort}" value="Facility{!IF(sortExpression=='Facility__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+	             			<apex:param value="Facility__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+	           				</apex:commandLink>
+         				</apex:facet>
+					</apex:column>
+					<apex:column value="{!c.objDatesOfService.Patient__c}">
+						<apex:facet name="header">
+	           				<apex:commandLink action="{!sort}" value="Patient{!IF(sortExpression=='Patient__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+	             			<apex:param value="Patient__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+	           				</apex:commandLink>
+         				</apex:facet>
+					</apex:column>
+					<apex:column value="{!c.objDatesOfService.Level_of_Care__c}">
+						<apex:facet name="header">
+	           				<apex:commandLink action="{!sort}" value="Level of Care{!IF(sortExpression=='Level_of_Care__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+	             			<apex:param value="Level_of_Care__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+	           				</apex:commandLink>
+         				</apex:facet>
+         			</apex:column>
+         			
+         			<apex:column headerValue="Billable Day">
+						<apex:outputField value="{!c.objDatesOfService.Billable_Day__c}" />
+					</apex:column>
+					<apex:column value="{!c.objDatesOfService.Start_Date__c}">
+						<apex:facet name="header">
+	           				<apex:commandLink action="{!sort}" value="Start Date{!IF(sortExpression=='Start_Date__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+	             			<apex:param value="Start_Date__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+	           				</apex:commandLink>
+         				</apex:facet>
+					</apex:column>
+					<apex:column value="{!c.objDatesOfService.End_Date__c}">
+						<apex:facet name="header">
+	           				<apex:commandLink action="{!sort}" value="End Date{!IF(sortExpression=='Facility__c',IF(sortDirection='ASC','▼','▲'),'▲')}" rerender="pb" status="processingImg">
+	             			<apex:param value="End_Date__c" name="column" assignTo="{!sortExpression}" ></apex:param>
+	           				</apex:commandLink>
+         				</apex:facet>
+					</apex:column>
+					<apex:column headerValue="Status">
+						<apex:outputField value="{!c.objDatesOfService.Status__c}" />
+					</apex:column>
+					<apex:column headerValue="Utilization Review Form">
+						<apex:outputField value="{!c.objDatesOfService.Utilization_Review_Form__c}" />
+					</apex:column>
+					<apex:column headerValue="Total Calendar Days">
+						<apex:outputField value="{!c.objDatesOfService.Total_Calendar_Days__c}" />
+					</apex:column>
+					<apex:column headerValue="Selected DateTime">
+						<apex:outputField value="{!c.objDatesOfService.Selected_DateTime__c}" />
+					</apex:column>
+					<apex:column headerValue="Amount">
+						<apex:outputText value="{!c.decAmout}" />
+					</apex:column>
+				</apex:pageBlockTable>
+            </apex:outputPanel>
+            
+            <!-- count of selected items -->
+            <!-- <apex:outputLabel value="[{!SelectedCount} records selected]" /> -->
+ 
+            <br/>
+ 
+            <!-- next, previous and page info -->
+<!--             <apex:commandLink action="{!doPrevious}" rendered="{!hasPrevious}" value="Previous" rerender="pb" status="processingImg"/> -->
+<!--             <apex:outputLabel rendered="{!NOT(hasPrevious)}" value="Previous" /> -->
+ 
+             <apex:outputLabel value=" (page {!pageNumber} of {!totalPages}) " rendered="{!!isError}" /> 
+             
+<!--             <apex:pageBlockButtons > -->
+<!-- 				<apex:commandButton action="{!doPrevious}" rendered="{!hasPrevious}" value="Previous" rerender="pb" status="processingImg"/> -->
+<!--                 <apex:commandButton value="Save and Confirm" action="{!renderToViewSelectedDOScharges}" rerender="popup" status="processingImg"/> -->
+<!--                 <apex:commandButton action="{!doNext}" rendered="{!hasNext}" value="Next"  rerender="pb" status="processingImg"/>  -->
+<!--             </apex:pageBlockButtons> -->
+            
+ 
+<!--             <apex:commandLink action="{!doNext}" rendered="{!hasNext}" value="Next"  rerender="pb" status="processingImg"/>  -->
+<!--             <apex:outputLabel rendered="{!NOT(hasNext)}" value="Next" /> -->
+         </apex:pageBlock>
+          
+        <apex:pageBlock >
+			   <apex:outputPanel id="popup">
+			   	<apex:outputPanel styleClass="popupb" layout="block" rendered="{!displayPopUp}"/>
+		            <apex:outputPanel styleClass="customPopup"  rendered="{!displayPopUp}"> 
+		            
+		             <apex:commandButton style="margin-left:38%;" value="Cancel" action="{!closePopup}" rendered="{!displayPopUp}" rerender="popup"/>
+		              <apex:commandButton value="Save" action="{!save}" status="processingImg" rerender="popup" oncomplete="document.location.reload(true);"/>
+		              
+		               <apex:pageBlockTable value="{!lstPopUpView}" var="c" id="table1">
+			               <apex:column headerValue="Facility">
+								<apex:outputField value="{!c.objDatesOfService.Facility__c}" />
+							</apex:column>
+							
+							<apex:column headerValue="Patient">
+								<apex:outputField value="{!c.objDatesOfService.Patient__c}" />
+							</apex:column>
+							
+							<apex:column headerValue="Level of Care">
+								<apex:outputField value="{!c.objDatesOfService.Level_of_Care__c}" />
+							</apex:column>
+							
+							<apex:column headerValue="Billable Day">
+								<apex:outputField value="{!c.objDatesOfService.Billable_Day__c}" />
+							</apex:column>
+							
+							<apex:column headerValue="Start Date">
+								<apex:outputField value="{!c.objDatesOfService.Start_Date__c}" />
+							</apex:column>
+							<apex:column headerValue="End Date">
+								<apex:outputField value="{!c.objDatesOfService.End_Date__c}" />
+							</apex:column>
+							
+							<apex:column headerValue="Status">
+								<apex:outputField value="{!c.objDatesOfService.Status__c}" />
+							</apex:column>
+							<apex:column headerValue="Utilization Review Form">
+								<apex:outputField value="{!c.objDatesOfService.Utilization_Review_Form__c}" />
+							</apex:column>
+							<apex:column headerValue="Total Calendar Days">
+								<apex:outputField value="{!c.objDatesOfService.Total_Calendar_Days__c}" />
+							</apex:column>
+							<apex:column headerValue="Selected DateTime">
+								<apex:outputField value="{!c.objDatesOfService.Selected_DateTime__c}" />
+							</apex:column>
+							<apex:column headerValue="Amount">
+								<apex:outputText value="{!c.decAmout}" />
+							</apex:column>
+						</apex:pageBlockTable>
+		              </apex:outputPanel>
+		          </apex:outputPanel>
+       </apex:pageBlock>
+     
+    </apex:form>
+    <script type="text/javascript">
+    
+  
+    function check(cb,cbid)
+    {   
+        if(cb.checked==true)
+        {   
+                aSelectItem(cbid);
+              
+        }
+        else
+        {
+                aDeselectItem(cbid);
+        }
+       
+        return false;
+    }  
+    
+    
+    
+    function checkall(cb,cbid)
+    {
+    	
+        
+        
+        var inputElem = document.getElementsByTagName("input");
+        var arr = "{!DocWrapper}";
+        //alert("{!DocWrapper}".length);                     
+        for(var i=0; i<inputElem.length; i++)
+        {            
+             if(inputElem[i].id.indexOf(cbid)!=-1)
+             {                                
+                inputElem[i].checked = cb.checked;
+            }
+        }
+        
+        
+       //allselect();
+      return false;  
+   }
+   
+</script>
+
+ <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 19%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+            margin-left: -250px;
+            top: 100px;
+            width: 95%;
+            overflow: auto;
+            height : 200px;
+        }
+        .popupb{
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 9998;
+        }
+    </style>
+    
+    
+
+</apex:page>

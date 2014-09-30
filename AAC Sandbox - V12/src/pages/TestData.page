@@ -1,0 +1,7 @@
+<apex:page controller="TBN_CreateDOSRecords">
+<apex:form >
+    <apex:commandButton action="{!CreateData}" value="Create Step 1"/>
+    <apex:commandButton action="{!CreateData2}" value="Create Step 2"/>
+    <apex:commandButton action="{!CreateDOS}" value="Create DOS Step 3"/>
+</apex:form>        
+</apex:page>
